@@ -71,15 +71,15 @@
 </template>
 
 <script>
-import IconIndex from "../components/icon/IconIndex.vue";
-import IconIndexActive from "../components/icon/IconIndexActive.vue";
-import UserProfile from "../components/icon/UserProfile.vue";
-import UserProfileActive from "../components/icon/UserProfileActive.vue";
-import Setting from "../components/icon/Setting.vue";
-import SettingActive from "../components/icon/SettingActive.vue";
-import Logout from "../components/icon/Logout.vue";
-import LogoutA from "../components/icon/LogoutA.vue";
-import ModalTweetNew from "./ModalTweetNew.vue";
+import IconIndex from '../components/icon/IconIndex.vue'
+import IconIndexActive from '../components/icon/IconIndexActive.vue'
+import UserProfile from '../components/icon/UserProfile.vue'
+import UserProfileActive from '../components/icon/UserProfileActive.vue'
+import Setting from '../components/icon/Setting.vue'
+import SettingActive from '../components/icon/SettingActive.vue'
+import Logout from '../components/icon/Logout.vue'
+import LogoutA from '../components/icon/LogoutA.vue'
+import ModalTweetNew from './ModalTweetNew.vue'
 
 export default {
   components: {
@@ -91,20 +91,20 @@ export default {
     SettingActive,
     Logout,
     LogoutA,
-    ModalTweetNew,
+    ModalTweetNew
   },
-  data() {
+  data () {
     return {
-      navStatus: "index",
-    };
+      navStatus: 'index'
+    }
   },
   methods: {
-    toggleNavStatus(e) {
-      console.log(e.target);
-      this.navStatus = status;
-    },
-  },
-};
+    toggleNavStatus (e) {
+      console.log(e.target)
+      this.navStatus = status
+    }
+  }
+}
 </script>
 
 <style scoped>
