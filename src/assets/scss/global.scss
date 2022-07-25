@@ -3,3 +3,84 @@
 @import 'base/reset',
 'base/root',
 'base/typography';
+
+// 輸入窗預設
+textarea {
+  padding: 0;
+  resize: none;
+}
+
+// 頭像
+.avatar {
+  height: 50px;
+  width: 50px;
+}
+
+// 跟隨 toggle 按鈕
+.toggle-follow {
+  width: 64px;
+  height: 40px;
+  padding: 8px 16px;
+  border: 1px solid var(--brand-color);
+  border-radius: 50px;
+  color: var(--brand-color);
+  cursor: pointer;
+
+  &.following {
+    width: 96px;
+    background-color: var(--brand-color);
+    color: #FFFFFF;
+  }
+}
+
+// 每個 page containet 架構 (除regist、login、admin系列、setting帳號設定)
+.container {
+  display: grid;
+  grid-template-columns: 20% auto 30%;
+  max-width: 1500px;
+  justify-items: center;
+  margin: 0 auto;
+  
+}
+
+// page containet 架構 - 僅限 admin系列
+.container-admin {
+  display: grid;
+  grid-template-columns: 20% auto;
+  max-width: 1500px;
+  justify-items: center;
+  margin: 0 auto;
+}
+
+// Modal - 推文、回覆跟首頁推文按鈕
+.btn-post-reply-tweet {
+  padding: 8px 16px;
+  width: 64px;
+  height: 40px;
+  border-radius: 50px;
+  color: #FFFFFF;
+  background: var(--brand-color);
+  cursor: pointer;
+}
+
+// Modal - 推文、回覆關閉視窗按鈕
+.modal-close {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 20.5px;
+  left: 20.5px;
+  cursor: pointer;
+}
+
+// Modal 視窗彈出後, 其他背景反灰
+.modal-background {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;  
+  background-color: #0b0b0b;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
