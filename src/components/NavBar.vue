@@ -11,42 +11,33 @@
 
       <!-- nav -->
       <nav class="navigation">
-        <div
-          class="nav-item-container"
-          @click.stop.prevent="toggleNavStatus('index')"
-        >
+        <div class="nav-item-container">
           <router-link class="nav-item index" to="/tweets">
             <div class="icon">
-              <IconIndexActive v-if="navStatus === 'index'" />
-              <IconIndex v-else />
+              <IconIndexActive v-if="NavbarStatus === 'tweets'" />
+              <IconIndex v-if="NavbarStatus !== 'tweets'" />
             </div>
-            <div>首頁</div>
+            <h5>首頁</h5>
           </router-link>
         </div>
 
-        <div
-          class="nav-item-container"
-          @click.stop.prevent="toggleNavStatus('user-profile')"
-        >
-          <router-link class="nav-item user-profile" to="/tweets/1">
+        <div class="nav-item-container">
+          <router-link class="nav-item user-profile" to="/users/1">
             <div class="icon">
-              <UserProfileActive v-if="navStatus === 'user-profile'" />
-              <UserProfile v-else />
+              <UserProfileActive v-if="NavbarStatus === 'user'" />
+              <UserProfile v-if="NavbarStatus !== 'user'" />
             </div>
-            <div>個人資料</div>
+            <h5>個人資料</h5>
           </router-link>
         </div>
 
-        <div
-          class="nav-item-container"
-          @click.stop.prevent="toggleNavStatus('setting')"
-        >
+        <div class="nav-item-container">
           <router-link class="nav-item setting" to="/user/1/setting">
             <div class="icon">
-              <SettingActive v-if="navStatus === 'setting'" />
-              <Setting v-else />
+              <SettingActive v-if="NavbarStatus === 'user-setting'" />
+              <Setting v-if="NavbarStatus !== 'user-setting'" />
             </div>
-            <div>設定</div>
+            <h5>設定</h5>
           </router-link>
         </div>
 
@@ -57,51 +48,40 @@
 
     <!-- 下半部 -->
     <div class="down">
-      <div @click.stop.prevent="toggleNavStatus('logout')">
-        <router-link class="logout" to="/404">
-          <div class="icon">
-            <LogoutA v-if="navStatus === 'logout'" />
-            <Logout v-else />
-          </div>
-          <div>登出</div>
-        </router-link>
-      </div>
+      <router-link class="logout" to="/404">
+        <div class="icon">
+          <Logout />
+        </div>
+        <h5>登出</h5>
+      </router-link>
     </div>
   </section>
 </template>
 
 <script>
 import IconIndex from '../components/icon/IconIndex.vue'
-import IconIndexActive from '../components/icon/IconIndexActive.vue'
 import UserProfile from '../components/icon/UserProfile.vue'
-import UserProfileActive from '../components/icon/UserProfileActive.vue'
 import Setting from '../components/icon/Setting.vue'
-import SettingActive from '../components/icon/SettingActive.vue'
 import Logout from '../components/icon/Logout.vue'
-import LogoutA from '../components/icon/LogoutA.vue'
+import IconIndexActive from '../components/icon/IconIndexActive.vue'
+import UserProfileActive from '../components/icon/UserProfileActive.vue'
+import SettingActive from '../components/icon/SettingActive.vue'
 import ModalTweetNew from './ModalTweetNew.vue'
 
 export default {
   components: {
     IconIndex,
-    IconIndexActive,
     UserProfile,
-    UserProfileActive,
     Setting,
-    SettingActive,
     Logout,
-    LogoutA,
-    ModalTweetNew
+    ModalTweetNew,
+    IconIndexActive,
+    UserProfileActive,
+    SettingActive
   },
   data () {
     return {
-      navStatus: 'index'
-    }
-  },
-  methods: {
-    toggleNavStatus (e) {
-      console.log(e.target)
-      this.navStatus = status
+      NavbarStatus: this.$router.currentRoute.name
     }
   }
 }

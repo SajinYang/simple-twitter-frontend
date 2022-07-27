@@ -1,10 +1,14 @@
 <template>
   <section class="modal-tweet-section">
     <button class="btn tweet-reply" @click.stop.prevent="openModal">
-      <img src="./../assets/icon/tweet-reply.svg" alt="" />
+      <img
+        class="tweet-reply-icon"
+        src="./../assets/icon/tweet-reply.svg"
+        alt=""
+      />
     </button>
 
-    <div v-show="modalStatus">
+    <div class="modal-tweet" v-show="modalStatus">
       <div class="modal-background"></div>
       <div class="modal-container">
         <div class="modal-header">
@@ -13,7 +17,7 @@
           </div>
         </div>
 
-        <div class="modal-content">
+        <form class="modal-content">
           <div class="avatar">
             <img src="./../assets/img/tweet-nophoto.png" alt="" />
           </div>
@@ -58,13 +62,15 @@
           >
             回覆
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import { Toast } from '../utils/helpers'
+
 export default {
   data () {
     return {
@@ -79,6 +85,8 @@ export default {
     },
     closeModal () {
       this.modalStatus = false
+      this.twitterText = ''
+      this.warningStatus = ''
     },
     createdTweet () {
       if (!this.twitterText.trim()) {
@@ -88,9 +96,17 @@ export default {
 
       if (this.twitterText.length > 140) {
         this.warningStatus = 'length'
+        return
       }
 
       // todo: 串接
+
+      Toast.fire({
+        icon: 'success',
+        title: '回覆推文成功'
+      })
+
+      this.closeModal()
     },
     resetwarningStatus () {
       this.warningStatus = ''
@@ -100,19 +116,17 @@ export default {
 </script>
 
 <style scoped>
-.tweet-creat {
-  padding: 8px 24px;
-  width: 178px;
-  height: 46px;
-  background: var(--brand-color);
-  border-radius: 50px;
-  font-size: 20px;
-  color: var(--dark-0);
+.modal-tweet {
+  position: fixed;
+}
+.tweet-reply-icon {
+  width: 16px;
+  height: 16px;
 }
 .modal-container {
   width: 634px;
   height: 500px;
-  position: absolute;
+  position: fixed;
   z-index: 999;
   top: 10%;
   left: 50%;
@@ -122,7 +136,7 @@ export default {
 }
 
 .modal-header {
-  border-bottom: 1px solid #e6ecf0;
+  border-bottom: 1px solid var(--border);
   height: 56px;
   width: 100%;
 }
