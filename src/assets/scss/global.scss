@@ -36,11 +36,10 @@ textarea {
 // 每個 page containet 架構 (除regist、login、admin系列、setting帳號設定)
 .container {
   display: grid;
-  grid-template-columns: 20% auto 30%;
+  grid-template-columns: 20% auto 25%;
   max-width: 1500px;
   justify-items: center;
   margin: 0 auto;
-  
 }
 
 // page containet 架構 - 僅限 admin系列
@@ -57,6 +56,8 @@ textarea {
   padding: 8px 16px;
   width: 64px;
   height: 40px;
+  font-weight: 400;
+  font-size: 16px;
   border-radius: 50px;
   color: #FFFFFF;
   background: var(--brand-color);
@@ -77,10 +78,56 @@ textarea {
 .modal-background {
   height: 100vh;
   width: 100vw;
-  position: absolute;  
+  position: fixed;  
   background-color: #0b0b0b;
   opacity: 0.5;
   top: 0;
   left: 0;
   z-index: 10;
+}
+
+// View - SimpleTwitter. Tweet. User. UserFollowStatus
+// 中間區塊的container版型
+.center-container {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+// 首頁. Tweet 中間頁面上方header
+.header {
+  width: 100%;
+  height: 75px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  
+  .title {
+    position: absolute;
+    top: 25%;
+    left: 24px;
+  }
+}
+
+// 卷軸style
+.scrollbar {
+  padding-right: 6px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #C1C1C1;
+  }
+}
+
+// 平板版型
+@media (max-width: 992px) {
+  .container {
+  display: grid;
+  grid-template-columns: 20% auto;
+}
 }
