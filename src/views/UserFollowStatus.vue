@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-twitter">
     <NavBar />
     <section class="tweets">
       UserFollowStatus 區塊 (可看到追蹤者、跟蹤者list)

@@ -1,8 +1,18 @@
 @charset "UTF-8";
 
-@import 'base/reset',
-'base/root',
-'base/typography';
+@import 'base/_reset',
+'base/_root',
+'base/_typography';
+
+// spacing
+.pt-6 {
+  padding-top: 4rem;
+}
+
+// display
+.d-none {
+  display: none;
+}
 
 // 輸入窗預設
 textarea {
@@ -34,7 +44,8 @@ textarea {
 }
 
 // 每個 page containet 架構 (除regist、login、admin系列、setting帳號設定)
-.container {
+// bootstrap conflict
+.container-twitter {
   display: grid;
   grid-template-columns: 20% auto 25%;
   max-width: 1500px;
@@ -78,7 +89,7 @@ textarea {
 .modal-background {
   height: 100vh;
   width: 100vw;
-  position: fixed;  
+  position: fixed;
   background-color: #0b0b0b;
   opacity: 0.5;
   top: 0;
@@ -103,7 +114,7 @@ textarea {
   height: 75px;
   border-bottom: 1px solid var(--border);
   position: relative;
-  
+
   .title {
     position: absolute;
     top: 25%;
@@ -118,6 +129,7 @@ textarea {
   &::-webkit-scrollbar {
     width: 8px;
   }
+
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: #C1C1C1;
@@ -125,9 +137,10 @@ textarea {
 }
 
 // 平板版型
+// bootstrap conflict
 @media (max-width: 992px) {
-  .container {
-  display: grid;
-  grid-template-columns: 20% auto;
-}
+  .container-twitter {
+    display: grid;
+    grid-template-columns: 20% auto;
+  }
 }

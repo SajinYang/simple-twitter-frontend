@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-twitter">
     <NavBar />
     <div class="center-container scrollbar">
       <TweetCreateNew />

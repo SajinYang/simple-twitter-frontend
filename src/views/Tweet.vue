@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-twitter">
     <NavBar />
     <section class="tweets">tweet 區塊 (單一堆文)</section>
     <TweetPopularUser />
