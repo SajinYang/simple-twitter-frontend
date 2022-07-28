@@ -4,6 +4,11 @@
 'base/_root',
 'base/_typography';
 
+// spacing
+.pt-6 {
+  padding-top: 4rem;
+}
+
 // 輸入窗預設
 textarea {
   padding: 0;
@@ -34,7 +39,8 @@ textarea {
 }
 
 // 每個 page containet 架構 (除regist、login、admin系列、setting帳號設定)
-.container {
+// bootstrap conflict
+.container-twitter {
   display: grid;
   grid-template-columns: 20% auto 25%;
   max-width: 1500px;
@@ -126,8 +132,9 @@ textarea {
 }
 
 // 平板版型
+// bootstrap conflict
 @media (max-width: 992px) {
-  .container {
+  .container-twitter {
     display: grid;
     grid-template-columns: 20% auto;
   }
