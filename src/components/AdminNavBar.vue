@@ -14,20 +14,20 @@
         <div @click.stop.prevent="toggleNavStatus('admin-tweet')">
           <router-link class="nav-item index" to="/admin">
             <div class="icon">
-              <IconIndexActive v-if="navStatus === 'admin-tweet'" />
-              <IconIndex v-else />
+              <IconIndexActive v-if="NavbarStatus === 'admin-tweets'" />
+              <IconIndex v-if="NavbarStatus !== 'admin-tweets'" />
             </div>
-            <div>推文清單</div>
+            <h5>推文清單</h5>
           </router-link>
         </div>
 
         <div @click.stop.prevent="toggleNavStatus('admin-users')">
           <router-link class="nav-item user-profile" to="/admin/users">
             <div class="icon">
-              <UserProfileActive v-if="navStatus === 'admin-users'" />
-              <UserProfile v-else />
+              <UserProfileActive v-if="NavbarStatus === 'admin-users'" />
+              <UserProfile v-if="NavbarStatus !== 'admin-users'" />
             </div>
-            <div>使用者列表</div>
+            <h5>使用者列表</h5>
           </router-link>
         </div>
       </nav>
@@ -38,10 +38,9 @@
       <div @click.stop.prevent="toggleNavStatus('logout')">
         <router-link class="logout" to="/404">
           <div class="icon">
-            <LogoutA v-if="navStatus === 'logout'" />
-            <Logout v-else />
+            <Logout />
           </div>
-          <div>登出</div>
+          <h5>登出</h5>
         </router-link>
       </div>
     </div>
@@ -54,7 +53,6 @@ import IconIndexActive from './icon/IconIndexActive.vue'
 import UserProfile from './icon/UserProfile.vue'
 import UserProfileActive from './icon/UserProfileActive.vue'
 import Logout from './icon/Logout.vue'
-import LogoutA from './icon/LogoutA.vue'
 
 export default {
   components: {
@@ -62,17 +60,11 @@ export default {
     IconIndexActive,
     UserProfile,
     UserProfileActive,
-    Logout,
-    LogoutA
+    Logout
   },
   data () {
     return {
-      navStatus: 'admin-tweet'
-    }
-  },
-  methods: {
-    toggleNavStatus (status) {
-      this.navStatus = status
+      NavbarStatus: this.$router.currentRoute.name
     }
   }
 }
@@ -100,7 +92,8 @@ export default {
 .nav-item:hover,
 .icon:hover,
 .logout:hover,
-.router-link-active {
+.nav-item.active,
+.logout.active {
   color: var(--brand-color);
   fill: var(--brand-color);
 }

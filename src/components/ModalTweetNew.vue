@@ -13,7 +13,7 @@
           </div>
         </div>
 
-        <div class="modal-content">
+        <form class="modal-content">
           <div class="avatar">
             <img src="./../assets/img/tweet-nophoto.png" alt="" />
           </div>
@@ -39,13 +39,15 @@
           >
             推文
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import { Toast } from '../utils/helpers'
+
 export default {
   data () {
     return {
@@ -60,6 +62,8 @@ export default {
     },
     closeModal () {
       this.modalStatus = false
+      this.twitterText = ''
+      this.warningStatus = ''
     },
     createdTweet () {
       if (!this.twitterText.trim()) {
@@ -69,9 +73,17 @@ export default {
 
       if (this.twitterText.length > 140) {
         this.warningStatus = 'length'
+        return
       }
 
       // todo: 串接
+
+      Toast.fire({
+        icon: 'success',
+        title: '新增推文成功'
+      })
+
+      this.closeModal()
     },
     resetwarningStatus () {
       this.warningStatus = ''
@@ -88,6 +100,7 @@ export default {
   background: var(--brand-color);
   border-radius: 50px;
   font-size: 20px;
+  font-weight: 400;
   color: var(--dark-0);
 }
 .modal-container {
@@ -103,7 +116,7 @@ export default {
 }
 
 .modal-header {
-  border-bottom: 1px solid #e6ecf0;
+  border-bottom: 1px solid var(--border);
   height: 56px;
   width: 100%;
 }

@@ -22,7 +22,7 @@ const routes = [
     component: () => import('../views/Tweet.vue')
   },
   {
-    path: '/user/:id',
+    path: '/users/:id',
     name: 'user',
     component: () => import('../views/User.vue')
   },

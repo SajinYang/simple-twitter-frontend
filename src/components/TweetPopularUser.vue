@@ -12,12 +12,12 @@
               </div>
             </router-link>
 
-            <router-link class="popular-user-item" to="/tweets">
+            <router-link class="popular-user-item name" to="/tweets">
               <!-- 暫時連結 -->
               <div class="popular-user-info">
-                <span class="popular-user-name">{{
-                  user.name | filterName(user.name)
-                }}</span>
+                <p class="popular-user-name">
+                  {{ user.name | filterName(user.name) }}
+                </p>
                 <span class="popular-user-account">@{{ user.account }}</span>
               </div>
             </router-link>
@@ -47,69 +47,8 @@
 </template>
 
 <script>
-const dummyUsers = {
-  users: [
-    {
-      id: 1,
-      name: 'Pizza Hut1 Pizza Hut1',
-      account: 'Pizza Hut',
-      isFollowing: true
-    },
-    {
-      id: 2,
-      name: 'Pizza Hut2',
-      account: 'Pizza Hut',
-      isFollowing: true
-    },
-    {
-      id: 3,
-      name: 'Pizza Hut3',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 4,
-      name: 'Pizza Hut4',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 5,
-      name: 'Pizza Hut5',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 6,
-      name: 'Pizza Hut6',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 7,
-      name: 'Pizza Hut7',
-      account: 'Pizza Hut'
-    },
-    {
-      id: 8,
-      name: 'Pizza Hut8',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 9,
-      name: 'Pizza Hut9',
-      account: 'Pizza Hut',
-      isFollowing: false
-    },
-    {
-      id: 10,
-      name: 'Pizza Hut10',
-      account: 'Pizza Hut',
-      isFollowing: false
-    }
-  ]
-}
+import usersAPI from '../apis/users'
+import { Toast } from './../utils/helpers'
 
 export default {
   data () {
@@ -121,8 +60,16 @@ export default {
     this.fetchTopUsers()
   },
   methods: {
-    fetchTopUsers () {
-      this.users = dummyUsers.users
+    async fetchTopUsers () {
+      try {
+        const response = await usersAPI.getTopUsers()
+        this.users = [...response.data]
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新前Top10 user，請稍後再試'
+        })
+      }
     },
     addFollowing (userId) {
       this.users = this.users.map((user) => {
@@ -180,7 +127,9 @@ export default {
 }
 
 .popular-user-container {
-  border-top: 1px solid #e6ecf0;
+  width: 97%;
+  border-top: 1px solid var(--border);
+  margin: 0 auto;
   padding: 15px 0 10px 0;
 }
 .popular-users {
@@ -191,13 +140,28 @@ export default {
   width: 100%;
   display: flex;
   flex: 1;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   margin: 8px 5px;
 }
 
 .popular-user-item {
+  width: 100%;
   margin: 5px;
+}
+
+.popular-user-item:nth-of-type(1) {
+  width: 50px;
+}
+
+.popular-user-name {
+  color: var(--dark-100);
+}
+
+.popular-user-account {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--dark-70);
 }
 
 .popular-user-btn {
@@ -209,5 +173,11 @@ export default {
 .popular-user-info {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 992px) {
+  .popular-users-section {
+    display: none;
+  }
 }
 </style>
