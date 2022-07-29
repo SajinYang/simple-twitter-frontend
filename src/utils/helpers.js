@@ -7,6 +7,7 @@ export const apiHelper = axios.create({
   baseURL
 })
 
+// eslint-disable-next-line
 export const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
