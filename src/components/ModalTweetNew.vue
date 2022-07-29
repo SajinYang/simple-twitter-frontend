@@ -3,6 +3,12 @@
     <button class="btn tweet-creat" @click.stop.prevent="openModal">
       推文
     </button>
+    <img
+      class="icon-create-small"
+      src="./../assets/icon/tweet-create.svg"
+      @click.stop.prevent="openModal"
+      alt=""
+    />
 
     <div v-show="modalStatus">
       <div class="modal-background"></div>
@@ -46,6 +52,7 @@
 </template>
 
 <script>
+import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
 
 export default {
@@ -65,25 +72,45 @@ export default {
       this.twitterText = ''
       this.warningStatus = ''
     },
-    createdTweet () {
-      if (!this.twitterText.trim()) {
-        this.warningStatus = 'trim'
-        return
+    async createdTweet () {
+      try {
+        if (!this.twitterText.trim()) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可空白'
+          })
+          return
+        }
+
+        if (this.twitterText.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文字數不可超過 140 字'
+          })
+          return
+        }
+
+        const { data } = await tweetsAPI.createTweet({
+          description: this.twitterText
+        })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        console.log(data)
+        Toast.fire({
+          icon: 'success',
+          title: '新增推文成功'
+        })
+
+        this.closeModal()
+        this.$emit('after-create-tweet')
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '新增推文失敗'
+        })
       }
-
-      if (this.twitterText.length > 140) {
-        this.warningStatus = 'length'
-        return
-      }
-
-      // todo: 串接
-
-      Toast.fire({
-        icon: 'success',
-        title: '新增推文成功'
-      })
-
-      this.closeModal()
     },
     resetwarningStatus () {
       this.warningStatus = ''
@@ -156,5 +183,24 @@ export default {
   font-size: 15px;
   color: var(--error);
   font-weight: 500;
+}
+
+.icon-create-small {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .tweet-creat {
+    display: none;
+  }
+  .icon-create-small {
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+    border-radius: 50%;
+    background-color: #ff6600;
+    margin: 25px 6px 40px 8px;
+  }
 }
 </style>
