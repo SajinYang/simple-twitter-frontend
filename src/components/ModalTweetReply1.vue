@@ -1,16 +1,14 @@
 <template>
   <section class="modal-tweet-section">
-    <button class="btn tweet-creat" @click.stop.prevent="openModal">
-      推文
+    <button class="btn tweet-reply" @click.stop.prevent="openModal">
+      <img
+        class="tweet-reply-icon"
+        src="./../assets/icon/tweet-reply.svg"
+        alt=""
+      />
     </button>
-    <img
-      class="icon-create-small"
-      src="./../assets/icon/tweet-create.svg"
-      @click.stop.prevent="openModal"
-      alt=""
-    />
 
-    <div v-show="modalStatus">
+    <div class="modal-tweet" v-show="modalStatus">
       <div class="modal-background"></div>
       <div class="modal-container">
         <div class="modal-header">
@@ -24,26 +22,46 @@
             <img src="./../assets/img/tweet-nophoto.png" alt="" />
           </div>
 
-          <div class="twitter-text-container">
+          <div class="twitter-reply-container">
+            <span class="twitter-reply name">Apple</span>
+            <span class="twitter-reply info">@apple ・3 小時</span>
+            <p class="twitter-reply content">
+              Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis
+              ullamco cillum dolor. Voluptate exercitation incididunt aliquip
+              deserunt reprehenderit elit laborum.
+            </p>
+            <span class="twitter-reply-text">回覆給 </span>
+            <span class="twitter-reply-account"> @Mitsubishi</span>
+          </div>
+
+          <div class="avatar avatar-reply">
+            <img src="./../assets/img/tweet-nophoto.png" alt="" />
+          </div>
+
+          <div class="modal-line"></div>
+
+          <div class="twitter-reply-container">
             <textarea
               class="twitter-text"
-              placeholder="有什麼新鮮事？"
+              placeholder="推你的回覆"
               maxlength="200"
               v-model="twitterText"
               @click.stop.prevent="resetwarningStatus"
             ></textarea>
           </div>
+
           <span v-if="warningStatus === 'length'" class="warning-sign"
             >字數不可超過 140 字</span
           >
           <span v-if="warningStatus === 'trim'" class="warning-sign"
             >內容不可空白</span
           >
+
           <button
             class="btn btn-post-reply-tweet"
             @click.stop.prevent="createdTweet"
           >
-            推文
+            回覆
           </button>
         </form>
       </div>
@@ -52,7 +70,6 @@
 </template>
 
 <script>
-import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
 
 export default {
@@ -72,45 +89,25 @@ export default {
       this.twitterText = ''
       this.warningStatus = ''
     },
-    async createdTweet () {
-      try {
-        if (!this.twitterText.trim()) {
-          Toast.fire({
-            icon: 'warning',
-            title: '推文內容不可空白'
-          })
-          return
-        }
-
-        if (this.twitterText.length > 140) {
-          Toast.fire({
-            icon: 'warning',
-            title: '推文字數不可超過 140 字'
-          })
-          return
-        }
-
-        const { data } = await tweetsAPI.createTweet({
-          description: this.twitterText
-        })
-
-        if (data.status !== 'success') {
-          throw new Error(data.message)
-        }
-        console.log(data)
-        Toast.fire({
-          icon: 'success',
-          title: '新增推文成功'
-        })
-
-        this.closeModal()
-        this.$emit('after-create-tweet')
-      } catch (error) {
-        Toast.fire({
-          icon: 'error',
-          title: '新增推文失敗'
-        })
+    createdTweet () {
+      if (!this.twitterText.trim()) {
+        this.warningStatus = 'trim'
+        return
       }
+
+      if (this.twitterText.length > 140) {
+        this.warningStatus = 'length'
+        return
+      }
+
+      // todo: 串接
+
+      Toast.fire({
+        icon: 'success',
+        title: '回覆推文成功'
+      })
+
+      this.closeModal()
     },
     resetwarningStatus () {
       this.warningStatus = ''
@@ -120,20 +117,17 @@ export default {
 </script>
 
 <style scoped>
-.tweet-creat {
-  padding: 8px 24px;
-  width: 178px;
-  height: 46px;
-  background: var(--brand-color);
-  border-radius: 50px;
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--dark-0);
+.modal-tweet {
+  position: fixed;
+}
+.tweet-reply-icon {
+  width: 25px;
+  height: 25px;
 }
 .modal-container {
   width: 634px;
-  height: 300px;
-  position: absolute;
+  height: 500px;
+  position: fixed;
   z-index: 999;
   top: 10%;
   left: 50%;
@@ -150,17 +144,23 @@ export default {
 
 .modal-content {
   display: grid;
-  grid-template-columns: 50px auto 10%;
+  grid-template-columns: 50px auto;
+  grid-template-rows: 48% auto;
   height: 80%;
   padding: 30px 0 0 25px;
 }
 
-.twitter-text-container {
+.twitter-reply-container {
   margin: 0 20px;
 }
 
-.avatar {
+.twitter-reply {
+  margin: 15px 5px;
+}
+
+.avatar-reply {
   margin-top: -15px;
+  border-radius: 50%;
 }
 
 .twitter-text {
@@ -185,22 +185,26 @@ export default {
   font-weight: 500;
 }
 
-.icon-create-small {
-  display: none;
+.modal-line {
+  position: absolute;
+  width: 2px;
+  height: 86px;
+  background: var(--dark-60);
+  left: 48px;
+  top: 148px;
 }
 
-@media (max-width: 992px) {
-  .tweet-creat {
-    display: none;
-  }
-  .icon-create-small {
-    display: block;
-    width: 40px;
-    height: 40px;
-    padding: 6px;
-    border-radius: 50%;
-    background-color: #ff6600;
-    margin: 25px 6px 40px 8px;
-  }
+.twitter-reply-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--secondary);
+}
+
+.twitter-reply-account {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #ff6600;
 }
 </style>

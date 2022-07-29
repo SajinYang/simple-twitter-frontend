@@ -1,8 +1,5 @@
 <template>
   <section>
-    <header class="header">
-      <h4 class="title">首頁</h4>
-    </header>
     <form class="tweet-creat-from">
       <div class="avatar">
         <img src="./../assets/img/tweet-nophoto.png" alt="" />
@@ -27,6 +24,7 @@
 </template>
 
 <script>
+import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
 
 export default {
@@ -36,31 +34,45 @@ export default {
     }
   },
   methods: {
-    createdTweet () {
-      if (!this.twitterText.trim()) {
-        Toast.fire({
-          icon: 'warning',
-          title: '推文內容不可空白'
+    async createdTweet () {
+      try {
+        if (!this.twitterText.trim()) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可空白'
+          })
+          return
+        }
+
+        if (this.twitterText.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文字數不可超過 140 字'
+          })
+          return
+        }
+
+        const { data } = await tweetsAPI.createTweet({
+          description: this.twitterText
         })
-        return
-      }
 
-      if (this.twitterText.length > 140) {
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
         Toast.fire({
-          icon: 'warning',
-          title: '推文字數不可超過 140 字'
+          icon: 'success',
+          title: '新增推文成功'
         })
-        return
+
+        this.twitterText = ''
+        this.$emit('after-create-tweet')
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '新增推文失敗'
+        })
       }
-
-      Toast.fire({
-        icon: 'success',
-        title: '新增推文成功'
-      })
-
-      this.twitterText = ''
-
-      // todo: 串接
     }
   }
 }

@@ -63,7 +63,8 @@ export default {
     async fetchTopUsers () {
       try {
         const response = await usersAPI.getTopUsers()
-        this.users = [...response.data]
+        const data = response.data.top10Users
+        this.users = [...data]
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -118,6 +119,7 @@ export default {
   width: 273px;
   background: var(--dark-20);
   border-radius: 16px;
+  margin-top: 10px;
   padding: 5px;
 }
 
@@ -155,10 +157,12 @@ export default {
 }
 
 .popular-user-name {
+  font-weight: 700;
   color: var(--dark-100);
 }
 
 .popular-user-account {
+  margin-top: 5px;
   font-weight: 500;
   font-size: 14px;
   color: var(--dark-70);
@@ -173,11 +177,5 @@ export default {
 .popular-user-info {
   display: flex;
   flex-direction: column;
-}
-
-@media (max-width: 992px) {
-  .popular-users-section {
-    display: none;
-  }
 }
 </style>
