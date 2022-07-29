@@ -30,7 +30,8 @@
               ullamco cillum dolor. Voluptate exercitation incididunt aliquip
               deserunt reprehenderit elit laborum.
             </p>
-            <span class="twitter-reply account">回覆給 @Mitsubishi</span>
+            <span class="twitter-reply-text">回覆給 </span>
+            <span class="twitter-reply-account"> @Mitsubishi</span>
           </div>
 
           <div class="avatar avatar-reply">
@@ -159,6 +160,7 @@ export default {
 
 .avatar-reply {
   margin-top: -15px;
+  border-radius: 50%;
 }
 
 .twitter-text {
@@ -190,5 +192,19 @@ export default {
   background: var(--dark-60);
   left: 48px;
   top: 148px;
+}
+
+.twitter-reply-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--secondary);
+}
+
+.twitter-reply-account {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #ff6600;
 }
 </style>
