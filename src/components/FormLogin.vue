@@ -104,9 +104,16 @@ label {
 // token放localStorage
 // response取得的資料放vuex
 import authorizationAPI from '../apis/authorization'
+import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'
 
 export default {
+  props: {
+    isAdminPage: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       account: '',
@@ -126,21 +133,22 @@ export default {
         }
 
         this.isProcessing = true
-        const { data } = await authorizationAPI.signIn({
+        const api = this.isAdminPage ? adminAPI : authorizationAPI
+
+        const { data } = await api.signIn({
           account: this.account,
           password: this.password
         })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
-        const { id, account, name, email, avatar, isAdmin } = data.user
+        const { id, account, name, email, avatar, isAdmin } = this.isAdminPage ? data.data : data.user
 
         localStorage.setItem('token', data.token)
         this.$store.commit('setCurrentUser', { id, account, name, email, avatar, isAdmin })
 
         // TODO:轉址到主頁
-        this.$router.push('/tweets')
-        this.isProcessing = false
+        this.isAdminPage ? this.$router.push('/admin/tweets') : this.$router.push('/tweets')
       } catch (error) {
         this.password = ''
         this.isProcessing = false

@@ -7,7 +7,16 @@ import store from '../store'
 
 Vue.use(VueRouter)
 
-/*
+// avoid none user access
+const authorizeIsUser = (to, from, next) => {
+  const currentUser = store.state.currentUser
+  if (currentUser && currentUser.isAdmin) {
+    next('/not-found')
+    return
+  }
+  next()
+}
+
 // avoid none admin access
 const authorizeIsAdmin = (to, from, next) => {
   const currentUser = store.state.currentUser
@@ -15,10 +24,8 @@ const authorizeIsAdmin = (to, from, next) => {
     next('/not-found')
     return
   }
-
   next()
 }
-*/
 
 const routes = [
   {
@@ -39,27 +46,32 @@ const routes = [
   {
     path: '/tweets',
     name: 'tweets',
-    component: SimpleTwitter
+    component: SimpleTwitter,
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/tweets/:id',
     name: 'tweet',
-    component: () => import('../views/Tweet.vue')
+    component: () => import('../views/Tweet.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/users/:id',
     name: 'user',
-    component: () => import('../views/UserProfile.vue')
+    component: () => import('../views/UserProfile.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/users/:id/follow',
     name: 'user-follow',
-    component: () => import('../views/UserFollowStatus.vue')
+    component: () => import('../views/UserFollowStatus.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/users/:id/setting',
     name: 'user-setting',
-    component: () => import('../views/AccountSetting.vue')
+    component: () => import('../views/AccountSetting.vue'),
+    beforeEnter: authorizeIsUser
   },
   {
     path: '/admin',
@@ -74,12 +86,14 @@ const routes = [
   {
     path: '/admin/tweets',
     name: 'admin-tweets',
-    component: () => import('../views/AdminTweets.vue')
+    component: () => import('../views/AdminTweets.vue'),
+    beforeEnter: authorizeIsAdmin
   },
   {
     path: '/admin/users',
     name: 'admin-users',
-    component: () => import('../views/AdminUsers.vue')
+    component: () => import('../views/AdminUsers.vue'),
+    beforeEnter: authorizeIsAdmin
   },
   {
     path: '*',
@@ -104,8 +118,8 @@ router.beforeEach(async (to, from, next) => {
     console.log('router before each isAuth:', isAuthenticated)
   }
 
-  // 對於不需要驗證 token 的頁面
-  const pathsWithoutAuthentication = ['sign-up', 'sign-in']
+  // 對於不需要驗證 token 的頁面: TODO:判斷admin or not
+  const pathsWithoutAuthentication = ['sign-up', 'sign-in', 'admin-sign-in']
 
   // 如果 token 無效則轉址到登入頁: 加條件避免無窮迴圈
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {

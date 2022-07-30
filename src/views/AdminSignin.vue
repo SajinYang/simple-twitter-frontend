@@ -12,7 +12,7 @@
         <h3>後台登入</h3>
       </div>
       <div class="col-12">
-        <FormLogin />
+        <FormLogin :is-admin-page="true" />
       </div>
       <div class="col-12">
         <router-link to="/signin" class="btn-link f-right">前台登入</router-link>
@@ -56,11 +56,6 @@ import FormLogin from '../components/FormLogin.vue'
 export default {
   components: {
     FormLogin
-  },
-  data () {
-    return {
-
-    }
   }
 }
 </script>

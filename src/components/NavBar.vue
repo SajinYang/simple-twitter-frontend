@@ -48,7 +48,7 @@
 
     <!-- 下半部 -->
     <div class="down">
-      <button class="logout" @click="logout">
+      <button class="logout" @click.stop.prevent="logout">
         <div class="icon">
           <Logout />
         </div>
