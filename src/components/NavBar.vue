@@ -48,12 +48,12 @@
 
     <!-- 下半部 -->
     <div class="down">
-      <router-link class="logout" to="/404">
+      <button class="logout" @click="logout">
         <div class="icon">
           <Logout />
         </div>
         <h5>登出</h5>
-      </router-link>
+      </button>
     </div>
   </section>
 </template>
@@ -82,6 +82,12 @@ export default {
   data () {
     return {
       NavbarStatus: this.$router.currentRoute.name
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
     }
   }
 }
@@ -113,11 +119,13 @@ export default {
   color: var(--brand-color);
   fill: var(--brand-color);
 }
+
 .logo {
   height: 40px;
   width: 40px;
   margin: 10px 0px 20px 10px;
 }
+
 .icon {
   height: 24px;
   width: 24px;
@@ -128,6 +136,7 @@ export default {
   .navbar {
     width: 100%;
   }
+
   .top {
     justify-content: center;
   }
