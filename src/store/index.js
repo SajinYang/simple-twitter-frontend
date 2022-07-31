@@ -37,13 +37,9 @@ export default new Vuex.Store({
   actions: {
     async fetchCurrentUser ({ commit }) {
       try {
-        console.log('getCurrentUser')
-        // 呼叫 usersAPI.getCurrentUser() 方法，並將 response 顯示出來
         const { data } = await usersAPI.getCurrentUser()
-        console.log(data)
+        const { id, account, name, email, avatar, isAdmin } = data
 
-        const { id, account, name, email, avatar, isAdmin } = data.user
-        console.log(data.user)
         commit('setCurrentUser', {
           id,
           account,

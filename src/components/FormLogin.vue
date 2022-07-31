@@ -147,7 +147,7 @@ export default {
         localStorage.setItem('token', data.token)
         this.$store.commit('setCurrentUser', { id, account, name, email, avatar, isAdmin })
 
-        // TODO:轉址到主頁
+        // 轉址到主頁
         this.isAdminPage ? this.$router.push('/admin/tweets') : this.$router.push('/tweets')
       } catch (error) {
         this.password = ''

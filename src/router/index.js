@@ -115,10 +115,9 @@ router.beforeEach(async (to, from, next) => {
   // 比較 localStorage 和 store 中的 token 是否一樣
   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
-    console.log('router before each isAuth:', isAuthenticated)
   }
 
-  // 對於不需要驗證 token 的頁面: TODO:判斷admin or not
+  // 對於不需要驗證 token 的頁面
   const pathsWithoutAuthentication = ['sign-up', 'sign-in', 'admin-sign-in']
 
   // 如果 token 無效則轉址到登入頁: 加條件避免無窮迴圈
