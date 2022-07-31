@@ -11,5 +11,10 @@ export default {
     return apiHelper.get('/users/14/followings', {
       headers: { Authorization: `Bearer ${getToken}` }
     })
+  },
+  getFollowers () {
+    return apiHelper.get('/users/14/followers', {
+      headers: { Authorization: `Bearer ${getToken}` }
+    })
   }
 }
