@@ -8,7 +8,7 @@
             <router-link class="popular-user-item" to="/tweets">
               <!-- 暫時連結 -->
               <div class="avatar">
-                <img src="./../assets/img/tweet-nophoto.png" alt="" />
+                <img :src="user.avatar | emptyImage" alt="" />
               </div>
             </router-link>
 
@@ -48,9 +48,12 @@
 
 <script>
 import usersAPI from '../apis/users'
+import followshipAPI from '../apis/followship'
 import { Toast } from './../utils/helpers'
+import { emptyImageFilter } from './../utils/mixin'
 
 export default {
+  mixins: [emptyImageFilter],
   data () {
     return {
       users: []
@@ -72,29 +75,52 @@ export default {
         })
       }
     },
-    addFollowing (userId) {
-      this.users = this.users.map((user) => {
-        if (user.id !== userId) {
-          return user
-        } else {
-          return {
-            ...user,
-            isFollowing: true
-          }
+    async addFollowing (userId) {
+      try {
+        const { data } = await followshipAPI.addFollow({ id: userId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
         }
-      })
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isFollowing: true
+            }
+          }
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤成功，請稍後再試'
+        })
+      }
     },
-    deleteFollowing (userId) {
-      this.users = this.users.map((user) => {
-        if (user.id !== userId) {
-          return user
-        } else {
-          return {
-            ...user,
-            isFollowing: false
-          }
+    async deleteFollowing (userId) {
+      try {
+        const { data } = await followshipAPI.deleteFollow({ id: userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
         }
-      })
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isFollowing: false
+            }
+          }
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤成功，請稍後再試'
+        })
+      }
     }
   },
   filters: {

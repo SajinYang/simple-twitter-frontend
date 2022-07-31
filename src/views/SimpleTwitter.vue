@@ -9,10 +9,10 @@
       </div>
       <div class="center-container scrollbar">
         <TweetCreateNew />
-        <TweetPopularList
+        <TweetPopularList class="card-hover"
           v-for="tweet in tweets"
           :key="tweet.id"
-          :initinalTweet="tweet"
+          :initialTweet="tweet"
           @after-create-tweet="afterCreateTweet"
         />
       </div>

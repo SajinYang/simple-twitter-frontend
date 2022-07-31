@@ -1,4 +1,6 @@
 import moment from 'moment'
+import emptyImg from './../assets/img/tweet-nophoto.png'
+import emptyCoverImg from './../assets/img/card-background.png'
 
 export const fromNowFilter = {
   filters: {
@@ -11,10 +13,22 @@ export const fromNowFilter = {
   }
 }
 
+export const dateFilter = {
+  filters: {
+    date (dateTime) {
+      moment.locale('zh-tw')
+      return dateTime ? moment(dateTime).format('a hh:mm ⋅ YYYY年M月D日') : '-'
+    }
+  }
+}
+
 export const emptyImageFilter = {
   filters: {
     emptyImage (src) {
-      return src || 'https://via.placeholder.com/350x220/DFDFDF?text=No+Image'
+      return src || emptyImg
+    },
+    emptyCover (src) {
+      return src || emptyCoverImg
     }
   }
 }

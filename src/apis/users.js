@@ -10,6 +10,9 @@ export default {
   getFollowings () {
     return apiHelper.get('/users/14/followings')
   },
+  getFollowers () {
+    return apiHelper.get('/users/14/followers')
+  },
   updateAccount ({ userId, ...data }) {
     console.log(userId)
     console.log({ ...data })

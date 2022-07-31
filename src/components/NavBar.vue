@@ -17,27 +17,37 @@
               <IconIndexActive v-if="NavbarStatus === 'tweets'" />
               <IconIndex v-if="NavbarStatus !== 'tweets'" />
             </div>
-            <h5>首頁</h5>
+            <h5 class="nav-item-text" :class="{ active: NavbarStatus === 'tweets' }">首頁</h5>
           </router-link>
         </div>
 
         <div class="nav-item-container">
-          <router-link class="nav-item user-profile" :to="{ name: 'user', params: { id: currentUser.id } }">
+          <router-link
+            class="nav-item user-profile"
+            :to="{ name: 'user', params: { id: currentUser.id } }"
+          >
             <div class="icon">
-              <UserProfileActive v-if="NavbarStatus === 'user'" />
+              <UserProfileActive
+                v-if="
+                  NavbarStatus !== 'tweets' && NavbarStatus !== 'user-setting'
+                "
+              />
               <UserProfile v-if="NavbarStatus !== 'user'" />
             </div>
-            <h5>個人資料</h5>
+            <h5 class="nav-item-text" :class="{ active: NavbarStatus !== 'tweets' && NavbarStatus !== 'user-setting'}">個人資料</h5>
           </router-link>
         </div>
 
         <div class="nav-item-container">
-          <router-link class="nav-item setting" :to="{ name: 'user-setting', params: { id: currentUser.id } }">
+          <router-link
+            class="nav-item setting"
+            :to="{ name: 'user-setting', params: { id: currentUser.id } }"
+          >
             <div class="icon">
               <SettingActive v-if="NavbarStatus === 'user-setting'" />
               <Setting v-if="NavbarStatus !== 'user-setting'" />
             </div>
-            <h5>設定</h5>
+            <h5 class="nav-item-text" :class="{ active: NavbarStatus === 'user-setting' }">設定</h5>
           </router-link>
         </div>
 
@@ -93,6 +103,9 @@ export default {
   },
   computed: {
     ...mapState(['currentUser'])
+  },
+  created () {
+    console.log(this.$router.currentRoute.name)
   }
 }
 </script>
@@ -118,8 +131,12 @@ export default {
 
 .nav-item:hover,
 .icon:hover,
-.logout:hover,
-.router-link-active {
+.logout:hover {
+  color: var(--brand-color);
+  fill: var(--brand-color);
+}
+
+.nav-item-text.active {
   color: var(--brand-color);
   fill: var(--brand-color);
 }

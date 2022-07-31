@@ -18,23 +18,23 @@
         <div class="navtabs">
           <button
             class="button-navtabs"
-            :class="{ active: FollowStatus === 'follower' }"
+            :class="{ active: followStatus === 'follower' }"
             @click.stop.prevent="toggleFollowStatus('follower')"
           >
             <span
               class="subtitle"
-              :class="{ active: FollowStatus === 'follower' }"
+              :class="{ active: followStatus === 'follower' }"
               >追隨者</span
             >
           </button>
           <button
             class="button-navtabs"
-            :class="{ active: FollowStatus === 'following' }"
+            :class="{ active: followStatus === 'following' }"
             @click.stop.prevent="toggleFollowStatus('following')"
           >
             <span
               class="subtitle"
-              :class="{ active: FollowStatus === 'following' }"
+              :class="{ active: followStatus === 'following' }"
               >正在追隨</span
             >
           </button>
@@ -42,7 +42,7 @@
       </header>
 
       <div class="follow-center-container scrollbar">
-        <TweetFollow />
+        <TweetFollow :followStatus="followStatus" />
       </div>
     </section>
     <TweetPopularUser />
@@ -62,12 +62,12 @@ export default {
   },
   data () {
     return {
-      FollowStatus: 'follower'
+      followStatus: 'follower'
     }
   },
   methods: {
     toggleFollowStatus (status) {
-      this.FollowStatus = status
+      this.followStatus = status
     }
   }
 }
@@ -103,6 +103,10 @@ export default {
   border-right: 1px solid var(--border);
 }
 
+.header-top {
+  margin-left: 15px;
+}
+
 .header-top,
 .navtabs {
   display: flex;
@@ -130,7 +134,7 @@ export default {
 }
 
 .title-container {
-  margin-left: 10px;
+  margin-left: 15px;
 }
 
 .subtitle {

@@ -1,9 +1,12 @@
 <template>
   <section class="tweet-popular-section">
     <div class="tweet-popular-container">
-      <div class="tweet">
+      <router-link
+        class="tweet"
+        :to="{ name: 'tweet', params: { id: tweet.id } }"
+      >
         <div class="avatar">
-          <img src="./../assets/img/tweet-nophoto.png" alt="" />
+          <img :src="tweet.User.avatar | emptyImage" alt="" />
         </div>
         <div class="tweet-info">
           <div class="tweet-user">
@@ -17,7 +20,12 @@
           </p>
           <div class="tweet-icon-container">
             <div class="tweet-reply">
-              <ModalTweetReply class="tweet-icon-reply" />
+              <router-link class="cursor-default" to="">
+                <ModalTweetReply
+                  :initialTweet="initialTweet"
+                  class="tweet-icon-reply"
+                />
+              </router-link>
               <span class="tweet-icon-number">{{ tweet.repliedCounts }}</span>
             </div>
 
@@ -26,27 +34,29 @@
                 v-if="tweet.isBeingLiked"
                 class="tweet-icon-like"
                 src="../assets/icon/tweet-like.svg"
+                @click.stop.prevent="deleteLike(tweet.id)"
                 alt=""
               />
               <img
                 v-else
                 class="tweet-icon-like"
                 src="../assets/icon/tweet-unlike.svg"
+                @click.stop.prevent="addLike(tweet.id)"
                 alt=""
               />
               <span class="tweet-icon-number">{{ tweet.likesCounts }}</span>
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
   </section>
 </template>
 
 <script>
 import ModalTweetReply from './ModalTweetReply.vue'
-// import tweetsAPI from '../apis/tweets'
-// import { Toast } from '../utils/helpers'
+import tweetsAPI from '../apis/tweets'
+import { Toast } from '../utils/helpers'
 import { fromNowFilter, emptyImageFilter } from '../utils/mixin'
 
 export default {
@@ -55,34 +65,47 @@ export default {
   },
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
-    initinalTweet: {
+    initialTweet: {
       type: Object,
       required: true
     }
   },
   data () {
     return {
-      tweet: this.initinalTweet
+      tweet: this.initialTweet
     }
   },
   methods: {
-    //  @click.stop.prevent="addLike(tweet.id)"
-    // async addLike (tweetId) {
-    //   try {
-    //     console.log('click')
-    //     const { data } = await tweetsAPI.addLike(tweetId)
-    //     if (data.status !== 'success') {
-    //       throw new Error(data.message)
-    //     }
-    //     this.tweet.isBeingLiked = true
-    //     this.tweet.likesCounts += 1
-    //   } catch (error) {
-    //     Toast.fire({
-    //       icon: 'error',
-    //       title: '無法按喜歡，請稍後再試'
-    //     })
-    //   }
-    // }
+    async addLike (tweetId) {
+      try {
+        const { data } = await tweetsAPI.addLike({ tweetId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.tweet.isBeingLiked = true
+        this.tweet.likesCounts += 1
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法按喜歡，請稍後再試'
+        })
+      }
+    },
+    async deleteLike (tweetId) {
+      try {
+        const { data } = await tweetsAPI.deleteLike({ tweetId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.tweet.isBeingLiked = false
+        this.tweet.likesCounts -= 1
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法按喜歡，請稍後再試'
+        })
+      }
+    }
   }
 }
 </script>
@@ -104,9 +127,10 @@ export default {
   grid-template-columns: 50px auto;
   grid-gap: 15px;
   width: 100%;
-  min-height: 116px;
+  min-height: 105px;
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
+  color: var(--dark-100);
 }
 
 .tweet-info {
@@ -133,6 +157,7 @@ export default {
 .tweet-icon-container {
   display: flex;
   width: 100%;
+  height: 20px;
 }
 
 .tweet-reply,
@@ -149,8 +174,18 @@ export default {
   margin-right: 12px;
 }
 
+.tweet-icon-like:hover {
+  height: 18px;
+  width: 18px;
+  transition: all 100ms ease-out;
+}
+
 .tweet-icon-reply {
   margin-top: 3px;
   margin-right: 3px;
+}
+
+.cursor-default {
+  cursor: default;
 }
 </style>

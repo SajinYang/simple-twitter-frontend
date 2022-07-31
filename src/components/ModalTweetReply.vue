@@ -3,13 +3,13 @@
     <button class="btn tweet-reply" @click.stop.prevent="openModal">
       <img
         class="tweet-reply-icon"
-        src="./../assets/icon/tweet-reply.svg"
+        src="./../assets/icon/tweet-reply1.svg"
         alt=""
       />
     </button>
 
     <div class="modal-tweet" v-show="modalStatus">
-      <div class="modal-background"></div>
+      <div class="modal-background" @click.stop.prevent="closeModal"></div>
       <div class="modal-container">
         <div class="modal-header">
           <div class="btn modal-close" @click.stop.prevent="closeModal">
@@ -19,19 +19,23 @@
 
         <form class="modal-content">
           <div class="avatar">
-            <img src="./../assets/img/tweet-nophoto.png" alt="" />
+            <img :src="initialTweet.User.avatar | emptyImage" alt="" />
           </div>
 
           <div class="twitter-reply-container">
-            <span class="twitter-reply name">Apple</span>
-            <span class="twitter-reply info">@apple ・3 小時</span>
+            <span class="twitter-reply name">{{ initialTweet.User.name }}</span>
+            <span class="twitter-reply info"
+              >@{{ initialTweet.User.account }}・{{
+                initialTweet.createdAt | fromNow
+              }}</span
+            >
             <p class="twitter-reply content">
-              Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis
-              ullamco cillum dolor. Voluptate exercitation incididunt aliquip
-              deserunt reprehenderit elit laborum.
+              {{ initialTweet.description }}
             </p>
             <span class="twitter-reply-text">回覆給 </span>
-            <span class="twitter-reply-account"> @Mitsubishi</span>
+            <span class="twitter-reply-account">
+              @{{ initialTweet.User.account }}</span
+            >
           </div>
 
           <div class="avatar avatar-reply">
@@ -71,8 +75,16 @@
 
 <script>
 import { Toast } from '../utils/helpers'
+import { fromNowFilter, emptyImageFilter } from '../utils/mixin'
 
 export default {
+  mixins: [fromNowFilter, emptyImageFilter],
+  props: {
+    initialTweet: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       twitterText: '',
@@ -121,14 +133,21 @@ export default {
   position: fixed;
 }
 .tweet-reply-icon {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
 }
+
+.tweet-reply-icon:hover {
+  height: 18px;
+  width: 18px;
+  transition: all 100ms ease-out;
+}
+
 .modal-container {
   width: 634px;
   height: 500px;
   position: fixed;
-  z-index: 999;
+  z-index: 1050;
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
@@ -152,6 +171,27 @@ export default {
 
 .twitter-reply-container {
   margin: 0 20px;
+}
+
+.twitter-reply.content {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--dark-100);
+}
+
+.twitter-reply.name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--dark-100);
+}
+
+.twitter-reply.info {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--secondary);
 }
 
 .twitter-reply {

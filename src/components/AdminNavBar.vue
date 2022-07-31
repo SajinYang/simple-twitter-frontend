@@ -4,15 +4,15 @@
     <div class="top">
       <!-- logo -->
       <div class="logo">
-        <router-link to="">
+        <router-link to="/admin/tweets">
           <img src="./../assets/icon/navbar-logo.svg" alt="" />
         </router-link>
       </div>
 
       <!-- nav -->
       <nav class="navigation">
-        <div @click.stop.prevent="toggleNavStatus('admin-tweet')">
-          <router-link class="nav-item index" to="/admin">
+        <div>
+          <router-link class="nav-item index" to="/admin/tweets">
             <div class="icon">
               <IconIndexActive v-if="NavbarStatus === 'admin-tweets'" />
               <IconIndex v-if="NavbarStatus !== 'admin-tweets'" />
@@ -21,7 +21,7 @@
           </router-link>
         </div>
 
-        <div @click.stop.prevent="toggleNavStatus('admin-users')">
+        <div>
           <router-link class="nav-item user-profile" to="/admin/users">
             <div class="icon">
               <UserProfileActive v-if="NavbarStatus === 'admin-users'" />
@@ -35,7 +35,7 @@
 
     <!-- 下半部 -->
     <div class="down">
-      <div @click.stop.prevent="toggleNavStatus('logout')">
+      <div>
         <button class="logout" @click.stop.prevent="logout">
           <div class="icon">
             <Logout />
