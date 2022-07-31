@@ -71,11 +71,6 @@ import FormLogin from '../components/FormLogin.vue'
 export default {
   components: {
     FormLogin
-  },
-  data () {
-    return {
-
-    }
   }
 }
 </script>
