@@ -36,12 +36,12 @@
     <!-- 下半部 -->
     <div class="down">
       <div @click.stop.prevent="toggleNavStatus('logout')">
-        <router-link class="logout" to="/404">
+        <button class="logout" @click.stop.prevent="logout">
           <div class="icon">
             <Logout />
           </div>
           <h5>登出</h5>
-        </router-link>
+        </button>
       </div>
     </div>
   </section>
@@ -65,6 +65,12 @@ export default {
   data () {
     return {
       NavbarStatus: this.$router.currentRoute.name
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/admin/signin')
     }
   }
 }

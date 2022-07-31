@@ -3,9 +3,22 @@ import Swal from 'sweetalert2'
 
 const baseURL = 'https://simple-twitter-paul.herokuapp.com/api'
 
-export const apiHelper = axios.create({
+const axiosInstance = axios.create({
   baseURL
 })
+
+axiosInstance.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  err => Promise.reject(err)
+)
+
+export const apiHelper = axiosInstance
 
 // eslint-disable-next-line
 export const Toast = Swal.mixin({
