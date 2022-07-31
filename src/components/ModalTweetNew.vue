@@ -11,7 +11,7 @@
     />
 
     <div v-show="modalStatus">
-      <div class="modal-background"></div>
+      <div class="modal-background" @click.stop.prevent="closeModal"></div>
       <div class="modal-container">
         <div class="modal-header">
           <div class="btn modal-close" @click.stop.prevent="closeModal">
@@ -97,7 +97,6 @@ export default {
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
-        console.log(data)
         Toast.fire({
           icon: 'success',
           title: '新增推文成功'
@@ -161,6 +160,7 @@ export default {
 
 .avatar {
   margin-top: -15px;
+  border-radius: 50%;
 }
 
 .twitter-text {

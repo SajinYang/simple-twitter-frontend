@@ -9,7 +9,7 @@
     </button>
 
     <div class="modal-tweet" v-show="modalStatus">
-      <div class="modal-background"></div>
+      <div class="modal-background" @click.stop.prevent="closeModal"></div>
       <div class="modal-container">
         <div class="modal-header">
           <div class="btn modal-close" @click.stop.prevent="closeModal">
@@ -19,19 +19,17 @@
 
         <form class="modal-content">
           <div class="avatar">
-            <img src="./../assets/img/tweet-nophoto.png" alt="" />
+            <img :src="user.avatar | emptyImage" alt="" />
           </div>
 
           <div class="twitter-reply-container">
-            <span class="twitter-reply name">Apple</span>
-            <span class="twitter-reply info">@apple ・3 小時</span>
+            <span class="twitter-reply name">{{ user.name }}</span>
+            <span class="twitter-reply info">@{{ user.account }}・{{ tweet.createdAt | fromNow }}</span>
             <p class="twitter-reply content">
-              Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis
-              ullamco cillum dolor. Voluptate exercitation incididunt aliquip
-              deserunt reprehenderit elit laborum.
+              {{ tweet.description }}
             </p>
             <span class="twitter-reply-text">回覆給 </span>
-            <span class="twitter-reply-account"> @Mitsubishi</span>
+            <span class="twitter-reply-account"> @{{ user.account }}</span>
           </div>
 
           <div class="avatar avatar-reply">
@@ -71,8 +69,20 @@
 
 <script>
 import { Toast } from '../utils/helpers'
+import { emptyImageFilter, fromNowFilter } from '../utils/mixin'
 
 export default {
+  props: {
+    tweet: {
+      type: Object,
+      required: true
+    },
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [emptyImageFilter, fromNowFilter],
   data () {
     return {
       twitterText: '',
@@ -152,6 +162,27 @@ export default {
 
 .twitter-reply-container {
   margin: 0 20px;
+}
+
+.twitter-reply.content {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--dark-100);
+}
+
+.twitter-reply.name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--dark-100);
+}
+
+.twitter-reply.info {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--secondary);
 }
 
 .twitter-reply {
