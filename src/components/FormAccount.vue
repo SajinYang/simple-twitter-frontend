@@ -25,10 +25,6 @@
         @change="checkEmailFormat">
 
       <label for="email">Email</label>
-      <!-- <div class="input-hints">
-        <span class="error" v-if="user.email && !checkEmailFormat()">Email須包含「@」，請檢查「{{ user.email
-          }}」是否為正確email格式</span>
-      </div> -->
     </div>
     <div class="input-group">
       <input type="password" name="password" id="password" placeholder="請設定密碼" maxlength="100"
@@ -37,12 +33,17 @@
     </div>
     <div class="input-group">
       <input type="password" name="password" id="passwordCheck" placeholder="請再次設定密碼" maxlength="100"
-        v-model.lazy="user.passwordCheck" required>
-      <label for="passwordCheck">密碼確認</label>
+        v-model.lazy="user.checkPassword" required>
+      <label for="checkPassword">密碼確認</label>
     </div>
 
-    <button type="submit" class="btn-primary" :disabled="isProcessing">{{ isProcessing ? '處理中' : '註冊' }}</button>
-    <router-link :to="{ name: 'sign-in' }" class="btn-link">取消</router-link>
+    <button type="submit" class="btn-setting" :disabled="isProcessing" v-if="currentPage === 'setting'">
+      {{ isProcessing ? '處理中' : '儲存' }}
+    </button>
+    <button type="submit" class="btn-primary" :disabled="isProcessing" v-if="currentPage === 'signup'">
+      {{ isProcessing ? '處理中' : '註冊' }}
+    </button>
+    <router-link :to="{ name: 'sign-in' }" class="btn-link" v-if="currentPage === 'signup'">取消</router-link>
   </form>
 </template>
 
@@ -118,6 +119,11 @@ label {
   color: var(--dark-0);
   font-size: 20px;
   line-height: 30px;
+
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
 }
 
 .btn-link {
@@ -125,11 +131,32 @@ label {
   text-decoration: underline;
   font-size: 1rem;
 }
+
+.btn-setting {
+  align-self: end;
+  padding: 8px 24px;
+  border-radius: 50px;
+  background-color: var(--brand-color);
+  color: var(--dark-0);
+  font-size: 20px;
+  line-height: 30px;
+
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+}
 </style>
 
 <script>
+import { Toast } from '../utils/helpers'
+
 export default {
   props: {
+    currentPage: {
+      type: String,
+      required: true
+    },
     initialUser: {
       type: Object,
       default: () => {
@@ -138,9 +165,13 @@ export default {
           name: '',
           email: '',
           password: '',
-          passwordCheck: ''
+          checkPassword: ''
         }
       }
+    },
+    isProcessing: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -150,15 +181,14 @@ export default {
         name: '',
         email: '',
         password: '',
-        passwordCheck: ''
-      },
-      isAuthenticated: false,
-      isProcessing: false
+        checkPassword: ''
+      }
     }
   },
   methods: {
-    fetchUser () {
+    fetchInitialUser () {
       this.user = {
+        ...this.user,
         ...this.initialUser
       }
     },
@@ -167,23 +197,37 @@ export default {
       console.log(pattern.test(this.user.email))
       return pattern.test(this.user.email)
     },
-    checkPassword () {
-      console.log('check password')
-      return this.password === this.passwordCheck
-    },
-    async handleSubmit (e) {
-      // TODO: API
-      this.isProcessing = true
-      console.log('handleSubmit')
-      console.log(e.target)
-      console.log(this.user)
+    handleSubmit (e) {
+      // basic check
+      if (
+        !this.user.account ||
+        !this.user.name ||
+        !this.user.email ||
+        !this.user.password ||
+        !this.user.checkPassword
+      ) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認已填寫所有欄位'
+        })
+        return false
+      }
+      if (this.password !== this.checkPassword) {
+        Toast.fire({
+          icon: 'warning',
+          title: '兩次輸入的密碼不同'
+        })
+        this.checkPassword = ''
+        return false
+      }
+
       // if success emit to parent
-      this.isProcessing = false
-      // this.$emit('after-submit', true)
+      this.$emit('after-submit', this.user)
     }
   },
   created () {
-    this.fetchUser()
+    // when editing
+    this.fetchInitialUser()
   }
 }
 </script>

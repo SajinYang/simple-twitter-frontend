@@ -9,5 +9,12 @@ export default {
   },
   getFollowings () {
     return apiHelper.get('/users/14/followings')
+  },
+  updateUser ({ userId, ...data }) {
+    console.log(...data)
+    return apiHelper.put(`/users/${userId}`, { ...data })
+  },
+  signUp (data) {
+    return apiHelper.post('/users', { ...data })
   }
 }

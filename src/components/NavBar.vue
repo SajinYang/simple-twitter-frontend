@@ -22,7 +22,7 @@
         </div>
 
         <div class="nav-item-container">
-          <router-link class="nav-item user-profile" to="/users/1">
+          <router-link class="nav-item user-profile" :to="{ name: 'user', params: { id: currentUser.id } }">
             <div class="icon">
               <UserProfileActive v-if="NavbarStatus === 'user'" />
               <UserProfile v-if="NavbarStatus !== 'user'" />
@@ -32,7 +32,7 @@
         </div>
 
         <div class="nav-item-container">
-          <router-link class="nav-item setting" to="/user/1/setting">
+          <router-link class="nav-item setting" :to="{ name: 'user-setting', params: { id: currentUser.id } }">
             <div class="icon">
               <SettingActive v-if="NavbarStatus === 'user-setting'" />
               <Setting v-if="NavbarStatus !== 'user-setting'" />
@@ -67,6 +67,7 @@ import IconIndexActive from '../components/icon/IconIndexActive.vue'
 import UserProfileActive from '../components/icon/UserProfileActive.vue'
 import SettingActive from '../components/icon/SettingActive.vue'
 import ModalTweetNew from './ModalTweetNew.vue'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -89,6 +90,9 @@ export default {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   }
 }
 </script>

@@ -5,8 +5,5 @@ export default {
     return apiHelper.post('/signin', {
       account, password
     })
-  },
-  signUp (data) {
-    return apiHelper.post('/signup', { ...data })
   }
 }
