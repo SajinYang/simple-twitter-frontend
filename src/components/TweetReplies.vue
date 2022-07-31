@@ -1,24 +1,24 @@
 <template>
   <section class="tweet-popular-section">
     <div class="tweet-popular-container">
-      <div v-for="tweet of tweets" :key="tweet.id" class="tweet">
+      <div v-for="reply of initialreplies" :key="reply.id" class="tweet">
         <div class="avatar">
           <img src="./../assets/img/tweet-nophoto.png" alt="" />
         </div>
         <div class="tweet-info">
           <div class="tweet-user">
-            <span class="tweet-user name">Apple</span>
+            <span class="tweet-user name">{{ reply.Tweet.User.name }}</span>
             <span class="tweet-user account"
-              >@apple ・{{ tweet.createdAt | fromNow }}</span
+              >@{{ reply.User.account }} ・{{
+                reply.Tweet.createdAt | fromNow
+              }}</span
             >
           </div>
           <div class="tweet-reply">
             <span class="text-reply">回覆 </span
-            ><span class="account">@apple</span>
+            ><span class="account">@{{ reply.Tweet.User.account }}</span>
           </div>
-          <p class="tweet-content">
-            {{ tweet.description }}
-          </p>
+          <p class="tweet-content">{{ reply.comment }}</p>
         </div>
       </div>
     </div>
@@ -26,34 +26,19 @@
 </template>
 
 <script>
-import tweetsAPI from '../apis/tweets'
-import { Toast } from '../utils/helpers'
 import { fromNowFilter, emptyImageFilter } from '../utils/mixin'
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
+  props: {
+    initialreplies: {
+      type: Array,
+      require: true
+    }
+  },
   data () {
     return {
       tweets: {}
-    }
-  },
-  created () {
-    this.fetchTweets()
-  },
-  methods: {
-    async fetchTweets () {
-      try {
-        const response = await tweetsAPI.getTweets()
-        const data = response.data
-        this.tweets = {
-          ...data
-        }
-      } catch (error) {
-        Toast.fire({
-          icon: 'error',
-          title: '無法取得推文資料，請稍後再試'
-        })
-      }
     }
   }
 }
@@ -90,7 +75,7 @@ export default {
 
 .avatar {
   margin-top: 7px;
-   border-radius: 50%;
+  border-radius: 50%;
 }
 
 .tweet-info {

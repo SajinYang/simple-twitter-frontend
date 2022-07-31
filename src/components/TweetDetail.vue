@@ -5,38 +5,51 @@
         <div class="tweet-info">
           <div class="tweet-user-container">
             <div class="avatar">
-              <img src="./../assets/img/tweet-nophoto.png" alt="" />
+              <img :src="user.avatar | emptyImage" alt="" />
             </div>
             <div class="tweet-user">
-              <span class="tweet-user-name">Apple</span>
-              <span class="tweet-user-account">@apple</span>
+              <span class="tweet-user-name">{{ user.name }}</span>
+              <span class="tweet-user-account"
+                >@{{ user.account }}</span
+              >
             </div>
           </div>
           <p class="tweet-content">
-            Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco
-            cillum dolor. Voluptate exercitation incididunt aliquip deserunt.
+            {{ tweet.description }}
           </p>
           <div class="tweet-time-container">
             <div class="tweet-time">
-              <span class="tweet-time-create">上午 10:05・2021年11月10日</span>
+              <span class="tweet-time-create">{{
+                tweet.createdAt | date
+              }}</span>
             </div>
           </div>
           <div class="tweet-data-container">
             <div class="tweet-reply">
-              <strong>34</strong><span class="tweet-icon-number">回覆</span>
+              <strong>{{ tweet.repliedCounts }}</strong
+              ><span class="tweet-icon-number">回覆</span>
             </div>
             <div class="tweet-reply">
-              <strong>808</strong
+              <strong>{{ tweet.likesCounts }}</strong
               ><span class="tweet-icon-number"> 喜歡次數</span>
             </div>
           </div>
           <div class="tweet-icon-container">
             <div class="tweet-reply">
-              <ModalTweetReply1 class="tweet-icon-reply" />
+              <ModalTweetReply1 :tweet="tweet" :user="user" class="tweet-icon-reply" />
             </div>
 
             <div class="tweet-like">
               <img
+                v-if="!tweet.isBeingLiked"
+                @click.stop.prevent="addLike(tweet.id)"
+                class="tweet-icon-unlike"
+                src="../assets/icon/tweet-unlike.svg"
+                alt=""
+              />
+              <img
+                v-else
+                @click.stop.prevent="deleteLike(tweet.id)"
                 class="tweet-icon-like"
                 src="../assets/icon/tweet-like.svg"
                 alt=""
@@ -51,10 +64,56 @@
 
 <script>
 import ModalTweetReply1 from './ModalTweetReply1.vue'
+import tweetsAPI from '../apis/tweets'
+import { Toast } from '../utils/helpers'
+import { emptyImageFilter, fromNowFilter, dateFilter } from '../utils/mixin'
 
 export default {
+  props: {
+    tweet: {
+      type: Object,
+      required: true
+    },
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [emptyImageFilter, fromNowFilter, dateFilter],
   components: {
     ModalTweetReply1
+  },
+  methods: {
+    async addLike (tweetId) {
+      try {
+        const { data } = await tweetsAPI.addLike({ tweetId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.tweet.isBeingLiked = true
+        this.tweet.likesCounts += 1
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法按喜歡，請稍後再試'
+        })
+      }
+    },
+    async deleteLike (tweetId) {
+      try {
+        const { data } = await tweetsAPI.deleteLike({ tweetId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.tweet.isBeingLiked = false
+        this.tweet.likesCounts -= 1
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法按喜歡，請稍後再試'
+        })
+      }
+    }
   }
 }
 </script>
@@ -127,13 +186,16 @@ export default {
 }
 
 .tweet-reply,
-.tweet-like {
+.tweet-like,
+.tweet-icon-unlike {
   display: flex;
   align-items: center;
   margin-right: 42px;
+  cursor: pointer;
 }
 
 .tweet-icon-like,
+.tweet-icon-unlike,
 .tweet-icon-reply {
   height: 25px;
   width: 25px;
@@ -144,7 +206,8 @@ export default {
   margin-right: 3px;
 }
 
-.tweet-icon-like {
+.tweet-icon-like,
+.tweet-icon-unlike {
   margin-top: 2px;
   margin-left: 35px;
 }
