@@ -4,15 +4,15 @@
       <div class="tweet">
         <div class="tweet-info">
           <div class="tweet-user-container">
-            <div class="avatar">
+            <router-link class="avatar" :to="{ name: 'user', params: { id: user.UserId } }">
               <img :src="user.avatar | emptyImage" alt="" />
-            </div>
-            <div class="tweet-user">
+            </router-link>
+            <router-link class="tweet-user" :to="{ name: 'user', params: { id: user.UserId } }">
               <span class="tweet-user-name">{{ user.name }}</span>
               <span class="tweet-user-account"
                 >@{{ user.account }}</span
               >
-            </div>
+            </router-link>
           </div>
           <p class="tweet-content">
             {{ tweet.description }}
@@ -140,6 +140,7 @@ export default {
   font-weight: 400;
   line-height: 36px;
   color: var(--dark-100);
+  white-space: pre-line;
 }
 
 .tweet-time-create {
@@ -158,6 +159,7 @@ export default {
 
 .tweet-user-name {
   font-weight: 700;
+  color: var(--dark-100);
 }
 
 .tweet-user-account {
