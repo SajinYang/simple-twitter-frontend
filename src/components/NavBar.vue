@@ -14,10 +14,21 @@
         <div class="nav-item-container">
           <router-link class="nav-item index" to="/tweets">
             <div class="icon">
-              <IconIndexActive v-if="NavbarStatus === 'tweets'" />
-              <IconIndex v-if="NavbarStatus !== 'tweets'" />
+              <IconIndexActive
+                v-if="NavbarStatus === 'tweets' || NavbarStatus === 'tweet'"
+              />
+              <IconIndex
+                v-if="NavbarStatus !== 'tweets' && NavbarStatus !== 'tweet'"
+              />
             </div>
-            <h5 class="nav-item-text" :class="{ active: NavbarStatus === 'tweets' }">首頁</h5>
+            <h5
+              class="nav-item-text"
+              :class="{
+                active: NavbarStatus === 'tweets' || NavbarStatus === 'tweet',
+              }"
+            >
+              首頁
+            </h5>
           </router-link>
         </div>
 
@@ -29,12 +40,29 @@
             <div class="icon">
               <UserProfileActive
                 v-if="
-                  NavbarStatus !== 'tweets' && NavbarStatus !== 'user-setting'
+                  NavbarStatus !== 'tweets' &&
+                  NavbarStatus !== 'user-setting' &&
+                  NavbarStatus !== 'tweet'
                 "
               />
-              <UserProfile v-if="NavbarStatus !== 'user'" />
+              <UserProfile
+                v-if="
+                  (NavbarStatus !== 'user' && NavbarStatus !== 'user-follow') ||
+                  NavbarStatus === 'tweet'
+                "
+              />
             </div>
-            <h5 class="nav-item-text" :class="{ active: NavbarStatus !== 'tweets' && NavbarStatus !== 'user-setting'}">個人資料</h5>
+            <h5
+              class="nav-item-text"
+              :class="{
+                active:
+                  NavbarStatus !== 'tweets' &&
+                  NavbarStatus !== 'user-setting' &&
+                  NavbarStatus !== 'tweet',
+              }"
+            >
+              個人資料
+            </h5>
           </router-link>
         </div>
 
@@ -47,7 +75,12 @@
               <SettingActive v-if="NavbarStatus === 'user-setting'" />
               <Setting v-if="NavbarStatus !== 'user-setting'" />
             </div>
-            <h5 class="nav-item-text" :class="{ active: NavbarStatus === 'user-setting' }">設定</h5>
+            <h5
+              class="nav-item-text"
+              :class="{ active: NavbarStatus === 'user-setting' }"
+            >
+              設定
+            </h5>
           </router-link>
         </div>
 
@@ -103,9 +136,6 @@ export default {
   },
   computed: {
     ...mapState(['currentUser'])
-  },
-  created () {
-    console.log(this.$router.currentRoute.name)
   }
 }
 </script>
