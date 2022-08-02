@@ -145,7 +145,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #E6ECF0;
+  border-bottom: 1px solid var(--border);
 }
 
 .modal-header-title {
