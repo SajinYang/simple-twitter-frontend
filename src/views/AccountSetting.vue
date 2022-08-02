@@ -2,15 +2,18 @@
   <div class="container-twitter">
     <NavBar />
     <section class="center-section">
-      <div class="title-container">
+      <div class="title-container mb-4">
         <header class="header">
           <h4 class="title">帳戶設定</h4>
         </header>
       </div>
-      <FormAccount :current-page="'setting'" :initial-user="initialUser" :is-processing="isProcessing"
-        @after-submit="handleAfterSubmit" />
+      <FormAccount
+      class="px-4"
+      :current-page="'setting'"
+      :initial-user="initialUser"
+      :is-processing="isProcessing"
+      @after-submit="handleAfterSubmit" />
     </section>
-    <TweetPopularUser />
   </div>
 </template>
 
@@ -19,8 +22,6 @@
 // 修改vuex的currentUser
 import NavBar from '../components/NavBar.vue'
 import FormAccount from '../components/FormAccount.vue'
-import TweetPopularUser from '../components/TweetPopularUser.vue'
-// import usersAPI from '../apis/users'
 import { mapState } from 'vuex'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
@@ -28,8 +29,7 @@ import { Toast } from '../utils/helpers'
 export default {
   components: {
     NavBar,
-    FormAccount,
-    TweetPopularUser
+    FormAccount
   },
   data () {
     return {

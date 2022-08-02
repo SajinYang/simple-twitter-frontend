@@ -1,18 +1,18 @@
 <template>
   <div class="container-admin">
     <AdminNavBar />
-    <UserTweets />
+    <AdminUserTweets />
   </div>
 </template>
 
 <script>
 import AdminNavBar from '../components/AdminNavBar.vue'
-import UserTweets from '../components/UserTweets.vue'
+import AdminUserTweets from '../components/AdminUserTweets.vue'
 
 export default {
   components: {
     AdminNavBar,
-    UserTweets
+    AdminUserTweets
   }
 }
 </script>

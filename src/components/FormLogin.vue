@@ -1,13 +1,16 @@
 <template>
   <form action="#" class="form-group" @submit.stop.prevent="handleSubmit">
     <div class="input-group">
-      <input type="text" name="account" id="account" placeholder="請輸入帳號" maxlength="100" v-model="account" required
-        autofocus>
+      <input type="text" name="account" id="account" placeholder="請輸入帳號" maxlength="100" v-model="account"
+        :class="{ error: account.length > 10 }" required autofocus>
       <label for="account">帳號</label>
 
       <div class="input-hints">
-        <span class="error" :style="{ visibility: account.length > 10 ? 'visible' : 'hidden' }">字數超出上限</span>
-        <span :class="{ error: account.length > 10 }" v-if="account.length">{{ account.length }}/10</span>
+        <span class="error" :style="{ visibility: account.length > 10 ? 'visible' : 'hidden' }">
+          字數超出上限
+        </span>
+        <span :class="{ error: account.length > 10 }" v-if="account.length">{{ account.length }}/10
+        </span>
       </div>
     </div>
     <div class="input-group">
@@ -16,7 +19,9 @@
       <label for="password">密碼</label>
     </div>
 
-    <button type="submit" class="btn-primary" :disabled="isProcessing">{{ isProcessing ? '登入中...' : '登入' }}</button>
+    <button type="submit" class="btn-primary" :disabled="isProcessing">
+      {{ isProcessing ? '登入中...' : '登入' }}
+    </button>
   </form>
 </template>
 

@@ -149,6 +149,7 @@ export default {
 .popular-users-section {
   height: 100vh;
 }
+
 .popular-users-container {
   display: flex;
   flex-direction: column;
@@ -170,6 +171,7 @@ export default {
   margin: 0 auto;
   padding: 15px 0 10px 0;
 }
+
 .popular-users {
   width: 100%;
 }
@@ -193,8 +195,12 @@ export default {
 }
 
 .popular-user-name {
+  max-width: 93px;
   font-weight: 700;
   color: var(--dark-100);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .popular-user-account {
