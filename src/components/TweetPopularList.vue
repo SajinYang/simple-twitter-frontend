@@ -5,14 +5,14 @@
         class="tweet"
         :to="{ name: 'tweet', params: { id: tweet.id } }"
       >
-        <div class="avatar">
+        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.id } }">
           <img :src="tweet.User.avatar | emptyImage" alt="" />
-        </div>
+        </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <span class="tweet-user name">{{ tweet.User.name }}</span>
-            <span class="tweet-user account"
-              >@{{ tweet.User.account }} ・{{ tweet.createdAt | fromNow }}</span
+            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.id } }">{{ tweet.User.name }}</router-link>
+            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.id } }"
+              >@{{ tweet.User.account }} ・ {{ tweet.createdAt | fromNow }}</router-link
             >
           </div>
           <p class="tweet-content">
@@ -24,6 +24,7 @@
                 <ModalTweetReply
                   :initialTweet="initialTweet"
                   class="tweet-icon-reply"
+                  @after-create-reply="afterCreateReply"
                 />
               </router-link>
               <span class="tweet-icon-number">{{ tweet.repliedCounts }}</span>
@@ -105,6 +106,9 @@ export default {
           title: '無法按喜歡，請稍後再試'
         })
       }
+    },
+    afterCreateReply () {
+      this.tweet.repliedCounts += 1
     }
   }
 }
@@ -142,10 +146,12 @@ export default {
   line-height: 24px;
   color: var(--dark-100);
   font-weight: 400;
+  white-space: pre-line;
 }
 
 .tweet-user.name {
   font-weight: 700;
+  color: var(--dark-100);
 }
 
 .tweet-user.account {

@@ -11,11 +11,13 @@
           placeholder="有什麼新鮮事？"
           maxlength="200"
           v-model="twitterText"
+          required
         ></textarea>
       </div>
       <button
         class="btn btn-post-reply-tweet"
         @click.stop.prevent="createdTweet"
+        :disabled="isProcessing"
       >
         推文
       </button>
@@ -26,14 +28,17 @@
 <script>
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      twitterText: ''
+      twitterText: '',
+      isProcessing: false
     }
   },
   methods: {
+    ...mapActions(['updatePage']),
     async createdTweet () {
       try {
         if (!this.twitterText.trim()) {
@@ -52,6 +57,8 @@ export default {
           return
         }
 
+        this.isProcessing = true
+
         const { data } = await tweetsAPI.createTweet({
           description: this.twitterText
         })
@@ -66,12 +73,14 @@ export default {
         })
 
         this.twitterText = ''
-        this.$emit('after-create-tweet')
+        this.isProcessing = false
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: '新增推文失敗'
         })
+        this.isProcessing = false
       }
     }
   }
@@ -108,5 +117,10 @@ export default {
   position: absolute;
   right: 20px;
   bottom: 15px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

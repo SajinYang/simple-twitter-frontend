@@ -3,7 +3,8 @@
     <header class="admin-header">
       <h4>使用者列表</h4>
     </header>
-    <div class="admin-user-container scrollbar">
+    <Spinner v-if="isLoading"/>
+    <div v-else class="admin-user-container scrollbar">
       <div v-for="user in users" :key="user.id" class="admin-user">
         <div class="cover">
           <img class="coverImg" :src="user.cover | emptyCover" alt="" />
@@ -56,12 +57,17 @@
 import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'
 import { emptyImageFilter, fromNowFilter } from '../utils/mixin'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   mixins: [emptyImageFilter, fromNowFilter],
+  components: {
+    Spinner
+  },
   data () {
     return {
-      users: {}
+      users: {},
+      isLoading: true
     }
   },
   created () {
@@ -72,7 +78,9 @@ export default {
       try {
         const response = await adminAPI.getAdminUsers()
         this.users = [...response.data]
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'warning',
           title: '無法取得使用者管理清單，請稍後再試'

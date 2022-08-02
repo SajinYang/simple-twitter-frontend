@@ -7,11 +7,11 @@ export default {
   getTopUsers () {
     return apiHelper.get('/users/top10')
   },
-  getFollowings () {
-    return apiHelper.get('/users/14/followings')
+  getFollowings ({ userId }) {
+    return apiHelper.get(`/users/${userId}/followings`)
   },
-  getFollowers () {
-    return apiHelper.get('/users/14/followers')
+  getFollowers ({ userId }) {
+    return apiHelper.get(`/users/${userId}/followers`)
   },
   updateAccount ({ userId, ...data }) {
     console.log(userId)

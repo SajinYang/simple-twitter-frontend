@@ -24,7 +24,9 @@
 
           <div class="twitter-reply-container">
             <span class="twitter-reply name">{{ user.name }}</span>
-            <span class="twitter-reply info">@{{ user.account }}・{{ tweet.createdAt | fromNow }}</span>
+            <span class="twitter-reply info"
+              >@{{ user.account }}・{{ tweet.createdAt | fromNow }}</span
+            >
             <p class="twitter-reply content">
               {{ tweet.description }}
             </p>
@@ -33,7 +35,7 @@
           </div>
 
           <div class="avatar avatar-reply">
-            <img src="./../assets/img/tweet-nophoto.png" alt="" />
+            <img :src="currentUser.avatar | emptyImage" alt="" />
           </div>
 
           <div class="modal-line"></div>
@@ -45,6 +47,7 @@
               maxlength="200"
               v-model="twitterText"
               @click.stop.prevent="resetwarningStatus"
+              required
             ></textarea>
           </div>
 
@@ -57,7 +60,8 @@
 
           <button
             class="btn btn-post-reply-tweet"
-            @click.stop.prevent="createdTweet"
+            @click.stop.prevent="createdTweet(tweet.id)"
+            :disabled="isProcessing"
           >
             回覆
           </button>
@@ -70,6 +74,8 @@
 <script>
 import { Toast } from '../utils/helpers'
 import { emptyImageFilter, fromNowFilter } from '../utils/mixin'
+import { mapState, mapActions } from 'vuex'
+import tweetsAPI from '../apis/tweets'
 
 export default {
   props: {
@@ -83,14 +89,19 @@ export default {
     }
   },
   mixins: [emptyImageFilter, fromNowFilter],
+  computed: {
+    ...mapState(['currentUser'])
+  },
   data () {
     return {
       twitterText: '',
       modalStatus: false,
-      warningStatus: ''
+      warningStatus: '',
+      isProcessing: false
     }
   },
   methods: {
+    ...mapActions(['updatePage']),
     openModal () {
       this.modalStatus = true
     },
@@ -99,25 +110,44 @@ export default {
       this.twitterText = ''
       this.warningStatus = ''
     },
-    createdTweet () {
-      if (!this.twitterText.trim()) {
-        this.warningStatus = 'trim'
-        return
+    async createdTweet (tweetId) {
+      try {
+        if (!this.twitterText.trim()) {
+          this.warningStatus = 'trim'
+          return
+        }
+
+        if (this.twitterText.length > 140) {
+          this.warningStatus = 'length'
+          return
+        }
+
+        this.isProcessing = true
+
+        const { data } = await tweetsAPI.replyTweet({
+          tweetId,
+          comment: this.twitterText.trim()
+        })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        Toast.fire({
+          icon: 'success',
+          title: '回覆推文成功'
+        })
+
+        this.isProcessing = false
+        this.closeModal()
+        this.updatePage(true)
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法回覆推文成功，請稍後再試'
+        })
+        this.isProcessing = false
       }
-
-      if (this.twitterText.length > 140) {
-        this.warningStatus = 'length'
-        return
-      }
-
-      // todo: 串接
-
-      Toast.fire({
-        icon: 'success',
-        title: '回覆推文成功'
-      })
-
-      this.closeModal()
     },
     resetwarningStatus () {
       this.warningStatus = ''
@@ -237,5 +267,10 @@ export default {
   font-size: 14px;
   line-height: 22px;
   color: #ff6600;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

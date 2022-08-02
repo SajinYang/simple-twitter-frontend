@@ -31,6 +31,7 @@
               maxlength="200"
               v-model="twitterText"
               @click.stop.prevent="resetwarningStatus"
+              required
             ></textarea>
           </div>
           <span v-if="warningStatus === 'length'" class="warning-sign"
@@ -42,6 +43,7 @@
           <button
             class="btn btn-post-reply-tweet"
             @click.stop.prevent="createdTweet"
+            :disabled="isProcessing"
           >
             推文
           </button>
@@ -54,16 +56,19 @@
 <script>
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
     return {
       twitterText: '',
       modalStatus: false,
-      warningStatus: ''
+      warningStatus: '',
+      isProcessing: false
     }
   },
   methods: {
+    ...mapActions(['updatePage']),
     openModal () {
       this.modalStatus = true
     },
@@ -75,6 +80,7 @@ export default {
     async createdTweet () {
       try {
         if (!this.twitterText.trim()) {
+          this.warningStatus = 'trim'
           Toast.fire({
             icon: 'warning',
             title: '推文內容不可空白'
@@ -83,12 +89,15 @@ export default {
         }
 
         if (this.twitterText.length > 140) {
+          this.warningStatus = 'length'
           Toast.fire({
             icon: 'warning',
             title: '推文字數不可超過 140 字'
           })
           return
         }
+
+        this.isProcessing = true
 
         const { data } = await tweetsAPI.createTweet({
           description: this.twitterText
@@ -97,18 +106,21 @@ export default {
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
+
         Toast.fire({
           icon: 'success',
           title: '新增推文成功'
         })
 
+        this.isProcessing = false
         this.closeModal()
-        this.$emit('after-create-tweet')
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: '新增推文失敗'
         })
+        this.isProcessing = false
       }
     },
     resetwarningStatus () {
@@ -187,6 +199,11 @@ export default {
 
 .icon-create-small {
   display: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 992px) {

@@ -5,15 +5,13 @@
       <div class="popular-user-container">
         <ul v-for="user in users" :key="user.id" class="popular-users">
           <li class="popular-user">
-            <router-link class="popular-user-item" to="/tweets">
-              <!-- 暫時連結 -->
+            <router-link class="popular-user-item" :to="{ name: 'user', params: { id: user.id } }">
               <div class="avatar">
                 <img :src="user.avatar | emptyImage" alt="" />
               </div>
             </router-link>
 
-            <router-link class="popular-user-item name" to="/tweets">
-              <!-- 暫時連結 -->
+            <router-link class="popular-user-item name" :to="{ name: 'user', params: { id: user.id } }">
               <div class="popular-user-info">
                 <p class="popular-user-name">
                   {{ user.name | filterName(user.name) }}
@@ -22,7 +20,7 @@
               </div>
             </router-link>
 
-            <div class="popular-user-btn">
+            <div v-if="currentUser.id !== user.id" class="popular-user-btn">
               <button
                 v-if="!user.isFollowing"
                 class="btn toggle-follow"
@@ -51,9 +49,13 @@ import usersAPI from '../apis/users'
 import followshipAPI from '../apis/followship'
 import { Toast } from './../utils/helpers'
 import { emptyImageFilter } from './../utils/mixin'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [emptyImageFilter],
+  computed: {
+    ...mapState(['currentUser'])
+  },
   data () {
     return {
       users: []
@@ -91,6 +93,10 @@ export default {
             }
           }
         })
+        Toast.fire({
+          icon: 'success',
+          title: '追蹤成功'
+        })
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -114,6 +120,10 @@ export default {
               isFollowing: false
             }
           }
+        })
+        Toast.fire({
+          icon: 'success',
+          title: '已取消追蹤'
         })
       } catch (error) {
         Toast.fire({

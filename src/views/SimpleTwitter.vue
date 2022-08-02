@@ -9,11 +9,12 @@
       </div>
       <div class="center-container scrollbar">
         <TweetCreateNew />
-        <TweetPopularList class="card-hover"
+        <Spinner v-if="isLoading"/>
+        <TweetPopularList
+          class="card-hover"
           v-for="tweet in tweets"
           :key="tweet.id"
           :initialTweet="tweet"
-          @after-create-tweet="afterCreateTweet"
         />
       </div>
     </section>
@@ -28,23 +29,39 @@ import TweetCreateNew from '../components/TweetCreateNew.vue'
 import TweetPopularList from '../components/TweetPopularList.vue'
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
+import { mapState, mapActions } from 'vuex'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   components: {
     NavBar,
     TweetPopularUser,
     TweetCreateNew,
-    TweetPopularList
+    TweetPopularList,
+    Spinner
   },
   data () {
     return {
-      tweets: {}
+      tweets: {},
+      isLoading: true
     }
   },
   created () {
     this.fetchTweets()
   },
+  computed: {
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        this.fetchTweets()
+        this.updatePage(false)
+      }
+    }
+  },
   methods: {
+    ...mapActions(['updatePage']),
     async fetchTweets () {
       try {
         const response = await tweetsAPI.getTweets()
@@ -52,7 +69,9 @@ export default {
         this.tweets = {
           ...data
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得推文資料，請稍後再試'

@@ -11,7 +11,8 @@
         />
         <h4 class="title">推文</h4>
       </header>
-      <div class="center-container scrollbar">
+      <Spinner v-if="isLoading"/>
+      <div v-else class="center-container scrollbar">
         <TweetDetail :tweet="tweet" :user="user" />
         <TweetReplies :initialreplies="replies" :user="user" />
       </div>
@@ -27,13 +28,16 @@ import TweetDetail from '../components/TweetDetail.vue'
 import TweetReplies from '../components/TweetReplies.vue'
 import TweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
+import { mapState, mapActions } from 'vuex'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   components: {
     NavBar,
     TweetPopularUser,
     TweetDetail,
-    TweetReplies
+    TweetReplies,
+    Spinner
   },
   data () {
     return {
@@ -52,7 +56,8 @@ export default {
         name: '',
         avatar: ''
       },
-      replies: []
+      replies: [],
+      isLoading: true
     }
   },
   created () {
@@ -60,7 +65,17 @@ export default {
     this.fetchTweet(tweetId)
     this.fetchReply(tweetId)
   },
+  beforeRouteUpdate (to, from, next) {
+    const { id: tweetId } = to.params
+    this.fetchTweet(tweetId)
+    this.fetchReply(tweetId)
+    next()
+  },
+  computed: {
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
   methods: {
+    ...mapActions(['updatePage']),
     async fetchTweet (tweetId) {
       try {
         const { data } = await TweetsAPI.getTweet({ tweetId })
@@ -92,7 +107,9 @@ export default {
           avatar,
           UserId
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得推文資料，請稍後再試'
@@ -104,11 +121,23 @@ export default {
         const { data } = await TweetsAPI.getReply({ tweetId })
 
         this.replies = [...data]
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得回覆推文資料，請稍後再試'
         })
+      }
+    }
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        const { id: tweetId } = this.$route.params
+        this.fetchTweet(tweetId)
+        this.fetchReply(tweetId)
+        this.updatePage(false)
       }
     }
   }
