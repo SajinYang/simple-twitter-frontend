@@ -59,7 +59,22 @@ const routes = [
     path: '/users/:id',
     name: 'user',
     component: () => import('../views/UserProfile.vue'),
-    beforeEnter: authorizeIsUser
+    beforeEnter: authorizeIsUser,
+    // nested routes
+    children: [
+      {
+        path: 'tweets',
+        redirect: '/users/:id'
+      },
+      {
+        path: 'replies',
+        component: () => import('../views/UserReplies.vue')
+      },
+      {
+        path: 'likes',
+        component: () => import('../views/UserLikes.vue')
+      }
+    ]
   },
   {
     path: '/users/:id/follow',
@@ -73,6 +88,18 @@ const routes = [
     component: () => import('../views/AccountSetting.vue'),
     beforeEnter: authorizeIsUser
   },
+  // {
+  //   path: '/users/:id/with_replies',
+  //   name: 'user-with_replies',
+  //   component: () => import('../views/UserReplies.vue'),
+  //   beforeEnter: authorizeIsUser
+  // },
+  // {
+  //   path: '/users/:id/likes',
+  //   name: 'user-likes',
+  //   component: () => import('../views/UserLikes.vue'),
+  //   beforeEnter: authorizeIsUser
+  // },
   {
     path: '/admin',
     name: 'admin',

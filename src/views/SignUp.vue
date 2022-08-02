@@ -12,7 +12,10 @@
         <h3>建立你的帳號</h3>
       </div>
       <div class="col-12">
-        <FormAccount :current-page="'signup'" :is-processing="isProcessing" @after-submit="handleAfterSubmit" />
+        <FormAccount
+        :current-page="'signup'"
+        :is-processing="isProcessing"
+        @after-submit="handleAfterSubmit" />
       </div>
     </div>
   </div>

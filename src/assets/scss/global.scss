@@ -20,6 +20,10 @@ textarea {
   resize: none;
 }
 
+.container-lg {
+  max-width: 380px;
+}
+
 // 頭像
 .avatar {
   height: 50px;
@@ -50,7 +54,6 @@ textarea {
 }
 
 // 每個 page containet 架構 (除regist、login、admin系列、setting帳號設定)
-// bootstrap conflict
 .container-twitter {
   display: grid;
   grid-template-columns: 20% auto 25%;
@@ -107,6 +110,7 @@ textarea {
 
 .center-section {
   width: 100%;
+  border: 1px solid #E6ECF0;
 }
 
 // 首頁. Tweet 中間頁面上方header
@@ -150,7 +154,6 @@ textarea {
 }
 
 // 平板版型
-// bootstrap conflict
 @media (max-width: 992px) {
   .container-twitter {
     display: grid;

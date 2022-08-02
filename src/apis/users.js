@@ -4,6 +4,12 @@ export default {
   getCurrentUser () {
     return apiHelper.get('/users/current_user')
   },
+  getProfile ({ userId }) {
+    return apiHelper.get(`/users/${userId}`)
+  },
+  getTweets ({ userId }) {
+    return apiHelper.get(`/users/${userId}/tweets`)
+  },
   getTopUsers () {
     return apiHelper.get('/users/top10')
   },

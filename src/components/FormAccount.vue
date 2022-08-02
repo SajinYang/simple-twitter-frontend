@@ -2,22 +2,30 @@
   <form action="#" class="form-group" @submit.stop.prevent="handleSubmit">
     <div class="input-group">
       <input type="text" name="account" id="account" placeholder="請輸入帳號" maxlength="100" v-model="user.account"
-        required>
+        :class="{ error: user.account.length > 10 }" required>
       <label for="account">帳號</label>
 
       <div class="input-hints">
-        <span class="error" :style="{ visibility: user.account.length > 10 ? 'visible' : 'hidden' }">字數超出上限！</span>
-        <span :class="{ error: user.account.length > 10 }" v-if="user.account.length">{{ user.account.length
-        }}/10</span>
+        <span class="error" :style="{ visibility: user.account.length > 10 ? 'visible' : 'hidden' }">
+          字數超出上限！
+        </span>
+        <span :class="{ error: user.account.length > 10 }" v-if="user.account.length">
+          {{ user.account.length }}/10
+        </span>
       </div>
     </div>
     <div class="input-group">
-      <input type="text" name="name" id="name" placeholder="請輸入使用者名稱" maxlength="100" v-model="user.name" required>
+      <input type="text" name="name" id="name" placeholder="請輸入使用者名稱" maxlength="100" v-model="user.name"
+        :class="{ error: user.name.length > 50 }" required>
       <label for="name">名稱</label>
 
       <div class="input-hints">
-        <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">字數超出上限！</span>
-        <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">{{ user.name.length }}/50</span>
+        <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">
+          字數超出上限！
+        </span>
+        <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">
+          {{ user.name.length }}/50
+        </span>
       </div>
     </div>
     <div class="input-group">
@@ -28,12 +36,12 @@
     </div>
     <div class="input-group">
       <input type="password" name="password" id="password" placeholder="請設定密碼" maxlength="100"
-        v-model.lazy="user.password" required>
+        v-model.lazy="user.password" :required="currentPage === 'signup'">
       <label for="password">密碼</label>
     </div>
     <div class="input-group">
       <input type="password" name="password" id="passwordCheck" placeholder="請再次設定密碼" maxlength="100"
-        v-model.lazy="user.checkPassword" required>
+        v-model.lazy="user.checkPassword" :required="currentPage === 'signup'">
       <label for="checkPassword">密碼確認</label>
     </div>
 
@@ -43,7 +51,9 @@
     <button type="submit" class="btn-primary" :disabled="isProcessing" v-if="currentPage === 'signup'">
       {{ isProcessing ? '處理中' : '註冊' }}
     </button>
-    <router-link :to="{ name: 'sign-in' }" class="btn-link" v-if="currentPage === 'signup'">取消</router-link>
+    <router-link class="btn-link" :to="{ name: 'sign-in' }" v-if="currentPage === 'signup'">
+      取消
+    </router-link>
   </form>
 </template>
 
@@ -202,9 +212,7 @@ export default {
       if (
         !this.user.account ||
         !this.user.name ||
-        !this.user.email ||
-        !this.user.password ||
-        !this.user.checkPassword
+        !this.user.email
       ) {
         Toast.fire({
           icon: 'warning',
@@ -212,7 +220,18 @@ export default {
         })
         return false
       }
-      if (this.password !== this.checkPassword) {
+      if (this.currentPage === 'signup' &&
+        (!this.user.password ||
+        !this.user.checkPassword)
+      ) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認已填寫所有欄位'
+        })
+        return false
+      }
+      if (this.password !== this.checkPassword &&
+        this.currentPage === 'signup') {
         Toast.fire({
           icon: 'warning',
           title: '兩次輸入的密碼不同'
