@@ -16,7 +16,8 @@ export default new Vuex.Store({
       isAdmin: false
     },
     isAuthenticated: false,
-    token: ''
+    token: '',
+    updatePageNow: false
   },
   mutations: {
     setCurrentUser (state, currentUser) {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
       state.isAuthenticated = false
       localStorage.removeItem('token')
       state.token = ''
+    },
+    updatePage (state, stateNow) {
+      state.updatePageNow = stateNow
     }
   },
   actions: {
@@ -59,6 +63,9 @@ export default new Vuex.Store({
         commit('revokeAuthentication')
         return false
       }
+    },
+    updatePage ({ commit }, stateNow) {
+      commit('updatePage', stateNow)
     }
   },
   modules: {

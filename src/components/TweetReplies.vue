@@ -2,21 +2,21 @@
   <section class="tweet-popular-section">
     <div class="tweet-popular-container">
       <div v-for="reply of initialreplies" :key="reply.id" class="tweet">
-        <div class="avatar">
-          <img src="./../assets/img/tweet-nophoto.png" alt="" />
-        </div>
+        <router-link class="avatar" :to="{ name: 'user', params: { id: reply.UserId } }">
+          <img :src="reply.User.avatar | emptyImage" alt="" />
+        </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <span class="tweet-user name">{{ reply.Tweet.User.name }}</span>
-            <span class="tweet-user account"
-              >@{{ reply.User.account }} ・{{
-                reply.Tweet.createdAt | fromNow
-              }}</span
+            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: reply.UserId } }">{{ reply.User.name }}</router-link>
+            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: reply.UserId } }"
+              >@{{ reply.User.account }} ・ {{
+                reply.createdAt | fromNow
+              }}</router-link
             >
           </div>
           <div class="tweet-reply">
             <span class="text-reply">回覆 </span
-            ><span class="account">@{{ reply.Tweet.User.account }}</span>
+            ><router-link class="account" :to="{ name: 'user', params: { id: reply.Tweet.User.id } }">@{{ reply.Tweet.User.account }}</router-link>
           </div>
           <p class="tweet-content">{{ reply.comment }}</p>
         </div>
@@ -27,6 +27,7 @@
 
 <script>
 import { fromNowFilter, emptyImageFilter } from '../utils/mixin'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -39,6 +40,19 @@ export default {
   data () {
     return {
       tweets: {}
+    }
+  },
+  computed: {
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
+  methods: {
+    ...mapActions(['updatePage'])
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        this.updatePage(false)
+      }
     }
   }
 }
@@ -67,10 +81,10 @@ export default {
 }
 
 .tweet-content {
-  /* margin: 5px 0; */
   line-height: 24px;
   color: var(--dark-100);
   font-weight: 400;
+  white-space: pre-line;
 }
 
 .avatar {
@@ -87,6 +101,7 @@ export default {
 
 .tweet-user.name {
   font-weight: 700;
+  color: var(--dark-100);
 }
 
 .tweet-user.account {
@@ -96,7 +111,6 @@ export default {
 }
 
 .tweet-reply {
-  /* margin-top: 5px; */
   font-size: 14px;
   font-weight: 400;
 }
