@@ -42,7 +42,7 @@
       </header>
 
       <div class="follow-center-container scrollbar">
-        <TweetFollow :followStatus="followStatus" />
+        <TweetFollow :followStatus="followStatus" :followers="followers" :followings="followings" />
       </div>
     </section>
     <TweetPopularUser />
@@ -53,6 +53,8 @@
 import NavBar from '../components/NavBar.vue'
 import TweetPopularUser from '../components/TweetPopularUser.vue'
 import TweetFollow from '../components/TweetFollow.vue'
+import usersAPI from '../apis/users'
+import { Toast } from '../utils/helpers'
 
 export default {
   components: {
@@ -62,12 +64,49 @@ export default {
   },
   data () {
     return {
-      followStatus: 'follower'
+      followStatus: 'follower',
+      followers: [],
+      followings: []
     }
+  },
+  created () {
+    const { id: userId } = this.$route.params
+    this.fetchfollowings(userId)
+    this.fetchfollowers(userId)
+  },
+  beforeRouteUpdate (to, from, next) {
+    const { id: userId } = to.params
+    this.fetchfollowings(userId)
+    this.fetchfollowers(userId)
+    next()
   },
   methods: {
     toggleFollowStatus (status) {
       this.followStatus = status
+    },
+    async fetchfollowings (userId) {
+      try {
+        const response = await usersAPI.getFollowings({ userId })
+        const data = response.data
+        this.followings = [...data]
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得追蹤者資料，請稍後再試'
+        })
+      }
+    },
+    async fetchfollowers (userId) {
+      try {
+        const response = await usersAPI.getFollowers({ userId })
+        const data = response.data
+        this.followers = [...data]
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得追蹤者資料，請稍後再試'
+        })
+      }
     }
   }
 }

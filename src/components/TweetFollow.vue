@@ -20,10 +20,10 @@
           </p>
         </div>
         <div class="popular-user-btn">
-          <!-- <button
-            v-if="!isFollowing"
+          <button
+            v-if="!follower.isFollowing"
             class="btn toggle-follow"
-            @click.stop.prevent="addFollowing(following.id)"
+            @click.stop.prevent="addFollowing(follower.followerId)"
           >
             跟隨
           </button>
@@ -31,10 +31,10 @@
           <button
             v-else
             class="btn toggle-follow following"
-            @click.stop.prevent="deleteFollowing(tweet.id)"
+            @click.stop.prevent="deleteFollowing(follower.followerId)"
           >
             正在跟隨
-          </button> -->
+          </button>
         </div>
       </div>
     </div>
@@ -58,10 +58,10 @@
           </p>
         </div>
         <div class="popular-user-btn">
-          <!-- <button
-            v-if="!isFollowing"
+          <button
+            v-if="!following.isFollowing"
             class="btn toggle-follow"
-            @click.stop.prevent="addFollowing(following.id)"
+            @click.stop.prevent="addFollowing(following.followingId)"
           >
             跟隨
           </button>
@@ -69,10 +69,10 @@
           <button
             v-else
             class="btn toggle-follow following"
-            @click.stop.prevent="deleteFollowing(tweet.id)"
+            @click.stop.prevent="deleteFollowing(following.followingId)"
           >
             正在跟隨
-          </button> -->
+          </button>
         </div>
       </div>
     </div>
@@ -80,77 +80,117 @@
 </template>
 
 <script>
-import usersAPI from '../apis/users'
-import { Toast } from '../utils/helpers'
+import followshipAPI from '../apis/followship'
 import { emptyImageFilter } from '../utils/mixin'
+import { mapState } from 'vuex'
+import { Toast } from '../utils/helpers'
 
 export default {
   props: {
     followStatus: {
       type: String,
-      default: 'follower'
+      default: 'follower',
+      required: true
+    },
+    followers: {
+      type: Array,
+      require: true
+    },
+    followings: {
+      type: Array,
+      require: true
     }
   },
   mixins: [emptyImageFilter],
-  data () {
-    return {
-      followers: [],
-      followings: []
-    }
-  },
-  created () {
-    this.fetchfollowings()
-    this.fetchfollowers()
-  },
   methods: {
-    async fetchfollowings (userId) {
+    async addFollowing (id) {
       try {
-        const response = await usersAPI.getFollowings({ userId })
-        const data = response.data
-        this.followings = [...data]
+        const { data } = await followshipAPI.addFollow({ id })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        if (this.followStatus === 'following') {
+          this.followings = this.followings.map((following) => {
+            if (following.followingId !== id) {
+              return following
+            } else {
+              return {
+                ...following,
+                isFollowing: true
+              }
+            }
+          })
+        }
+        if (this.followStatus === 'follower') {
+          this.followers = this.followers.map((follower) => {
+            if (follower.followerId !== id) {
+              return follower
+            } else {
+              return {
+                ...follower,
+                isFollowing: true
+              }
+            }
+          })
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '追蹤成功'
+        })
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: '無法取得追蹤者資料，請稍後再試'
+          title: '無法追蹤成功，請稍後再試'
         })
       }
     },
-    async fetchfollowers (userId) {
+    async deleteFollowing (id) {
       try {
-        const response = await usersAPI.getFollowers({ userId })
-        const data = response.data
-        this.followers = [...data]
+        const { data } = await followshipAPI.deleteFollow({ id })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        if (this.followStatus === 'following') {
+          this.followings = this.followings.map((following) => {
+            if (following.followingId !== id) {
+              return following
+            } else {
+              return {
+                ...following,
+                isFollowing: false
+              }
+            }
+          })
+        }
+        if (this.followStatus === 'follower') {
+          this.followers = this.followers.map((follower) => {
+            if (follower.followerId !== id) {
+              return follower
+            } else {
+              return {
+                ...follower,
+                isFollowing: false
+              }
+            }
+          })
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '已取消追蹤'
+        })
       } catch (error) {
         Toast.fire({
           icon: 'error',
-          title: '無法取得追蹤者資料，請稍後再試'
+          title: '無法追蹤成功，請稍後再試'
         })
       }
     }
-    // addFollowing (tweetId) {
-    //   this.tweets = this.tweets.map((tweet) => {
-    //     if (tweet.id !== tweetId) {
-    //       return tweet
-    //     } else {
-    //       return {
-    //         ...this.tweet,
-    //         isFollowing: true
-    //       }
-    //     }
-    //   })
-    // },
-    // deleteFollowing (tweetId) {
-    //   this.tweets = this.tweets.map((tweet) => {
-    //     if (tweet.id !== tweetId) {
-    //       return tweet
-    //     } else {
-    //       return {
-    //         ...this.tweet,
-    //         isFollowing: false
-    //       }
-    //     }
-    //   })
-    // }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   }
 }
 </script>
@@ -197,7 +237,7 @@ export default {
 .follow-info {
   display: grid;
   grid-template-rows: 50px auto;
-  width: 100%;
+  width: 85%;
 }
 
 .follow-user {
