@@ -21,7 +21,7 @@ export default {
 
 .container-admin-users {
   display: grid;
-  grid-template-columns: 178px auto;
+  grid-template-columns: 20% auto;
   max-width: 1200px;
   justify-items: center;
   margin: 0 auto;
