@@ -14,12 +14,12 @@
       <main>
         <div class="profile-img">
           <!-- avatar -->
-          <img class="avatar-img-thumbnail" src="../assets/img/avatar.png" alt="avatar-image">
+          <img class="avatar-img-thumbnail" :src="profile.avatar | emptyImage" alt="avatar-image">
           <!-- banner -->
-          <img class="d-block img-thumbnail" src="../assets/icon/card-background.png" alt="banner-image">
+          <img class="d-block img-thumbnail" :src="profile.cover | emptyCover" alt="banner-image">
         </div>
         <div class="profile-detail px-4">
-          <!-- modal button -->
+          <!-- button -->
           <div class="button-group my-3">
             <button class="btn-edit" v-if="currentUser.id === profile.id"
               @click.stop.prevent="isEditing = true">編輯個人資料</button>
@@ -42,22 +42,35 @@
           <span class="text-muted mb-1">@{{ profile.account }}</span>
           <p>{{ profile.introduction }}</p>
           <div class="follow-status">
-            <span class="following-text">{{ profile.followingsCounts }}個<span class="text-light">跟隨中</span></span>
-            <span class="follower">{{ profile.followersCounts }}位<span class="text-light">跟隨者</span></span>
+            <span class="following-text">{{ profile.followingsCounts }}個
+              <router-link :to="{ name: 'user-follow', params: { id: profile.id } }">
+                <span class="text-light">跟隨中</span>
+              </router-link>
+            </span>
+            <span class="follower">{{ profile.followersCounts }}位
+              <router-link :to="{ name: 'user-follow', params: { id: profile.id } }">
+                <span class="text-light">跟隨者</span>
+              </router-link>
+            </span>
           </div>
         </div>
 
-        <!-- navtabs -->
-        <NavTabs />
-        <!-- tweetsList -->
-        <div class="center-container scrollbar">
-          <TweetPopularList v-for="tweet in tweets" :key="tweet.id" :initialTweet="tweet" />
-          <router-view v-for="tweet in tweets" :key="tweet.id" :initialTweet="tweet" />
-        </div>
+        <!-- NavTabs -->
+        <ul class="tabs-group">
+          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab']">
+            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+              {{ tab.title }}
+            </router-link>
+          </li>
+        </ul>
+
         <!-- nested routes -->
+        <router-view />
       </main>
-      <ModalEditProfile v-show="isEditing" @save="handleModalSave" @close="handleModalClose" />
+      <ModalEditProfile v-show="isEditing" :initial-profile="profile" @save="handleModalSave"
+        @close="handleModalClose" />
     </section>
+    <TweetPopularUser />
   </div>
 </template>
 
@@ -81,6 +94,11 @@
   border: 1px solid var(--brand-color);
   border-radius: 50px;
   color: var(--brand-color);
+
+  &:hover {
+    color: var(--dark-0);
+    background-color: var(--brand-color);
+  }
 }
 
 .btn-follow {
@@ -138,6 +156,27 @@
   margin-right: 1.25rem;
 }
 
+.tabs-group {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-tab.shine {
+  border-bottom: 1px solid var(--brand-color);
+}
+
+.nav-link {
+  display: block;
+  margin: 15px 30px;
+  color: var(--secondary);
+  cursor: pointer;
+
+  &.active {
+    color: var(--brand-color);
+  }
+}
+
 @media(max-width:992px) {
   .avatar-img-thumbnail {
     left: 1.5rem;
@@ -156,16 +195,17 @@
 
 <script>
 import NavBar from '../components/NavBar.vue'
+import TweetPopularUser from '../components/TweetPopularUser.vue'
 import ModalEditProfile from '../components/ModalEditProfile.vue'
 import usersAPI from '../apis/users'
 import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
-import NavTabs from '../components/NavTabs.vue'
-import TweetPopularList from '../components/TweetPopularList.vue'
 import { mapState } from 'vuex'
+import { emptyImageFilter } from '../utils/mixin'
 
 export default {
   name: 'UserProfile',
+  mixins: [emptyImageFilter],
   data () {
     return {
       profile: {
@@ -175,20 +215,20 @@ export default {
         email: '',
         introduction: '',
         avatar: null,
+        cover: null,
         tweetsCounts: 0,
         followingsCounts: 0,
         followersCounts: 0,
-        isFollowing: null
+        isFollowing: false
       },
-      tweets: [],
-      isEditing: false
+      isEditing: false,
+      tabs: []
     }
   },
   components: {
     NavBar,
-    ModalEditProfile,
-    NavTabs,
-    TweetPopularList
+    TweetPopularUser,
+    ModalEditProfile
   },
   methods: {
     async fetchUserProfile (userId) {
@@ -202,11 +242,12 @@ export default {
         this.profile = data
         delete this.profile.status
         delete this.profile.message
-        delete this.profile.cover
-        // console.log(this.profile)
 
-        // get tweets
-        this.fetchUserTweets(userId)
+        // if introduction is null
+        this.profile = {
+          ...this.profile,
+          introduction: this.profile.introduction ? this.profile.introduction : ''
+        }
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -214,30 +255,24 @@ export default {
         })
       }
     },
-    async fetchUserTweets (userId) {
-      try {
-        // get all tweets
-        const response = await usersAPI.getTweets({ userId })
-        if (response.status !== 200) {
-          throw new Error(response.message)
+    fetchTabs (userId) {
+      this.tabs = [
+        {
+          id: 1,
+          title: '推文',
+          path: `/users/${userId}/tweets`
+        },
+        {
+          id: 2,
+          title: '回覆',
+          path: `/users/${userId}/replies`
+        },
+        {
+          id: 3,
+          title: '喜歡的內容',
+          path: `/users/${userId}/likes`
         }
-        const { data } = response
-        // console.log(data)
-        this.tweets = data.map(tweet => ({
-          ...tweet,
-          User: {
-            id: this.profile.id,
-            account: this.profile.account,
-            name: this.profile.name,
-            avatar: this.profile.avatar
-          }
-        }))
-      } catch (error) {
-        Toast.fire({
-          icon: 'error',
-          title: '無法取得使用者所有tweets，請稍後再試'
-        })
-      }
+      ]
     },
     async addFollowing (userId) {
       try {
@@ -280,10 +315,12 @@ export default {
   created () {
     const { id: userId } = this.$route.params
     this.fetchUserProfile(userId)
+    this.fetchTabs(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id } = to.params
     this.fetchUserProfile(id)
+    this.fetchTabs(id)
     next()
   },
   computed: {
