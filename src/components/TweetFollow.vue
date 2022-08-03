@@ -6,15 +6,15 @@
         :key="follower.followerId"
         class="follow"
       >
-        <div class="avatar">
+        <router-link class="avatar" :to="{ name: 'user', params: { id: follower.followerId } }">
           <img :src="follower.userAvatarOfFollower | emptyImage" alt="" />
-        </div>
+        </router-link>
         <div class="follow-info">
-          <div class="follow-user">
+          <router-link class="follow-user" :to="{ name: 'user', params: { id: follower.followerId } }">
             <span class="follow-user name">{{
               follower.userNameOfFollower
             }}</span>
-          </div>
+          </router-link>
           <p class="follow-content">
             {{ follower.userInrtoductionOfFollower }}
           </p>
@@ -44,14 +44,14 @@
         :key="following.followingId"
         class="follow"
       >
-        <div class="avatar">
+        <router-link class="avatar" :to="{ name: 'user', params: { id: following.followingId } }">
           <img :src="following.userAvatarOfFollowing | emptyImage" alt="" />
-        </div>
+        </router-link>
         <div class="follow-info">
           <div class="follow-user">
-            <span class="follow-user name">{{
+            <router-link class="follow-user name" :to="{ name: 'user', params: { id: following.followingId } }">{{
               following.userNameOfFollowing
-            }}</span>
+            }}</router-link>
           </div>
           <p class="follow-content">
             {{ following.userInrtoductionOfFollowing }}
@@ -248,6 +248,7 @@ export default {
   display: flex;
   align-items: center;
   font-weight: 700;
+  color: var(--dark-100);
 }
 
 .follow-user.account {

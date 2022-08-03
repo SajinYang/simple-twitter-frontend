@@ -3,7 +3,8 @@
     <header class="admin-header">
       <h4>推文清單</h4>
     </header>
-    <div class="admin-tweet-container scrollbar">
+    <Spinner v-if="isLoading" />
+    <div v-else class="admin-tweet-container scrollbar">
       <div v-for="tweet in tweets" :key="tweet.id" class="admin-tweet">
         <div class="avatar">
           <img
@@ -43,12 +44,17 @@
 import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'
 import { emptyImageFilter, fromNowFilter } from '../utils/mixin'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   mixins: [emptyImageFilter, fromNowFilter],
+  components: {
+    Spinner
+  },
   data () {
     return {
-      tweets: {}
+      tweets: {},
+      isLoading: true
     }
   },
   created () {
@@ -59,7 +65,9 @@ export default {
       try {
         const response = await adminAPI.getAdmintweets()
         this.tweets = [...response.data.tweets]
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'warning',
           title: '無法取得推文管理清單，請稍後再試'
@@ -68,19 +76,25 @@ export default {
     },
     async deleteAdminTweet (tweetId) {
       try {
-        const { data } = await adminAPI.deleteAdminTweet({
-          tweetId
-        })
+        const confirm = window.confirm('確定刪除此推文嗎？')
+        if (confirm === true) {
+          const { data } = await adminAPI.deleteAdminTweet({
+            tweetId
+          })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+          if (data.status !== 'success') {
+            throw new Error(data.message)
+          }
+
+          this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId)
+
+          Toast.fire({
+            icon: 'success',
+            title: '刪除推文成功'
+          })
+        } else {
+          return
         }
-
-        this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId)
-        Toast.fire({
-          icon: 'success',
-          title: '刪除推文成功'
-        })
       } catch (error) {
         Toast.fire({
           icon: 'warning',
