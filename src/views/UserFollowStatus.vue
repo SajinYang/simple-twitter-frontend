@@ -11,8 +11,8 @@
             alt=""
           />
           <div class="title-container">
-            <h5 class="title">John Doe</h5>
-            <span class="subtitle">25 推文</span>
+            <h5 class="title">{{ profile.name }}</h5>
+            <span class="subtitle">{{ profile.tweetsCounts }} 推文</span>
           </div>
         </div>
         <div class="navtabs">
@@ -40,9 +40,13 @@
           </button>
         </div>
       </header>
-
-      <div class="follow-center-container scrollbar">
-        <TweetFollow :followStatus="followStatus" :followers="followers" :followings="followings" />
+      <Spinner v-if="isLoading" />
+      <div v-else class="follow-center-container scrollbar">
+        <TweetFollow
+          :followStatus="followStatus"
+          :followers="followers"
+          :followings="followings"
+        />
       </div>
     </section>
     <TweetPopularUser />
@@ -55,29 +59,40 @@ import TweetPopularUser from '../components/TweetPopularUser.vue'
 import TweetFollow from '../components/TweetFollow.vue'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   components: {
     NavBar,
     TweetPopularUser,
-    TweetFollow
+    TweetFollow,
+    Spinner
   },
   data () {
     return {
       followStatus: 'follower',
       followers: [],
-      followings: []
+      followings: [],
+      profile: {
+        id: -1,
+        account: '',
+        name: '',
+        tweetsCounts: 0
+      },
+      isLoading: true
     }
   },
   created () {
     const { id: userId } = this.$route.params
     this.fetchfollowings(userId)
     this.fetchfollowers(userId)
+    this.fetchUserProfile(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id: userId } = to.params
     this.fetchfollowings(userId)
     this.fetchfollowers(userId)
+    this.fetchUserProfile(userId)
     next()
   },
   methods: {
@@ -89,7 +104,9 @@ export default {
         const response = await usersAPI.getFollowings({ userId })
         const data = response.data
         this.followings = [...data]
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得追蹤者資料，請稍後再試'
@@ -101,11 +118,24 @@ export default {
         const response = await usersAPI.getFollowers({ userId })
         const data = response.data
         this.followers = [...data]
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得追蹤者資料，請稍後再試'
         })
+      }
+    },
+    async fetchUserProfile (userId) {
+      const { data } = await usersAPI.getProfile({ userId })
+      console.log(data)
+      if (data.status !== 'success') {
+        throw new Error(data.message)
+      }
+      const { id, account, name, tweetsCounts } = data
+      this.profile = {
+        id, account, name, tweetsCounts
       }
     }
   }
