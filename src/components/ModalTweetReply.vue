@@ -18,28 +18,29 @@
         </div>
 
         <form class="modal-content">
-          <div class="avatar">
+          <router-link class="avatar" :to="{ name: 'user', params: { id: initialTweet.UserId } }">
             <img :src="initialTweet.User.avatar | emptyImage" alt="" />
-          </div>
+          </router-link>
 
           <div class="twitter-reply-container">
-            <span class="twitter-reply name">{{ initialTweet.User.name }}</span>
-            <span class="twitter-reply info"
+            <router-link class="twitter-reply name" :to="{ name: 'user', params: { id: initialTweet.UserId } }">{{ initialTweet.User.name }}</router-link>
+            <router-link class="twitter-reply info" :to="{ name: 'user', params: { id: initialTweet.UserId } }"
               >@{{ initialTweet.User.account
-              }}{{ initialTweet.createdAt | fromNow }}</span
+              }}</router-link>・
+              <span>{{ initialTweet.createdAt | fromNow }}</span
             >
             <p class="twitter-reply content">
               {{ initialTweet.description }}
             </p>
             <span class="twitter-reply-text">回覆給 </span>
-            <span class="twitter-reply-account">
-              @{{ initialTweet.User.account }}</span
+            <router-link class="twitter-reply-account" :to="{ name: 'user', params: { id: initialTweet.UserId } }">
+              @{{ initialTweet.User.account }}</router-link
             >
           </div>
 
-          <div class="avatar avatar-reply">
+          <router-link class="avatar avatar-reply" :to="{ name: 'user', params: { id: currentUser.id } }">
             <img :src="currentUser.avatar | emptyImage" alt="" />
-          </div>
+          </router-link>
 
           <div class="modal-line"></div>
 

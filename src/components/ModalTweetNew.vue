@@ -20,9 +20,9 @@
         </div>
 
         <form class="modal-content">
-          <div class="avatar">
-            <img src="./../assets/img/tweet-nophoto.png" alt="" />
-          </div>
+          <router-link class="avatar" :to="{ name: 'user', params: { id: currentUser.id } }">
+            <img :src="currentUser.avatar | emptyImage" alt="" />
+          </router-link>
 
           <div class="twitter-text-container">
             <textarea
@@ -56,9 +56,11 @@
 <script>
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { emptyImageFilter } from './../utils/mixin'
 
 export default {
+  mixins: [emptyImageFilter],
   data () {
     return {
       twitterText: '',
@@ -66,6 +68,9 @@ export default {
       warningStatus: '',
       isProcessing: false
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     ...mapActions(['updatePage']),
