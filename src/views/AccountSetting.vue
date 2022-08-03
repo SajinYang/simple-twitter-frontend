@@ -57,14 +57,13 @@ export default {
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
-        // page reload trigger getCurrentUser
-        this.$router.go(0)
-
         this.isProcessing = false
         Toast.fire({
           icon: 'success',
           title: '編輯成功'
         })
+        // page reload trigger getCurrentUser
+        this.$router.go(0)
       } catch (error) {
         this.isProcessing = false
         console.log(error)

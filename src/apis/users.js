@@ -28,6 +28,11 @@ export default {
   updateAccount ({ userId, ...data }) {
     console.log(userId)
     console.log({ ...data })
+    return apiHelper.put(`/users/${userId}`, { ...data })
+  },
+  updateProfile ({ userId, data }) {
+    console.log(userId)
+    console.log({ ...data })
     return apiHelper.put(`/users/${userId}/setting`, { ...data })
   },
   signUp (data) {
