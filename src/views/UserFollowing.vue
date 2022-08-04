@@ -129,7 +129,6 @@ export default {
     },
     async fetchUserProfile (userId) {
       const { data } = await usersAPI.getProfile({ userId })
-      console.log(data)
       if (data.status !== 'success') {
         throw new Error(data.message)
       }

@@ -59,7 +59,7 @@
 
               <div class="input-group">
                 <textarea name="introduction" id="introduction" cols="30" rows="10" class="self-intro"
-                  v-model="user.introduction"></textarea>
+                  v-model="user.introduction" placeholder="讓社群更認識你"></textarea>
                 <label for="introduction">自我介紹</label>
 
                 <div class="input-hints">
@@ -126,8 +126,6 @@ export default {
     },
     handleAvatarFileChange (e) {
       const { files } = e.target
-      console.log('avatar', files)
-
       if (files.length === 0) {
         this.user.avatar = ''
       } else {
@@ -192,7 +190,6 @@ export default {
         // current page reload
         this.$router.go(0)
       } catch (error) {
-        console.log(error)
         this.isProcessing = false
         Toast.fire({
           icon: 'error',
@@ -244,7 +241,6 @@ export default {
 
 .modal-container {
   max-width: 600px;
-  // height: 610px;
   left: 334px;
   margin: 0px auto;
   background-color: #fff;
