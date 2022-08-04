@@ -80,9 +80,15 @@ const routes = [
     ]
   },
   {
-    path: '/users/:id/follow',
-    name: 'user-follow',
-    component: () => import('../views/UserFollowStatus.vue'),
+    path: '/users/:id/following',
+    name: 'user-following',
+    component: () => import('../views/UserFollowing.vue'),
+    beforeEnter: authorizeIsUser
+  },
+  {
+    path: '/users/:id/follower',
+    name: 'user-follower',
+    component: () => import('../views/UserFollower.vue'),
     beforeEnter: authorizeIsUser
   },
   {

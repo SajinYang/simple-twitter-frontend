@@ -20,7 +20,7 @@ export default {
 <style scoped>
 .container-admin {
   display: grid;
-  grid-template-columns: 20% auto;
+  grid-template-columns: 15% auto;
   max-width: 1200px;
   justify-items: center;
   margin: 0 auto;
