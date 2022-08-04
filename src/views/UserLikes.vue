@@ -1,5 +1,6 @@
 <template>
-  <div class="center-container scrollbar">
+  <Spinner v-if="isLoading"/>
+  <div v-else class="center-container scrollbar">
     <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
       <div class="tweet-popular-container">
         <router-link class="tweet" :to="{ name: 'tweet', params: { id: liked.id } }">
@@ -45,15 +46,18 @@ import usersAPI from '../apis/users'
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
 import ModalTweetReply from '../components/ModalTweetReply.vue'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
   components: {
-    ModalTweetReply
+    ModalTweetReply,
+    Spinner
   },
   data () {
     return {
-      userLikes: []
+      userLikes: [],
+      isLoading: true
     }
   },
   methods: {
@@ -80,7 +84,9 @@ export default {
             avatar: tweet.userAvatarOflikedTweet
           }
         }))
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得使用者所有tweets，請稍後再試'
