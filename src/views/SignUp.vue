@@ -55,9 +55,10 @@ export default {
       } catch (error) {
         this.isProcessing = false
         console.log(error)
+        const message = error.response.data.message
         Toast.fire({
           icon: 'warning',
-          title: '註冊失敗，請稍後再試'
+          title: message
         })
       }
     }

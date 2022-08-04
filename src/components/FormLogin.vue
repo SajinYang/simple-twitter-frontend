@@ -144,7 +144,12 @@ export default {
           account: this.account,
           password: this.password
         })
+
         if (data.status !== 'success') {
+          Toast.fire({
+            icon: 'warning',
+            title: data.message
+          })
           throw new Error(data.message)
         }
         const { id, account, name, email, avatar, isAdmin } = this.isAdminPage ? data.data : data.user
@@ -158,9 +163,10 @@ export default {
         this.password = ''
         this.isProcessing = false
 
+        const message = error.response.data.message
         Toast.fire({
           icon: 'warning',
-          title: '登入失敗，請確認您輸入了正確的帳號密碼'
+          title: message
         })
       }
     }
