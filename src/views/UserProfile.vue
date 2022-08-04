@@ -91,28 +91,12 @@
             </span>
           </div>
         </div>
-
-        <!-- NavTabs -->
-        <ul class="tabs-group">
-          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab']">
-            <router-link
-              class="nav-link"
-              aria-current="page"
-              :to="tab.path"
-              :key="tab.id"
-            >
-              {{ tab.title }}
-            </router-link>
-          </li>
-        </ul>
-
         <!-- nested routes -->
         <router-view />
       </main>
       <ModalEditProfile
         v-show="isEditing"
         :initial-profile="profile"
-        @save="handleModalSave"
         @close="handleModalClose"
       />
     </section>
@@ -209,27 +193,6 @@
   margin-right: 1.25rem;
 }
 
-.tabs-group {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-tab.shine {
-  border-bottom: 1px solid var(--brand-color);
-}
-
-.nav-link {
-  display: block;
-  margin: 15px 30px;
-  color: var(--secondary);
-  cursor: pointer;
-
-  &.active {
-    color: var(--brand-color);
-  }
-}
-
 @media (max-width: 992px) {
   .avatar-img-thumbnail {
     left: 1.5rem;
@@ -315,25 +278,6 @@ export default {
         })
       }
     },
-    fetchTabs (userId) {
-      this.tabs = [
-        {
-          id: 1,
-          title: '推文',
-          path: `/users/${userId}/tweets`
-        },
-        {
-          id: 2,
-          title: '回覆',
-          path: `/users/${userId}/replies`
-        },
-        {
-          id: 3,
-          title: '喜歡的內容',
-          path: `/users/${userId}/likes`
-        }
-      ]
-    },
     async addFollowing (userId) {
       try {
         const { data } = await followshipAPI.addFollow({ id: userId })
@@ -364,23 +308,17 @@ export default {
         })
       }
     },
-    handleModalSave () {
-      console.log('handleModalSave')
-    },
     handleModalClose () {
-      console.log('handleModalClose')
       this.isEditing = false
     }
   },
   created () {
     const { id: userId } = this.$route.params
     this.fetchUserProfile(userId)
-    this.fetchTabs(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id } = to.params
     this.fetchUserProfile(id)
-    this.fetchTabs(id)
     next()
   },
   computed: {

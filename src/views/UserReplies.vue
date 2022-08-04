@@ -1,7 +1,17 @@
 <template>
   <div class="center-container scrollbar">
-    <Spinner v-if="isLoading"/>
-    <TweetReplies v-else :initialreplies="replies" />
+    <Spinner v-if="isLoading" />
+    <!-- NavTabs -->
+    <template v-else>
+      <ul class="tabs-group">
+        <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
+          <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+            {{ tab.title }}
+          </router-link>
+        </li>
+      </ul>
+      <TweetReplies :initialreplies="replies" />
+    </template>
   </div>
 </template>
 
@@ -19,10 +29,33 @@ export default {
   data () {
     return {
       replies: [],
-      isLoading: true
+      isLoading: true,
+      currentRoute: this.$router.currentRoute.name
     }
   },
   methods: {
+    fetchTabs (userId) {
+      this.tabs = [
+        {
+          id: 1,
+          title: '推文',
+          path: `/users/${userId}/tweets`,
+          name: 'user'
+        },
+        {
+          id: 2,
+          title: '回覆',
+          path: `/users/${userId}/replies`,
+          name: 'user-replies'
+        },
+        {
+          id: 3,
+          title: '喜歡的內容',
+          path: `/users/${userId}/likes`,
+          name: 'user-likes'
+        }
+      ]
+    },
     async fetchUserReplies (userId) {
       try {
         // get all tweets
@@ -63,11 +96,42 @@ export default {
   created () {
     const { id: userId } = this.$route.params
     this.fetchUserReplies(userId)
+    this.fetchTabs(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id } = to.params
     this.fetchUserReplies(id)
+    this.fetchTabs(id)
     next()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.tabs-group {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-tab {
+  &.active {
+    border-bottom: 2px solid var(--brand-color);
+  }
+}
+
+.nav-link {
+  display: block;
+  padding: 15px 30px;
+  color: var(--secondary);
+  cursor: pointer;
+
+  &.active {
+    color: var(--brand-color);
+  }
+
+  &:hover {
+    color: var(--brand-color);
+  }
+}
+</style>
