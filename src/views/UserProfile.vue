@@ -16,7 +16,7 @@
           <!-- avatar -->
           <img class="avatar-img-thumbnail" :src="profile.avatar | emptyImage" alt="avatar-image">
           <!-- banner -->
-          <img class="d-block img-thumbnail" :src="profile.cover | emptyCover" alt="banner-image">
+          <img class="d-block banner-img-thumbnail" :src="profile.cover | emptyCover" alt="banner-image">
         </div>
         <div class="profile-detail px-4">
           <!-- button -->
@@ -136,6 +136,13 @@
   height: 140px;
   border: 4px solid #fff;
   border-radius: 50%;
+  object-fit: cover;
+}
+
+.banner-img-thumbnail {
+  max-height: 200px;
+  object-fit: cover;
+  object-position: center center;
 }
 
 .profile-detail {

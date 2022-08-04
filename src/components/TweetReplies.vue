@@ -3,7 +3,7 @@
     <div class="tweet-popular-container">
       <div v-for="reply of initialreplies" :key="reply.id" class="tweet">
         <router-link class="avatar" :to="{ name: 'user', params: { id: reply.UserId } }">
-          <img :src="reply.User.avatar | emptyImage" alt="" />
+          <img :src="reply.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">

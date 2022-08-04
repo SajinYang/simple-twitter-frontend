@@ -37,6 +37,7 @@ export default {
           repliedCounts: tweet.repliedCounts,
           isBeingLiked: tweet.isBeingLiked,
           likesCounts: tweet.likesCounts,
+          UserId: tweet.UserId,
           User: {
             id: tweet.UserId,
             account: tweet.userAccountOfTweeet,

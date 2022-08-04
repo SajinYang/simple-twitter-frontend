@@ -3,12 +3,7 @@
     <button class="btn tweet-creat" @click.stop.prevent="openModal">
       推文
     </button>
-    <img
-      class="icon-create-small"
-      src="./../assets/icon/tweet-create.svg"
-      @click.stop.prevent="openModal"
-      alt=""
-    />
+    <img class="icon-create-small" src="./../assets/icon/tweet-create.svg" @click.stop.prevent="openModal" alt="" />
 
     <div v-show="modalStatus">
       <div class="modal-background" @click.stop.prevent="closeModal"></div>
@@ -21,30 +16,16 @@
 
         <form class="modal-content">
           <router-link class="avatar" :to="{ name: 'user', params: { id: currentUser.id } }">
-            <img :src="currentUser.avatar | emptyImage" alt="" />
+            <img class="avatarImg" :src="currentUser.avatar | emptyImage" alt="" />
           </router-link>
 
           <div class="twitter-text-container">
-            <textarea
-              class="twitter-text"
-              placeholder="有什麼新鮮事？"
-              maxlength="200"
-              v-model="twitterText"
-              @click.stop.prevent="resetwarningStatus"
-              required
-            ></textarea>
+            <textarea class="twitter-text" placeholder="有什麼新鮮事？" maxlength="200" v-model="twitterText"
+              @click.stop.prevent="resetwarningStatus" required></textarea>
           </div>
-          <span v-if="warningStatus === 'length'" class="warning-sign"
-            >字數不可超過 140 字</span
-          >
-          <span v-if="warningStatus === 'trim'" class="warning-sign"
-            >內容不可空白</span
-          >
-          <button
-            class="btn btn-post-reply-tweet"
-            @click.stop.prevent="createdTweet"
-            :disabled="isProcessing"
-          >
+          <span v-if="warningStatus === 'length'" class="warning-sign">字數不可超過 140 字</span>
+          <span v-if="warningStatus === 'trim'" class="warning-sign">內容不可空白</span>
+          <button class="btn btn-post-reply-tweet" @click.stop.prevent="createdTweet" :disabled="isProcessing">
             推文
           </button>
         </form>

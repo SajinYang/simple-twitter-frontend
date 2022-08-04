@@ -34,6 +34,7 @@ textarea {
 // 上讓串接進來的頭像都變圓圈圈
 .avatarImg {
   border-radius: 50%;
+  object-fit: cover;
 }
 
 // 跟隨 toggle 按鈕

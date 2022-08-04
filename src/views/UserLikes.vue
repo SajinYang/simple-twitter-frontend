@@ -1,41 +1,41 @@
 <template>
   <div class="center-container scrollbar">
-      <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
-        <div class="tweet-popular-container">
-          <router-link class="tweet" :to="{ name: 'tweet', params: { id: liked.id } }">
-            <router-link class="avatar" :to="{ name: 'user', params: { id: liked.User.id } }">
-              <img :src="liked.User.avatar | emptyImage" alt="" />
-            </router-link>
-            <div class="tweet-info">
-              <div class="tweet-user">
-                <router-link class="tweet-user name" :to="{ name: 'user', params: { id: liked.User.id } }">
-                  {{ liked.User.name }}
+    <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
+      <div class="tweet-popular-container">
+        <router-link class="tweet" :to="{ name: 'tweet', params: { id: liked.id } }">
+          <router-link class="avatar" :to="{ name: 'user', params: { id: liked.User.id } }">
+            <img :src="liked.User.avatar | emptyImage" alt="" class="avatarImg" />
+          </router-link>
+          <div class="tweet-info">
+            <div class="tweet-user">
+              <router-link class="tweet-user name" :to="{ name: 'user', params: { id: liked.User.id } }">
+                {{ liked.User.name }}
+              </router-link>
+              <router-link class="tweet-user account" :to="{ name: 'user', params: { id: liked.User.id } }">
+                @{{ liked.User.account }} ・ {{ liked.createdAt | fromNow }}</router-link>
+            </div>
+            <p class="tweet-content">
+              {{ liked.description }}
+            </p>
+            <div class="tweet-icon-container">
+              <div class="tweet-reply">
+                <router-link class="cursor-default" to="">
+                  <ModalTweetReply :initialTweet="liked" class="tweet-icon-reply"
+                    @after-create-reply="afterCreateReply(liked.id)" />
                 </router-link>
-                <router-link class="tweet-user account" :to="{ name: 'user', params: { id: liked.User.id } }">
-                  @{{ liked.User.account }} ・ {{ liked.createdAt | fromNow }}</router-link>
+                <span class="tweet-icon-number">{{ liked.repliedCounts }}</span>
               </div>
-              <p class="tweet-content">
-                {{ liked.description }}
-              </p>
-              <div class="tweet-icon-container">
-                <div class="tweet-reply">
-                  <router-link class="cursor-default" to="">
-                    <ModalTweetReply :initialTweet="liked" class="tweet-icon-reply"
-                      @after-create-reply="afterCreateReply(liked.id)" />
-                  </router-link>
-                  <span class="tweet-icon-number">{{ liked.repliedCounts }}</span>
-                </div>
 
-                <div class="tweet-like">
-                  <img v-if="liked.isBeingLiked" class="tweet-icon-like" src="../assets/icon/tweet-like.svg"
-                    @click.stop.prevent="deleteLike(liked.id)" alt="" />
-                  <span class="tweet-icon-number">{{ liked.likesCounts }}</span>
-                </div>
+              <div class="tweet-like">
+                <img v-if="liked.isBeingLiked" class="tweet-icon-like" src="../assets/icon/tweet-like.svg"
+                  @click.stop.prevent="deleteLike(liked.id)" alt="" />
+                <span class="tweet-icon-number">{{ liked.likesCounts }}</span>
               </div>
             </div>
-          </router-link>
-        </div>
-      </section>
+          </div>
+        </router-link>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -72,6 +72,7 @@ export default {
           likesCounts: tweet.likesCounts,
           repliedCounts: tweet.repliedCounts,
           isBeingLiked: true,
+          UserId: tweet.userOflikedTweet,
           User: {
             id: tweet.userOflikedTweet,
             name: tweet.userNameOflikedTweet,

@@ -57,7 +57,6 @@ const routes = [
   },
   {
     path: '/users/:id',
-    name: 'user',
     component: () => import('../views/UserProfile.vue'),
     redirect: '/users/:id/tweets',
     beforeEnter: authorizeIsUser,
@@ -65,14 +64,17 @@ const routes = [
     children: [
       {
         path: 'tweets',
+        name: 'user',
         component: () => import('../views/UserTweets.vue')
       },
       {
         path: 'replies',
+        name: 'user-replies',
         component: () => import('../views/UserReplies.vue')
       },
       {
         path: 'likes',
+        name: 'user-likes',
         component: () => import('../views/UserLikes.vue')
       }
     ]
