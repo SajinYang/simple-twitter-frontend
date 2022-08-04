@@ -1,11 +1,7 @@
 <template>
   <section class="modal-tweet-section">
     <button class="btn tweet-reply" @click.stop.prevent="openModal">
-      <img
-        class="tweet-reply-icon"
-        src="./../assets/icon/tweet-reply.svg"
-        alt=""
-      />
+      <img class="tweet-reply-icon" src="./../assets/icon/tweet-reply.svg" alt="" />
     </button>
 
     <div class="modal-tweet" v-show="modalStatus">
@@ -19,51 +15,39 @@
 
         <form class="modal-content">
           <router-link class="avatar" :to="{ name: 'user', params: { id: user.UserId } }">
-            <img :src="user.avatar | emptyImage" alt="" />
+            <img class="avatarImg" :src="user.avatar | emptyImage" alt="" />
           </router-link>
 
           <div class="twitter-reply-container">
-            <router-link class="twitter-reply name" :to="{ name: 'user', params: { id: user.UserId } }">{{ user.name }}</router-link>
-            <router-link class="twitter-reply info" :to="{ name: 'user', params: { id: user.UserId } }"
-              >@{{ user.account }}</router-link>・
-            <span>{{ tweet.createdAt | fromNow }}</span
-            >
+            <router-link class="twitter-reply name" :to="{ name: 'user', params: { id: user.UserId } }">{{ user.name }}
+            </router-link>
+            <router-link class="twitter-reply info" :to="{ name: 'user', params: { id: user.UserId } }">@{{ user.account
+              }}</router-link>・
+            <span>{{ tweet.createdAt | fromNow }}</span>
             <p class="twitter-reply content">
               {{ tweet.description }}
             </p>
             <span class="twitter-reply-text">回覆給 </span>
-            <router-link class="twitter-reply-account" :to="{ name: 'user', params: { id: user.UserId } }"> @{{ user.account }}</router-link>
+            <router-link class="twitter-reply-account" :to="{ name: 'user', params: { id: user.UserId } }"> @{{
+              user.account }}</router-link>
           </div>
 
           <router-link class="avatar avatar-reply" :to="{ name: 'user', params: { id: currentUser.id } }">
-            <img :src="currentUser.avatar | emptyImage" alt="" />
+            <img class="avatarImg" :src="currentUser.avatar | emptyImage" alt="" />
           </router-link>
 
           <div class="modal-line"></div>
 
           <div class="twitter-reply-container">
-            <textarea
-              class="twitter-text"
-              placeholder="推你的回覆"
-              maxlength="200"
-              v-model="twitterText"
-              @click.stop.prevent="resetwarningStatus"
-              required
-            ></textarea>
+            <textarea class="twitter-text" placeholder="推你的回覆" maxlength="200" v-model="twitterText"
+              @click.stop.prevent="resetwarningStatus" required></textarea>
           </div>
 
-          <span v-if="warningStatus === 'length'" class="warning-sign"
-            >字數不可超過 140 字</span
-          >
-          <span v-if="warningStatus === 'trim'" class="warning-sign"
-            >內容不可空白</span
-          >
+          <span v-if="warningStatus === 'length'" class="warning-sign">字數不可超過 140 字</span>
+          <span v-if="warningStatus === 'trim'" class="warning-sign">內容不可空白</span>
 
-          <button
-            class="btn btn-post-reply-tweet"
-            @click.stop.prevent="createdTweet(tweet.id)"
-            :disabled="isProcessing"
-          >
+          <button class="btn btn-post-reply-tweet" @click.stop.prevent="createdTweet(tweet.id)"
+            :disabled="isProcessing">
             回覆
           </button>
         </form>
