@@ -1,6 +1,6 @@
 <template>
   <section class="modal-tweet-section">
-    <button class="btn tweet-creat" @click.stop.prevent="openModal">
+    <button class="btn tweet-create" @click.stop.prevent="openModal">
       推文
     </button>
     <img class="icon-create-small" src="./../assets/icon/tweet-create.svg" @click.stop.prevent="openModal" alt="" />
@@ -116,8 +116,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.tweet-creat {
+<style lang="scss" scoped>
+.tweet-create {
   padding: 8px 24px;
   width: 178px;
   height: 46px;
@@ -126,6 +126,10 @@ export default {
   font-size: 20px;
   font-weight: 400;
   color: var(--dark-0);
+
+  &:hover{
+    opacity: 0.8;
+  }
 }
 .modal-container {
   width: 634px;
@@ -193,7 +197,7 @@ button:disabled {
 }
 
 @media (max-width: 992px) {
-  .tweet-creat {
+  .tweet-create {
     display: none;
   }
   .icon-create-small {

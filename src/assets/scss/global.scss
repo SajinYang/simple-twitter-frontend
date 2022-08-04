@@ -90,6 +90,9 @@ textarea {
   color: #FFFFFF;
   background: var(--brand-color);
   cursor: pointer;
+  &:hover{
+    opacity: 0.7;
+  }
 }
 
 // Modal - 推文、回覆關閉視窗按鈕

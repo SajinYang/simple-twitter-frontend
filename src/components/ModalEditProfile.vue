@@ -382,7 +382,7 @@ export default {
 }
 
 .banner-img-thumbnail {
-  height: 200px;
+  height: 188px;
   object-fit: cover;
 }
 
