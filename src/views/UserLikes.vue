@@ -1,5 +1,5 @@
 <template>
-  <div class="center-container scrollbar">
+  <div>
     <Spinner v-if="isLoading" />
     <template v-else>
       <ul class="tabs-group">

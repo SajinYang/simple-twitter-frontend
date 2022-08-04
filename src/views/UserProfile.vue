@@ -17,7 +17,7 @@
       </header>
 
       <Spinner v-if="isLoading"/>
-      <main v-else>
+      <main class="center-container scrollbar" v-else>
         <div class="profile-img">
           <!-- avatar -->
           <img
@@ -106,8 +106,10 @@
 
 <style lang="scss" scoped>
 .title {
+  position: relative;;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .icon-back {
@@ -239,7 +241,6 @@ export default {
         isFollowing: false
       },
       isEditing: false,
-      tabs: [],
       isLoading: true
     }
   },

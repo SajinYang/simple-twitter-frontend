@@ -1,5 +1,5 @@
 <template>
-  <div class="center-container scrollbar">
+  <div>
     <Spinner v-if="isLoading" />
     <!-- NavTabs -->
     <template v-else>

@@ -1,6 +1,6 @@
 <template>
   <!-- <div> -->
-  <div class="center-container scrollbar">
+  <div>
     <Spinner v-if="isLoading" />
     <template v-else>
       <!-- NavTabs -->
@@ -67,7 +67,6 @@ export default {
           throw new Error(response.message)
         }
         const { data } = response
-        // console.log(data)
         this.tweets = data.map(tweet => ({
           id: tweet.id,
           createdAt: tweet.createdAt,
