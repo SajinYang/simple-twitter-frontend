@@ -201,4 +201,23 @@ export default {
     display: none;
   }
 }
+
+@media (max-width: 576px) {
+  .navbar {
+    width: 100%;
+  }
+
+  .top {
+    justify-content: center;
+  }
+
+  .logo {
+    margin: 20px 6px 40px 6px;
+  }
+
+  .nav-item h5,
+  .logout h5 {
+    display: none;
+  }
+}
 </style>

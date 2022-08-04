@@ -243,7 +243,7 @@ export default {
 }
 
 .modal-container {
-  min-width: 600px;
+  max-width: 600px;
   // height: 610px;
   left: 334px;
   margin: 0px auto;

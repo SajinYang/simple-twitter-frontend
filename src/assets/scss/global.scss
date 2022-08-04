@@ -25,7 +25,7 @@ textarea {
   max-width: 380px;
 }
 
-.text-muted{
+.text-muted {
   font-size: 14px;
   color: var(--secondary);
 }
@@ -54,7 +54,7 @@ textarea {
   color: var(--brand-color);
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     color: var(--dark-0);
     background-color: var(--brand-color);
   }
@@ -64,7 +64,8 @@ textarea {
     margin-right: 6px;
     background-color: var(--brand-color);
     color: #FFFFFF;
-    &:hover{
+
+    &:hover {
       opacity: 0.8;
     }
   }
@@ -90,7 +91,8 @@ textarea {
   color: #FFFFFF;
   background: var(--brand-color);
   cursor: pointer;
-  &:hover{
+
+  &:hover {
     opacity: 0.7;
   }
 }
@@ -178,5 +180,17 @@ textarea {
   .container-twitter {
     display: grid;
     grid-template-columns: 6% auto 35%;
+  }
+
+  .container-lg {
+    max-width: 100%;
+  }
+}
+
+// 手機
+@media (max-width: 576px) {
+  .container-twitter {
+    display: grid;
+    grid-template-columns: 6% auto;
   }
 }

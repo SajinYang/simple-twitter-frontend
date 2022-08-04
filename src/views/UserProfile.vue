@@ -43,13 +43,13 @@
               編輯個人資料
             </button>
             <div class="btn-follow" v-else>
-              <button class="btn-direct-message me-3 p-2">
+              <button class="btn-direct-message p-2">
                 <img
                   src="../assets/icon/direct-message.svg"
                   alt="direct-message"
                 />
               </button>
-              <button class="btn-notification me-3">
+              <button class="btn-notification">
                 <img src="../assets/icon/add-notify.svg" alt="get-notify" />
               </button>
               <button
@@ -135,13 +135,14 @@
 
 .btn-follow {
   display: flex;
-  align-content: center;
+  align-items: center;
 }
 
 .btn-direct-message,
 .btn-notification {
   width: 40px;
   height: 40px;
+  margin-right: 16px;
   border: 1px solid var(--brand-color);
   border-radius: 50%;
 }
@@ -196,17 +197,24 @@
 }
 
 @media (max-width: 992px) {
+  .btn-direct-message,
+    .btn-notification {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
+      border: 1px solid var(--brand-color);
+      border-radius: 50%;
+      & > img{
+        width: 16px;
+        height: 14px;
+      }
+    }
+
   .avatar-img-thumbnail {
     left: 1.5rem;
     width: 80px;
     height: 80px;
     bottom: -40px;
-  }
-
-  .btn-direct-message,
-  .btn-notification {
-    width: 2rem;
-    height: 2px;
   }
 }
 </style>
