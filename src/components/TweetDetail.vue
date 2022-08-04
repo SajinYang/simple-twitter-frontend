@@ -5,7 +5,7 @@
         <div class="tweet-info">
           <div class="tweet-user-container">
             <router-link class="avatar" :to="{ name: 'user', params: { id: user.UserId } }">
-              <img :src="user.avatar | emptyImage" alt="" />
+              <img class="avatarImg" :src="user.avatar | emptyImage" alt="" />
             </router-link>
             <router-link class="tweet-user" :to="{ name: 'user', params: { id: user.UserId } }">
               <span class="tweet-user-name">{{ user.name }}</span>
