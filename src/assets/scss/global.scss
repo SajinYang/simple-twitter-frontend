@@ -46,10 +46,18 @@ textarea {
   color: var(--brand-color);
   cursor: pointer;
 
+  &:hover{
+    color: var(--dark-0);
+    background-color: var(--brand-color);
+  }
+
   &.following {
     width: 96px;
     background-color: var(--brand-color);
     color: #FFFFFF;
+    &:hover{
+      opacity: 0.8;
+    }
   }
 }
 

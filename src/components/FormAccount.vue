@@ -209,39 +209,53 @@ export default {
     },
     handleSubmit (e) {
       // basic check
-      if (
-        !this.user.account ||
-        !this.user.name ||
-        !this.user.email
-      ) {
-        Toast.fire({
-          icon: 'warning',
-          title: '請確認已填寫所有欄位'
-        })
-        return false
-      }
-      if (this.currentPage === 'signup' &&
-        (!this.user.password ||
-        !this.user.checkPassword)
-      ) {
-        Toast.fire({
-          icon: 'warning',
-          title: '請確認已填寫所有欄位'
-        })
-        return false
-      }
-      if (this.password !== this.checkPassword &&
-        this.currentPage === 'signup') {
-        Toast.fire({
-          icon: 'warning',
-          title: '兩次輸入的密碼不同'
-        })
-        this.checkPassword = ''
-        return false
+      if (this.currentPage === 'signup') {
+        if (
+          !this.user.account ||
+          !this.user.name ||
+          !this.user.email ||
+          !this.user.password ||
+          !this.user.checkPassword
+        ) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請確認已填寫所有欄位'
+          })
+          return
+        }
+
+        if (this.user.password !== this.user.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '兩次輸入的密碼不同'
+          })
+          this.user.checkPassword = ''
+        }
+        this.$emit('after-submit', this.user)
       }
 
-      // if success emit to parent
-      this.$emit('after-submit', this.user)
+      if (this.currentPage === 'setting') {
+        if (
+          !this.user.account ||
+          !this.user.name ||
+          !this.user.email
+        ) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請確認已填寫所有欄位'
+          })
+          return
+        }
+
+        if (this.user.password !== this.user.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '兩次輸入的密碼不同'
+          })
+          this.user.checkPassword = ''
+        }
+        this.$emit('after-submit', this.user)
+      }
     }
   },
   created () {

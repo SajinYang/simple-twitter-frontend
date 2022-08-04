@@ -10,6 +10,12 @@ export default {
   getTweets ({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
+  getRepliedTweets ({ userId }) {
+    return apiHelper.get(`/users/${userId}/replied_tweets`)
+  },
+  getLikes ({ userId }) {
+    return apiHelper.get(`/users/${userId}/likes`)
+  },
   getTopUsers () {
     return apiHelper.get('/users/top10')
   },
@@ -20,6 +26,11 @@ export default {
     return apiHelper.get(`/users/${userId}/followers`)
   },
   updateAccount ({ userId, ...data }) {
+    console.log(userId)
+    console.log({ ...data })
+    return apiHelper.put(`/users/${userId}`, { ...data })
+  },
+  updateProfile ({ userId, data }) {
     console.log(userId)
     console.log({ ...data })
     return apiHelper.put(`/users/${userId}/setting`, { ...data })

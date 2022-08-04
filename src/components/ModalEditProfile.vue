@@ -6,18 +6,20 @@
           <form @submit.prevent.stop="handleSubmit">
             <div class="modal-header">
               <h5 name="modal-header" class="modal-header-title">編輯個人資料</h5>
-              <button class="modal-close-button" @click.stop.prevent="$emit('close')">
+              <button class="modal-close-button" @click.stop.prevent="handleCancel">
                 <img class="btn-close" src="./../assets/icon/modal-cancel.svg" alt="" />
               </button>
-              <button type="submit" class="btn-save">儲存</button>
+              <button type="submit" class="btn-save" :disabled="isProcessing">
+                {{ isProcessing ? '儲存中' : '儲存' }}
+              </button>
             </div>
 
             <div class="modal-body">
               <div class="avatar-container">
                 <div class="avatar-image-container">
                   <label for="avatar-image" class="avatar-image-label"></label>
-                  <img class="avatar-img-thumbnail" src="../assets/img/avatar.png" alt="avatar-image">
-                  <div class="bg-mask avatar-mask"></div>
+                  <img class="avatar-img-thumbnail" :src="user.avatar | emptyImage" alt="avatar-image">
+                  <div class="bg-mask avatar-mask" v-if="!user.avatar"></div>
                 </div>
                 <input id="avatar-image" type="file" name="image" accept="image/*" class="form-control-file"
                   @change="handleAvatarFileChange">
@@ -32,8 +34,8 @@
                           alt="close-button" />
                       </button>
                     </div>
-                    <img class="d-block img-thumbnail" src="../assets/icon/card-background.png" alt="banner-image">
-                    <div class="bg-mask banner-mask"></div>
+                    <img class="d-block img-thumbnail" :src="user.cover | emptyCover" alt="banner-image">
+                    <div class="bg-mask banner-mask" v-if="!user.cover"></div>
                   </div>
                   <input id="image" type="file" name="image" accept="image/*" class="form-control-file"
                     @change="handleBannerFileChange">
@@ -47,10 +49,11 @@
                 <label for="name">名稱</label>
 
                 <div class="input-hints">
-                  <span class="error"
-                    :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">字數超出上限</span>
-                  <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">{{ user.name.length
-                  }}/50</span>
+                  <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">
+                    字數超出上限
+                  </span>
+                  <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">
+                    {{ user.name.length }}/50</span>
                 </div>
               </div>
 
@@ -60,11 +63,12 @@
                 <label for="introduction">自我介紹</label>
 
                 <div class="input-hints">
-                  <span class="error"
-                    :style="{ visibility: user.introduction.length > 160 ? 'visible' : 'hidden' }">字數超出上限</span>
-                  <span :class="{ error: user.introduction.length > 160 }" v-if="user.introduction.length">{{
-                      user.introduction.length
-                  }}/160</span>
+                  <span class="error" :style="{ visibility: user.introduction.length > 160 ? 'visible' : 'hidden' }">
+                    字數超出上限
+                  </span>
+                  <span :class="{ error: user.introduction.length > 160 }" v-if="user.introduction.length">
+                    {{ user.introduction.length }}/160
+                  </span>
                 </div>
               </div>
             </div>
@@ -76,38 +80,130 @@
 </template>
 
 <script>
-// AdminCategories toggleEdit
+import usersAPI from '../apis/users'
+import { Toast } from '../utils/helpers'
+import { emptyImageFilter } from '../utils/mixin'
 
 export default {
+  mixins: [emptyImageFilter],
+  props: {
+    initialProfile: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       user: {
+        id: -1,
         name: '',
-        password: '',
-        isAdmin: false,
-        introduction: ''
+        nameCached: '',
+        introduction: '',
+        introCached: '',
+        avatar: null,
+        avatarCached: '',
+        cover: null,
+        coverCached: ''
       },
-      isAuthenticated: false,
       isProcessing: false
     }
   },
   methods: {
-    handleAvatarFileChange () {
-      console.log('handleAvatarChange')
+    fetchUserProfile (profile) {
+      const { id, name, introduction, avatar, cover } = profile
+      this.user = {
+        ...this.user,
+        id,
+        name,
+        nameCached: name,
+        introduction,
+        introCached: introduction,
+        avatar,
+        avatarCached: avatar,
+        cover,
+        coverCached: cover
+      }
     },
-    handleBannerFileChange () {
-      console.log('handleBannerChange')
+    handleAvatarFileChange (e) {
+      const { files } = e.target
+      console.log('avatar', files)
+
+      if (files.length === 0) {
+        this.user.avatar = ''
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0])
+        this.user.avatar = imageURL
+      }
+    },
+    handleBannerFileChange (e) {
+      const { files } = e.target
+      console.log('cover', files)
+
+      if (files.length === 0) {
+        this.user.cover = ''
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0])
+        this.user.cover = imageURL
+      }
     },
     handleBannerFileCancel () {
-      console.log('handleBannerFileCancel')
+      this.user = {
+        ...this.user,
+        cover: this.user.coverCached
+      }
     },
-    handleSubmit (e) {
-      console.log('handleSubmit')
-      console.log(e.target)
+    async handleSubmit () {
+      try {
+        if (!this.user.name) {
+          Toast.fire({
+            icon: 'error',
+            title: '使用者名稱為必填，請確認已填寫'
+          })
+          return
+        }
+        this.isProcessing = true
+        const { data } = await usersAPI.updateProfile({
+          userId: this.user.id,
+          data: this.user
+        })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '成功更新使用者資料'
+        })
+        this.isProcessing = false
+        // current page reload?
+        this.$router.go(0)
+      } catch (error) {
+        this.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法編輯使用者資料，請稍後再試'
+        })
+      }
+    },
+    handleCancel () {
+      this.user = {
+        ...this.user,
+        name: this.user.nameCached,
+        introduction: this.user.introCached,
+        avatar: this.user.avatarCached,
+        cover: this.user.coverCached
+      }
+      this.$emit('close')
+    }
+  },
+  created () {
+    this.fetchUserProfile(this.initialProfile)
+  },
+  watch: {
+    initialProfile (newValue) {
+      this.fetchUserProfile(newValue)
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -182,6 +278,10 @@ export default {
   border-radius: 50px;
   background-color: var(--brand-color);
   color: var(--dark-0);
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .btn-close {
@@ -212,6 +312,8 @@ export default {
   position: relative;
   width: 140px;
   height: 140px;
+  border: 4px solid var(--dark-0);
+  border-radius: 50%;
 }
 
 .avatar-image-label {
@@ -229,7 +331,6 @@ export default {
 }
 
 .avatar-img-thumbnail {
-  border: 4px solid steelblue;
   border-radius: 50%;
 }
 
