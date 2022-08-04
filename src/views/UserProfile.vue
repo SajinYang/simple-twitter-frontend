@@ -4,35 +4,66 @@
     <section class="center-section">
       <!-- header -->
       <header class="mt-3 mb-4 title">
-        <img class="icon-back" src="../assets/icon/tweet-back.svg" alt="" @click="$router.back()" />
+        <img
+          class="icon-back"
+          src="../assets/icon/tweet-back.svg"
+          alt=""
+          @click="$router.back()"
+        />
         <div class="user-title">
           <h5 class="">{{ profile.name }}</h5>
           <p class="text-muted">{{ profile.tweetsCounts }} 推文</p>
         </div>
       </header>
 
-      <main>
+      <Spinner v-if="isLoading"/>
+      <main v-else>
         <div class="profile-img">
           <!-- avatar -->
-          <img class="avatar-img-thumbnail" :src="profile.avatar | emptyImage" alt="avatar-image">
+          <img
+            class="avatar-img-thumbnail"
+            :src="profile.avatar | emptyImage"
+            alt="avatar-image"
+          />
           <!-- banner -->
-          <img class="d-block banner-img-thumbnail" :src="profile.cover | emptyCover" alt="banner-image">
+          <img
+            class="d-block banner-img-thumbnail"
+            :src="profile.cover | emptyCover"
+            alt="banner-image"
+          />
         </div>
         <div class="profile-detail px-4">
           <!-- button -->
           <div class="button-group my-3">
-            <button class="btn-edit" v-if="currentUser.id === profile.id"
-              @click.stop.prevent="isEditing = true">編輯個人資料</button>
+            <button
+              class="btn-edit"
+              v-if="currentUser.id === profile.id"
+              @click.stop.prevent="isEditing = true"
+            >
+              編輯個人資料
+            </button>
             <div class="btn-follow" v-else>
               <button class="btn-direct-message me-3 p-2">
-                <img src="../assets/icon/direct-message.svg" alt="direct-message">
+                <img
+                  src="../assets/icon/direct-message.svg"
+                  alt="direct-message"
+                />
               </button>
               <button class="btn-notification me-3">
-                <img src="../assets/icon/add-notify.svg" alt="get-notify">
+                <img src="../assets/icon/add-notify.svg" alt="get-notify" />
               </button>
-              <button class="btn toggle-follow" v-if="!profile.isFollowing"
-                @click.stop.prevent="addFollowing(profile.id)">跟隨</button>
-              <button class="btn toggle-follow following" v-else @click.stop.prevent="deleteFollowing(profile.id)">
+              <button
+                class="btn toggle-follow"
+                v-if="!profile.isFollowing"
+                @click.stop.prevent="addFollowing(profile.id)"
+              >
+                跟隨
+              </button>
+              <button
+                class="btn toggle-follow following"
+                v-else
+                @click.stop.prevent="deleteFollowing(profile.id)"
+              >
                 正在跟隨
               </button>
             </div>
@@ -42,13 +73,19 @@
           <span class="text-muted mb-1">@{{ profile.account }}</span>
           <p>{{ profile.introduction }}</p>
           <div class="follow-status">
-            <span class="following-text">{{ profile.followingsCounts }}個
-              <router-link :to="{ name: 'user-follow', params: { id: profile.id } }">
+            <span class="following-text"
+              >{{ profile.followingsCounts }}個
+              <router-link
+                :to="{ name: 'user-following', params: { id: profile.id } }"
+              >
                 <span class="text-light">跟隨中</span>
               </router-link>
             </span>
-            <span class="follower">{{ profile.followersCounts }}位
-              <router-link :to="{ name: 'user-follow', params: { id: profile.id } }">
+            <span class="follower"
+              >{{ profile.followersCounts }}位
+              <router-link
+                :to="{ name: 'user-follower', params: { id: profile.id } }"
+              >
                 <span class="text-light">跟隨者</span>
               </router-link>
             </span>
@@ -58,7 +95,12 @@
         <!-- NavTabs -->
         <ul class="tabs-group">
           <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab']">
-            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+            <router-link
+              class="nav-link"
+              aria-current="page"
+              :to="tab.path"
+              :key="tab.id"
+            >
               {{ tab.title }}
             </router-link>
           </li>
@@ -67,8 +109,12 @@
         <!-- nested routes -->
         <router-view />
       </main>
-      <ModalEditProfile v-show="isEditing" :initial-profile="profile" @save="handleModalSave"
-        @close="handleModalClose" />
+      <ModalEditProfile
+        v-show="isEditing"
+        :initial-profile="profile"
+        @save="handleModalSave"
+        @close="handleModalClose"
+      />
     </section>
     <TweetPopularUser />
   </div>
@@ -184,7 +230,7 @@
   }
 }
 
-@media(max-width:992px) {
+@media (max-width: 992px) {
   .avatar-img-thumbnail {
     left: 1.5rem;
     width: 80px;
@@ -209,6 +255,7 @@ import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
 import { mapState } from 'vuex'
 import { emptyImageFilter } from '../utils/mixin'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   name: 'UserProfile',
@@ -229,13 +276,15 @@ export default {
         isFollowing: false
       },
       isEditing: false,
-      tabs: []
+      tabs: [],
+      isLoading: true
     }
   },
   components: {
     NavBar,
     TweetPopularUser,
-    ModalEditProfile
+    ModalEditProfile,
+    Spinner
   },
   methods: {
     async fetchUserProfile (userId) {
@@ -253,9 +302,13 @@ export default {
         // if introduction is null
         this.profile = {
           ...this.profile,
-          introduction: this.profile.introduction ? this.profile.introduction : ''
+          introduction: this.profile.introduction
+            ? this.profile.introduction
+            : ''
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得使用者資料，請稍後再試'

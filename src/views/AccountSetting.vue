@@ -66,10 +66,11 @@ export default {
         this.$router.go(0)
       } catch (error) {
         this.isProcessing = false
-        console.log(error)
+
+        const message = error.response.data.message
         Toast.fire({
           icon: 'warning',
-          title: '無法編輯使用者資料，請稍後再試'
+          title: message
         })
       }
     }

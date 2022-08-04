@@ -47,7 +47,7 @@
               />
               <UserProfile
                 v-if="
-                  (NavbarStatus !== 'user' && NavbarStatus !== 'user-follow') ||
+                  (NavbarStatus !== 'user' && NavbarStatus !== 'user-following' && NavbarStatus !== 'user-follower') ||
                   NavbarStatus === 'tweet'
                 "
               />

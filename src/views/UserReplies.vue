@@ -1,6 +1,7 @@
 <template>
   <div class="center-container scrollbar">
-    <TweetReplies :initialreplies="replies" />
+    <Spinner v-if="isLoading"/>
+    <TweetReplies v-else :initialreplies="replies" />
   </div>
 </template>
 
@@ -8,14 +9,17 @@
 import TweetReplies from '../components/TweetReplies.vue'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   components: {
-    TweetReplies
+    TweetReplies,
+    Spinner
   },
   data () {
     return {
-      replies: []
+      replies: [],
+      isLoading: true
     }
   },
   methods: {
@@ -46,7 +50,9 @@ export default {
           createdAt: reply.repliedTweetCreatedAt,
           comment: reply.comment
         }))
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得使用者所有tweets，請稍後再試'

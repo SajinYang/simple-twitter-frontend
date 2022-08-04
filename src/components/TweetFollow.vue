@@ -7,7 +7,7 @@
         class="follow"
       >
         <router-link class="avatar" :to="{ name: 'user', params: { id: follower.followerId } }">
-          <img :src="follower.userAvatarOfFollower | emptyImage" alt="" />
+          <img class="avatarImg" :src="follower.userAvatarOfFollower | emptyImage" alt="" />
         </router-link>
         <div class="follow-info">
           <router-link class="follow-user" :to="{ name: 'user', params: { id: follower.followerId } }">
@@ -45,7 +45,7 @@
         class="follow"
       >
         <router-link class="avatar" :to="{ name: 'user', params: { id: following.followingId } }">
-          <img :src="following.userAvatarOfFollowing | emptyImage" alt="" />
+          <img class="avatarImg" :src="following.userAvatarOfFollowing | emptyImage" alt="" />
         </router-link>
         <div class="follow-info">
           <div class="follow-user">

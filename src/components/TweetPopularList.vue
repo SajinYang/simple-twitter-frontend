@@ -5,13 +5,13 @@
         class="tweet"
         :to="{ name: 'tweet', params: { id: tweet.id } }"
       >
-        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.id } }">
+        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.UserId } }">
           <img :src="tweet.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.id } }">{{ tweet.User.name }}</router-link>
-            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.id } }"
+            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.UserId } }">{{ tweet.User.name }}</router-link>
+            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.UserId } }"
               >@{{ tweet.User.account }} ・ {{ tweet.createdAt | fromNow }}</router-link
             >
           </div>

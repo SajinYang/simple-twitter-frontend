@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="center-container scrollbar">
+      <Spinner v-if="isLoading"/>
       <TweetPopularList v-for="tweet in tweets" :key="tweet.id" :initialTweet="tweet" />
     </div>
   </div>
@@ -10,14 +11,17 @@
 import TweetPopularList from '../components/TweetPopularList.vue'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
+import Spinner from '../components/Spinner1.vue'
 
 export default {
   components: {
-    TweetPopularList
+    TweetPopularList,
+    Spinner
   },
   data () {
     return {
-      tweets: []
+      tweets: [],
+      isLoading: true
     }
   },
   methods: {
@@ -45,7 +49,9 @@ export default {
             avatar: tweet.userAvatarOfTweeet
           }
         }))
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得使用者所有tweets，請稍後再試'
