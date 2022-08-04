@@ -9,7 +9,7 @@
         <div class="avatar">
           <img
             class="avatarImg"
-            :src="tweet.avatarOdUser | emptyImage"
+            :src="tweet.avatarOfUser | emptyImage"
             alt=""
           />
         </div>

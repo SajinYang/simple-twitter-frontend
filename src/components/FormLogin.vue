@@ -105,9 +105,6 @@ label {
 </style>
 
 <script>
-// 向API取得資料
-// token放localStorage
-// response取得的資料放vuex
 import authorizationAPI from '../apis/authorization'
 import adminAPI from '../apis/admin'
 import { Toast } from '../utils/helpers'

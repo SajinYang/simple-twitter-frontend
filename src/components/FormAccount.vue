@@ -155,6 +155,10 @@ label {
     opacity: 0.8;
     cursor: not-allowed;
   }
+
+  &:hover{
+    opacity: 0.8;
+  }
 }
 </style>
 
@@ -230,6 +234,7 @@ export default {
             title: '兩次輸入的密碼不同'
           })
           this.user.checkPassword = ''
+          return
         }
         this.$emit('after-submit', this.user)
       }
@@ -253,13 +258,13 @@ export default {
             title: '兩次輸入的密碼不同'
           })
           this.user.checkPassword = ''
+          return
         }
         this.$emit('after-submit', this.user)
       }
     }
   },
   created () {
-    // when editing
     this.fetchInitialUser()
   }
 }
