@@ -2,23 +2,13 @@
   <section>
     <form class="tweet-creat-from">
       <div class="avatar">
-        <img src="./../assets/img/tweet-nophoto.png" alt="" />
+        <img class="avatarImg" :src="currentUser.avatar | emptyImage" alt="" />
       </div>
 
       <div class="twitter-text-container">
-        <textarea
-          class="twitter-text"
-          placeholder="有什麼新鮮事？"
-          maxlength="200"
-          v-model="twitterText"
-          required
-        ></textarea>
+        <textarea class="twitter-text" placeholder="有什麼新鮮事？" maxlength="200" v-model="twitterText" required></textarea>
       </div>
-      <button
-        class="btn btn-post-reply-tweet"
-        @click.stop.prevent="createdTweet"
-        :disabled="isProcessing"
-      >
+      <button class="btn btn-post-reply-tweet" @click.stop.prevent="createdTweet" :disabled="isProcessing">
         推文
       </button>
     </form>
@@ -28,9 +18,11 @@
 <script>
 import tweetsAPI from '../apis/tweets'
 import { Toast } from '../utils/helpers'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import { emptyImageFilter } from './../utils/mixin'
 
 export default {
+  mixins: [emptyImageFilter],
   data () {
     return {
       twitterText: '',
@@ -83,6 +75,9 @@ export default {
         this.isProcessing = false
       }
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   }
 }
 </script>

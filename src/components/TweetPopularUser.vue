@@ -7,7 +7,7 @@
           <li class="popular-user">
             <router-link class="popular-user-item" :to="{ name: 'user', params: { id: user.id } }">
               <div class="avatar">
-                <img :src="user.avatar | emptyImage" alt="" />
+                <img class="avatarImg" :src="user.avatar | emptyImage" alt="" />
               </div>
             </router-link>
 
@@ -21,19 +21,11 @@
             </router-link>
 
             <div v-if="currentUser.id !== user.id" class="popular-user-btn">
-              <button
-                v-if="!user.isFollowing"
-                class="btn toggle-follow"
-                @click.stop.prevent="addFollowing(user.id)"
-              >
+              <button v-if="!user.isFollowing" class="btn toggle-follow" @click.stop.prevent="addFollowing(user.id)">
                 跟隨
               </button>
 
-              <button
-                v-else
-                class="btn toggle-follow following"
-                @click.stop.prevent="deleteFollowing(user.id)"
-              >
+              <button v-else class="btn toggle-follow following" @click.stop.prevent="deleteFollowing(user.id)">
                 正在跟隨
               </button>
             </div>

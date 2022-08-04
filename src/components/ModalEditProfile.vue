@@ -21,7 +21,7 @@
                   <img class="avatar-img-thumbnail" :src="user.avatar | emptyImage" alt="avatar-image">
                   <div class="bg-mask avatar-mask" v-if="!user.avatar"></div>
                 </div>
-                <input id="avatar-image" type="file" name="image" accept="image/*" class="form-control-file"
+                <input id="avatar-image" type="file" name="avatar" accept="image/*" class="form-control-file"
                   @change="handleAvatarFileChange">
               </div>
               <div class="banner">
@@ -34,10 +34,10 @@
                           alt="close-button" />
                       </button>
                     </div>
-                    <img class="d-block img-thumbnail" :src="user.cover | emptyCover" alt="banner-image">
+                    <img class="d-block banner-img-thumbnail" :src="user.cover | emptyCover" alt="banner-image">
                     <div class="bg-mask banner-mask" v-if="!user.cover"></div>
                   </div>
-                  <input id="image" type="file" name="image" accept="image/*" class="form-control-file"
+                  <input id="image" type="file" name="cover" accept="image/*" class="form-control-file"
                     @change="handleBannerFileChange">
                 </div>
               </div>
@@ -334,6 +334,7 @@ export default {
 
 .avatar-img-thumbnail {
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .avatar-mask {
@@ -366,9 +367,8 @@ export default {
 }
 
 .banner-img-thumbnail {
-  border: 4px solid steelblue;
-  border-radius: 50%;
-  opacity: 0.8;
+  height: 200px;
+  object-fit: cover;
 }
 
 .banner-mask {

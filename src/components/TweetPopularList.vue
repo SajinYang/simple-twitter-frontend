@@ -6,7 +6,7 @@
         :to="{ name: 'tweet', params: { id: tweet.id } }"
       >
         <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.id } }">
-          <img :src="tweet.User.avatar | emptyImage" alt="" />
+          <img :src="tweet.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
