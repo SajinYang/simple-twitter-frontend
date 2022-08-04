@@ -2,6 +2,7 @@
 
 @import 'base/_reset',
 'base/_root',
+'base/_base',
 'base/_typography';
 
 // spacing
@@ -118,7 +119,7 @@ textarea {
   border-right: 1px solid var(--border);
   width: 100%;
   height: calc(100vh - 75px);
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
 }
 
@@ -147,7 +148,7 @@ textarea {
 
 // 卷軸style
 .scrollbar {
-  padding-right: 6px;
+  // padding-right: 6px;
 
   &::-webkit-scrollbar {
     width: 8px;
