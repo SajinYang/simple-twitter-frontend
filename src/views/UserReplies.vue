@@ -3,14 +3,20 @@
     <Spinner v-if="isLoading" />
     <!-- NavTabs -->
     <template v-else>
-      <ul class="tabs-group">
-        <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
-          <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
-            {{ tab.title }}
-          </router-link>
-        </li>
-      </ul>
+      <nav>
+        <ul class="tabs-group">
+          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
+            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+              {{ tab.title }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
       <TweetReplies :initialreplies="replies" />
+      <h5 class="m-6" v-if="replies.length < 1">
+        You don’t have any replies yet.
+        <p class="text-muted">Start replying to other tweets!. When you do, it’ll show up here.</p>
+      </h5>
     </template>
   </div>
 </template>
@@ -64,7 +70,6 @@ export default {
           throw new Error(response.message)
         }
         const { data } = response
-        // console.log(data)
         this.replies = data.map(reply => ({
           id: reply.replyId,
           UserId: reply.userOfReply,

@@ -2,13 +2,15 @@
   <div>
     <Spinner v-if="isLoading" />
     <template v-else>
-      <ul class="tabs-group">
-        <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
-          <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
-            {{ tab.title }}
-          </router-link>
-        </li>
-      </ul>
+      <nav>
+        <ul class="tabs-group">
+          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
+            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+              {{ tab.title }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
       <div class="center-container scrollbar">
         <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
           <div class="tweet-popular-container">
@@ -46,6 +48,11 @@
             </router-link>
           </div>
         </section>
+        <h5 class="m-6" v-if="userLikes.length < 1">
+          You don’t have any likes yet.
+          <p class="text-muted">Tap the heart on any Tweet to show it some love. When you do, it’ll show up
+            here.</p>
+        </h5>
       </div>
     </template>
   </div>

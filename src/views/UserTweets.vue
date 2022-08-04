@@ -4,14 +4,20 @@
     <Spinner v-if="isLoading" />
     <template v-else>
       <!-- NavTabs -->
-      <ul class="tabs-group">
-        <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
-          <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
-            {{ tab.title }}
-          </router-link>
-        </li>
-      </ul>
+      <nav>
+        <ul class="tabs-group">
+          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
+            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+              {{ tab.title }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
       <TweetPopularList v-for="tweet in tweets" :key="tweet.id" :initialTweet="tweet" />
+      <h5 class="m-6" v-if="tweets.length < 1">
+        You don’t have any tweets yet.
+        <p class="text-muted">Start tweeting ! When you do, it’ll show up here.</p>
+      </h5>
     </template>
   </div>
   <!-- </div> -->
