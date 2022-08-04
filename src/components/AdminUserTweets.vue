@@ -130,7 +130,7 @@ export default {
   margin-top: 75px;
   width: 100%;
   height: calc(100vh - 75px);
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
 }
 

@@ -151,7 +151,7 @@ export default {
   border-right: 1px solid var(--border);
   width: 100%;
   height: calc(100vh - 127px);
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
   margin-top: 127px;
   position: relative;
