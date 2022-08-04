@@ -128,15 +128,14 @@ export default {
   },
   methods: {
     async handleSubmit () {
+      if (!this.account || !this.password) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認已填寫 帳號 和 密碼'
+        })
+        return
+      }
       try {
-        if (!this.account || !this.password) {
-          Toast.fire({
-            icon: 'warning',
-            title: '請確認已填寫 帳號 和 密碼'
-          })
-          return
-        }
-
         this.isProcessing = true
         const api = this.isAdminPage ? adminAPI : authorizationAPI
 

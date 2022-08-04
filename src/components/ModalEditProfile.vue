@@ -153,16 +153,29 @@ export default {
       }
     },
     async handleSubmit (e) {
+      if (!this.user.name) {
+        Toast.fire({
+          icon: 'error',
+          title: '使用者名稱為必填，請確認已填寫'
+        })
+        return
+      }
+      // if unmodified
+      if (this.user.name === this.user.nameCached &&
+        this.user.introduction === this.user.introCached &&
+        this.user.avatar === this.user.avatarCached &&
+        this.user.cover === this.user.coverCached) {
+        Toast.fire({
+          icon: 'success',
+          title: '成功更新使用者資料'
+        })
+        this.isProcessing = false
+        this.$emit('close')
+        return
+      }
       try {
-        if (!this.user.name) {
-          Toast.fire({
-            icon: 'error',
-            title: '使用者名稱為必填，請確認已填寫'
-          })
-          return
-        }
         this.isProcessing = true
-        const form = e.target // <form></form>
+        const form = e.target
         const formData = new FormData(form)
         const { data } = await usersAPI.updateProfile({
           userId: this.user.id,
@@ -176,9 +189,11 @@ export default {
           title: '成功更新使用者資料'
         })
         this.isProcessing = false
-        // current page reload?
+
+        // current page reload
         this.$router.go(0)
       } catch (error) {
+        console.log(error)
         this.isProcessing = false
         Toast.fire({
           icon: 'error',
@@ -281,7 +296,8 @@ export default {
   background-color: var(--brand-color);
   color: var(--dark-0);
 
-  &:hover {
+  &:hover,
+  &:disabled {
     opacity: 0.8;
   }
 }
