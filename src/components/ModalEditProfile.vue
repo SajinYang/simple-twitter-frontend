@@ -152,7 +152,7 @@ export default {
         cover: this.user.coverCached
       }
     },
-    async handleSubmit () {
+    async handleSubmit (e) {
       try {
         if (!this.user.name) {
           Toast.fire({
@@ -162,9 +162,11 @@ export default {
           return
         }
         this.isProcessing = true
+        const form = e.target // <form></form>
+        const formData = new FormData(form)
         const { data } = await usersAPI.updateProfile({
           userId: this.user.id,
-          data: this.user
+          data: formData
         })
         if (data.status !== 'success') {
           throw new Error(data.message)

@@ -32,8 +32,8 @@ export default {
   },
   updateProfile ({ userId, data }) {
     console.log(userId)
-    console.log({ ...data })
-    return apiHelper.put(`/users/${userId}`, { ...data })
+    console.log(data)
+    return apiHelper.put(`/users/${userId}`, data)
   },
   signUp (data) {
     return apiHelper.post('/users', { ...data })
