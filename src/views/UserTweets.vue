@@ -43,6 +43,18 @@ export default {
       currentRoute: this.$router.currentRoute.name
     }
   },
+  computed: {
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        const { id: userId } = this.$route.params
+        this.fetchUserTweets(userId)
+        this.updatePage(false)
+      }
+    }
+  },
   methods: {
     ...mapActions(['updatePage']),
     fetchTabs (userId) {
@@ -110,18 +122,6 @@ export default {
     this.fetchUserTweets(id)
     this.fetchTabs(id)
     next()
-  },
-  computed: {
-    ...mapState({ updatePageNow: 'updatePageNow' })
-  },
-  watch: {
-    updatePageNow () {
-      if (this.updatePageNow) {
-        const { id: userId } = this.$route.params
-        this.fetchUserTweets(userId)
-        this.updatePage(false)
-      }
-    }
   }
 }
 </script>
