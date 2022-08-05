@@ -92,7 +92,7 @@ export default {
           createdAt: tweet.createdAt,
           description: tweet.description,
           repliedCounts: tweet.repliedCounts,
-          isBeingLiked: tweet.isBeingLiked,
+          isBeingLiked: tweet.isBeingliked,
           likesCounts: tweet.likesCounts,
           UserId: tweet.UserId,
           User: {
