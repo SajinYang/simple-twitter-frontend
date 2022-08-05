@@ -168,6 +168,7 @@ export default {
   padding: 15px 0 10px 0;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-right: 6px;
 }
 
 .popular-users {
