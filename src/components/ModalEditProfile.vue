@@ -159,6 +159,14 @@ export default {
           })
           return
         }
+        if (this.user.name.trim().length > 50 ||
+          this.user.introduction.trim().length > 160) {
+          Toast.fire({
+            icon: 'error',
+            title: '超過字數上限，請重新修改'
+          })
+          return
+        }
         if (this.user.name === this.user.nameCached &&
           this.user.introduction === this.user.introCached &&
           this.user.avatar === this.user.avatarCached &&
@@ -240,7 +248,7 @@ export default {
 }
 
 .modal-container {
-  max-width: 600px;
+  width: 600px;
   left: 334px;
   margin: 0px auto;
   background-color: #fff;
@@ -454,4 +462,10 @@ textarea {
 }
 
 // input end
+@media (max-width: 992px) {
+  .modal-container{
+    width: 100%;
+    max-width: 600px;
+  }
+}
 </style>

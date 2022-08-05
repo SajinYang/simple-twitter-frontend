@@ -133,6 +133,13 @@ export default {
           })
           return
         }
+        if (this.account.trim().length > 10) {
+          Toast.fire({
+            icon: 'warning',
+            title: '帳號字數超過上限，請重新填寫'
+          })
+          return
+        }
         this.isProcessing = true
         const api = this.isAdminPage ? adminAPI : authorizationAPI
 
