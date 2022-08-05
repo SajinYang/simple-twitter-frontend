@@ -23,7 +23,7 @@
           <button
             v-if="!follower.isFollowing"
             class="btn toggle-follow"
-            @click.stop.prevent="addFollowing(follower.followerId)"
+            @click.stop.prevent="addFollowing(follower.followerId)" :disabled="isProcessing"
           >
             跟隨
           </button>
@@ -31,7 +31,7 @@
           <button
             v-else
             class="btn toggle-follow following"
-            @click.stop.prevent="deleteFollowing(follower.followerId)"
+            @click.stop.prevent="deleteFollowing(follower.followerId)" :disabled="isProcessing"
           >
             正在跟隨
           </button>
@@ -61,7 +61,7 @@
           <button
             v-if="!following.isFollowing"
             class="btn toggle-follow"
-            @click.stop.prevent="addFollowing(following.followingId)"
+            @click.stop.prevent="addFollowing(following.followingId)" :disabled="isProcessing"
           >
             跟隨
           </button>
@@ -69,7 +69,7 @@
           <button
             v-else
             class="btn toggle-follow following"
-            @click.stop.prevent="deleteFollowing(following.followingId)"
+            @click.stop.prevent="deleteFollowing(following.followingId)" :disabled="isProcessing"
           >
             正在跟隨
           </button>
@@ -101,10 +101,16 @@ export default {
       require: true
     }
   },
+  data () {
+    return {
+      isProcessing: false
+    }
+  },
   mixins: [emptyImageFilter],
   methods: {
     async addFollowing (id) {
       try {
+        this.isProcessing = true
         const { data } = await followshipAPI.addFollow({ id })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -138,7 +144,9 @@ export default {
           icon: 'success',
           title: '追蹤成功'
         })
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法追蹤成功，請稍後再試'
@@ -147,6 +155,7 @@ export default {
     },
     async deleteFollowing (id) {
       try {
+        this.isProcessing = true
         const { data } = await followshipAPI.deleteFollow({ id })
 
         if (data.status !== 'success') {
@@ -165,6 +174,7 @@ export default {
             }
           })
         }
+
         if (this.followStatus === 'follower') {
           this.followers = this.followers.map((follower) => {
             if (follower.followerId !== id) {
@@ -181,7 +191,9 @@ export default {
           icon: 'success',
           title: '已取消追蹤'
         })
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法追蹤成功，請稍後再試'
