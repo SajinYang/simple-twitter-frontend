@@ -2,7 +2,7 @@
   <section class="popular-users-section">
     <div class="popular-users-container">
       <h4 class="popular-users-title">推薦跟隨</h4>
-      <div class="popular-user-container">
+      <div class="popular-user-container scrollbar">
         <ul v-for="user in users" :key="user.id" class="popular-users">
           <li class="popular-user">
             <router-link class="popular-user-item" :to="{ name: 'user', params: { id: user.id } }">
@@ -21,11 +21,11 @@
             </router-link>
 
             <div v-if="currentUser.id !== user.id" class="popular-user-btn">
-              <button v-if="!user.isFollowing" class="btn toggle-follow" @click.stop.prevent="addFollowing(user.id)">
+              <button v-if="!user.isFollowing" class="btn toggle-follow" @click.stop.prevent="addFollowing(user.id)" :disabled="isProcessing">
                 跟隨
               </button>
 
-              <button v-else class="btn toggle-follow following" @click.stop.prevent="deleteFollowing(user.id)">
+              <button v-else class="btn toggle-follow following" @click.stop.prevent="deleteFollowing(user.id)" :disabled="isProcessing">
                 正在跟隨
               </button>
             </div>
@@ -50,7 +50,8 @@ export default {
   },
   data () {
     return {
-      users: []
+      users: [],
+      isProcessing: false
     }
   },
   created () {
@@ -72,6 +73,7 @@ export default {
     },
     async addFollowing (userId) {
       try {
+        this.isProcessing = true
         const { data } = await followshipAPI.addFollow({ id: userId })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -91,7 +93,9 @@ export default {
           title: '追蹤成功'
         })
         this.updatePage(true)
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法追蹤成功，請稍後再試'
@@ -100,6 +104,7 @@ export default {
     },
     async deleteFollowing (userId) {
       try {
+        this.isProcessing = true
         const { data } = await followshipAPI.deleteFollow({ id: userId })
 
         if (data.status !== 'success') {
@@ -120,7 +125,9 @@ export default {
           title: '已取消追蹤'
         })
         this.updatePage(true)
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法追蹤成功，請稍後再試'
@@ -161,10 +168,14 @@ export default {
 }
 
 .popular-user-container {
-  width: 97%;
+  width: 100%;
+  max-height: 90vh;
   border-top: 1px solid var(--border);
   margin: 0 auto;
   padding: 15px 0 10px 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 6px;
 }
 
 .popular-users {

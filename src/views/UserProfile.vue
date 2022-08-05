@@ -340,7 +340,6 @@ export default {
       if (this.updatePageNow) {
         const { id: userId } = this.$route.params
         this.fetchUserProfile(userId)
-        this.updatePage(false)
       }
     }
   }
