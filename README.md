@@ -1,7 +1,7 @@
-# simple-twitter
+# Simple-Twitter
 
 ## demo
-[Simple Twitter](https://github.com/SajinYang/simple-twitter-frontend)
+[Simple Twitter](https://sajinyang.github.io/simple-twitter-frontend/)
 
 
 ## Test Account
