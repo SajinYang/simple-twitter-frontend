@@ -52,7 +52,7 @@
 
                 <div class="input-hints">
                   <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">
-                    字數超出上限
+                    字數超出上限！
                   </span>
                   <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">
                     {{ user.name.length }}/50</span>
@@ -66,7 +66,7 @@
 
                 <div class="input-hints">
                   <span class="error" :style="{ visibility: user.introduction.length > 160 ? 'visible' : 'hidden' }">
-                    字數超出上限
+                    字數超出上限！
                   </span>
                   <span :class="{ error: user.introduction.length > 160 }" v-if="user.introduction.length">
                     {{ user.introduction.length }}/160

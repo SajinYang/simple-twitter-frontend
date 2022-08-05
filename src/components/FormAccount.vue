@@ -205,7 +205,8 @@ export default {
         email: '',
         password: '',
         checkPassword: ''
-      }
+      },
+      validResult: false
     }
   },
   methods: {
@@ -233,27 +234,46 @@ export default {
             icon: 'warning',
             title: '請確認已填寫所有欄位'
           })
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
+          })
           return
         }
-        if (this.user.account.trim().length > 10 ||
+        if (
+          this.user.account.trim().length > 10 ||
           this.user.name.trim().length > 50
         ) {
           Toast.fire({
             icon: 'warning',
-            title: '超過字數上限，請新修改'
+            title: '字數超出上限，請重新填寫'
+          })
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
           })
           return
         }
-
         if (this.user.password !== this.user.checkPassword) {
           Toast.fire({
             icon: 'warning',
             title: '兩次輸入的密碼不同'
           })
           this.user.checkPassword = ''
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
+          })
           return
         }
-        this.$emit('after-submit', this.user)
+        this.validResult = true
+        this.$emit('after-submit', {
+          validResult: this.validResult,
+          user: this.user
+        })
       }
 
       if (this.currentPage === 'setting') {
@@ -266,6 +286,26 @@ export default {
             icon: 'warning',
             title: '請確認已填寫所有欄位'
           })
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
+          })
+          return
+        }
+        if (
+          this.user.account.trim().length > 10 ||
+          this.user.name.trim().length > 50
+        ) {
+          Toast.fire({
+            icon: 'warning',
+            title: '字數超出上限，請重新填寫'
+          })
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
+          })
           return
         }
 
@@ -275,9 +315,18 @@ export default {
             title: '兩次輸入的密碼不同'
           })
           this.user.checkPassword = ''
+          this.validResult = false
+          this.$emit('after-submit', {
+            validResult: this.validResult,
+            user: {}
+          })
           return
         }
-        this.$emit('after-submit', this.user)
+        this.validResult = true
+        this.$emit('after-submit', {
+          validResult: this.validResult,
+          user: this.user
+        })
       }
     }
   },

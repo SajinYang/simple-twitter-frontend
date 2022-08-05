@@ -37,8 +37,13 @@ export default {
     }
   },
   methods: {
-    async handleAfterSubmit (user) {
+    async handleAfterSubmit (payload) {
       try {
+        // form check error
+        const { validResult, user } = payload
+        if (!validResult) {
+          return
+        }
         this.isProcessing = true
         const { data } = await usersAPI.signUp({
           ...user
