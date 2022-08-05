@@ -16,7 +16,7 @@
           <span class="error" v-if="account.length > 10 && apiErrMsg.length"> 且
           </span>
           <span class="error" :style="{ visibility: account.length > 10 ? 'visible' : 'hidden' }">
-            字數超出上限
+            字數超出上限！
           </span>
         </div>
         <span :class="{ error: account.length > 10 }" v-if="account.length">{{ account.length }}/10

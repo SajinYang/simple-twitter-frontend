@@ -44,8 +44,13 @@ export default {
       const { account, name, email } = this.currentUser
       this.initialUser = { account, name, email }
     },
-    async handleAfterSubmit (user) {
+    async handleAfterSubmit (payload) {
       try {
+        // form check error
+        const { validResult, user } = payload
+        if (!validResult) {
+          return
+        }
         this.isProcessing = true
         const { data } = await usersAPI.updateAccount({
           userId: this.currentUser.id,
