@@ -1,7 +1,7 @@
 <template>
   <section class="tweet-popular-section">
-    <div class="tweet-popular-container">
-      <router-link
+    <div class="tweet-popular-container card-hover">
+      <li
         class="tweet"
         :to="{ name: 'tweet', params: { id: tweet.id } }"
       >
@@ -30,7 +30,7 @@
               <span class="tweet-icon-number">{{ tweet.repliedCounts }}</span>
             </div>
 
-            <div class="tweet-like">
+            <button class="tweet-like" :disabled="isProcessing">
               <img
                 v-if="tweet.isBeingLiked"
                 class="tweet-icon-like"
@@ -46,10 +46,11 @@
                 alt=""
               />
               <span class="tweet-icon-number">{{ tweet.likesCounts }}</span>
-            </div>
+            </button>
           </div>
         </div>
-      </router-link>
+      </li>
+      <div class="toLink" @click.stop.prevent="LinkToDetail(tweet.id)"></div>
     </div>
   </section>
 </template>
@@ -73,19 +74,23 @@ export default {
   },
   data () {
     return {
-      tweet: this.initialTweet
+      tweet: this.initialTweet,
+      isProcessing: false
     }
   },
   methods: {
     async addLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.addLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = true
         this.tweet.likesCounts += 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
@@ -94,13 +99,16 @@ export default {
     },
     async deleteLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.deleteLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = false
         this.tweet.likesCounts -= 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
@@ -109,6 +117,10 @@ export default {
     },
     afterCreateReply () {
       this.tweet.repliedCounts += 1
+    },
+    LinkToDetail (tweetId) {
+      console.log('click')
+      this.$router.push(`/tweets/${tweetId}`)
     }
   }
 }
@@ -120,6 +132,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 5;
 }
 
 .tweet-popular-container {
@@ -135,6 +149,7 @@ export default {
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
   color: var(--dark-100);
+  z-index: 5;
 }
 
 .tweet-info {
@@ -193,5 +208,18 @@ export default {
 
 .cursor-default {
   cursor: default;
+}
+
+.toLink{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.avatar, .tweet-reply, .tweet-like, .tweet-user, .tweet-icon-container {
+  z-index: 1;
 }
 </style>

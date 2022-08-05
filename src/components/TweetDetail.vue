@@ -39,7 +39,7 @@
               <ModalTweetReply1 :tweet="tweet" :user="user" class="tweet-icon-reply" />
             </div>
 
-            <div class="tweet-like">
+            <button class="tweet-like" :disabled="isProcessing">
               <img
                 v-if="!tweet.isBeingLiked"
                 @click.stop.prevent="addLike(tweet.id)"
@@ -54,7 +54,7 @@
                 src="../assets/icon/tweet-like.svg"
                 alt=""
               />
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -79,6 +79,11 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      isProcessing: false
+    }
+  },
   mixins: [emptyImageFilter, fromNowFilter, dateFilter],
   components: {
     ModalTweetReply1
@@ -86,13 +91,16 @@ export default {
   methods: {
     async addLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.addLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = true
         this.tweet.likesCounts += 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
@@ -101,13 +109,16 @@ export default {
     },
     async deleteLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.deleteLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = false
         this.tweet.likesCounts -= 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
