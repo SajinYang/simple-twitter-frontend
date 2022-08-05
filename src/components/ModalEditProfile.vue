@@ -248,7 +248,7 @@ export default {
 }
 
 .modal-container {
-  max-width: 600px;
+  width: 600px;
   left: 334px;
   margin: 0px auto;
   background-color: #fff;
@@ -462,4 +462,10 @@ textarea {
 }
 
 // input end
+@media (max-width: 992px) {
+  .modal-container{
+    width: 100%;
+    max-width: 600px;
+  }
+}
 </style>
