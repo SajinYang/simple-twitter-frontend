@@ -2,7 +2,7 @@
   <section class="popular-users-section">
     <div class="popular-users-container">
       <h4 class="popular-users-title">推薦跟隨</h4>
-      <div class="popular-user-container">
+      <div class="popular-user-container scrollbar">
         <ul v-for="user in users" :key="user.id" class="popular-users">
           <li class="popular-user">
             <router-link class="popular-user-item" :to="{ name: 'user', params: { id: user.id } }">
@@ -161,10 +161,13 @@ export default {
 }
 
 .popular-user-container {
-  width: 97%;
+  width: 100%;
+  max-height: 90vh;
   border-top: 1px solid var(--border);
   margin: 0 auto;
   padding: 15px 0 10px 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .popular-users {
