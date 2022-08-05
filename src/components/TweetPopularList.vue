@@ -1,18 +1,25 @@
 <template>
   <section class="tweet-popular-section">
     <div class="tweet-popular-container">
-      <li
-        class="tweet card-hover"
-        @click.stop.prevent="linkToDetail(tweet.id)"
-      >
-        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.UserId } }">
+      <li class="tweet card-hover" @click.stop.prevent="linkToDetail(tweet.id)">
+        <router-link
+          class="avatar"
+          :to="{ name: 'user', params: { id: tweet.UserId } }"
+        >
           <img :src="tweet.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.UserId } }">{{ tweet.User.name }}</router-link>
-            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.UserId } }"
-              >@{{ tweet.User.account }} ・ {{ tweet.createdAt | fromNow }}</router-link
+            <router-link
+              class="tweet-user name"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >{{ tweet.User.name }}</router-link
+            >
+            <router-link
+              class="tweet-user account"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >@{{ tweet.User.account }} ・
+              {{ tweet.createdAt | fromNow }}</router-link
             >
           </div>
           <p class="tweet-content">
@@ -206,5 +213,12 @@ export default {
 
 .cursor-default {
   cursor: default;
+}
+
+.tweet-icon-number {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--secondary);
 }
 </style>
