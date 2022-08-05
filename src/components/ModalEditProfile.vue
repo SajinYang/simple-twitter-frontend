@@ -159,6 +159,14 @@ export default {
           })
           return
         }
+        if (this.user.name.trim().length > 50 ||
+          this.user.introduction.trim().length > 160) {
+          Toast.fire({
+            icon: 'error',
+            title: '超過字數上限，請重新修改'
+          })
+          return
+        }
         if (this.user.name === this.user.nameCached &&
           this.user.introduction === this.user.introCached &&
           this.user.avatar === this.user.avatarCached &&

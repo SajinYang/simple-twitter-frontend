@@ -235,6 +235,15 @@ export default {
           })
           return
         }
+        if (this.user.account.trim().length > 10 ||
+          this.user.name.trim().length > 50
+        ) {
+          Toast.fire({
+            icon: 'warning',
+            title: '超過字數上限，請新修改'
+          })
+          return
+        }
 
         if (this.user.password !== this.user.checkPassword) {
           Toast.fire({
