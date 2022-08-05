@@ -18,8 +18,6 @@
 </template>
 
 <script>
-// PUT API
-// 修改vuex的currentUser
 import NavBar from '../components/NavBar.vue'
 import FormAccount from '../components/FormAccount.vue'
 import { mapState } from 'vuex'
@@ -48,7 +46,6 @@ export default {
     },
     async handleAfterSubmit (user) {
       try {
-        console.log(user)
         this.isProcessing = true
         const { data } = await usersAPI.updateAccount({
           userId: this.currentUser.id,

@@ -23,7 +23,7 @@
             </router-link>
             <router-link class="twitter-reply info" :to="{ name: 'user', params: { id: user.UserId } }">@{{ user.account
               }}</router-link>・
-            <span>{{ tweet.createdAt | fromNow }}</span>
+            <span class="text-muted">{{ tweet.createdAt | fromNow }}</span>
             <p class="twitter-reply content">
               {{ tweet.description }}
             </p>

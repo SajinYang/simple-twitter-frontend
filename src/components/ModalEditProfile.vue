@@ -59,7 +59,7 @@
 
               <div class="input-group">
                 <textarea name="introduction" id="introduction" cols="30" rows="10" class="self-intro"
-                  v-model="user.introduction"></textarea>
+                  v-model="user.introduction" placeholder="讓社群更認識你"></textarea>
                 <label for="introduction">自我介紹</label>
 
                 <div class="input-hints">
@@ -126,8 +126,6 @@ export default {
     },
     handleAvatarFileChange (e) {
       const { files } = e.target
-      console.log('avatar', files)
-
       if (files.length === 0) {
         this.user.avatar = ''
       } else {
@@ -161,8 +159,20 @@ export default {
           })
           return
         }
+        if (this.user.name === this.user.nameCached &&
+          this.user.introduction === this.user.introCached &&
+          this.user.avatar === this.user.avatarCached &&
+          this.user.cover === this.user.coverCached) {
+          Toast.fire({
+            icon: 'success',
+            title: '成功更新使用者資料'
+          })
+          this.isProcessing = false
+          this.$emit('close')
+          return
+        }
         this.isProcessing = true
-        const form = e.target // <form></form>
+        const form = e.target
         const formData = new FormData(form)
         const { data } = await usersAPI.updateProfile({
           userId: this.user.id,
@@ -176,7 +186,8 @@ export default {
           title: '成功更新使用者資料'
         })
         this.isProcessing = false
-        // current page reload?
+
+        // current page reload
         this.$router.go(0)
       } catch (error) {
         this.isProcessing = false
@@ -229,8 +240,7 @@ export default {
 }
 
 .modal-container {
-  min-width: 600px;
-  // height: 610px;
+  max-width: 600px;
   left: 334px;
   margin: 0px auto;
   background-color: #fff;
@@ -281,7 +291,8 @@ export default {
   background-color: var(--brand-color);
   color: var(--dark-0);
 
-  &:hover {
+  &:hover,
+  &:disabled {
     opacity: 0.8;
   }
 }
@@ -367,7 +378,7 @@ export default {
 }
 
 .banner-img-thumbnail {
-  height: 200px;
+  height: 188px;
   object-fit: cover;
 }
 

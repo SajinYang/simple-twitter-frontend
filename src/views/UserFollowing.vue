@@ -129,7 +129,6 @@ export default {
     },
     async fetchUserProfile (userId) {
       const { data } = await usersAPI.getProfile({ userId })
-      console.log(data)
       if (data.status !== 'success') {
         throw new Error(data.message)
       }
@@ -151,7 +150,7 @@ export default {
   border-right: 1px solid var(--border);
   width: 100%;
   height: calc(100vh - 127px);
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
   margin-top: 127px;
   position: relative;

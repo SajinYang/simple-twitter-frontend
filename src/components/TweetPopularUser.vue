@@ -212,4 +212,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 576px) {
+  .popular-users-section {
+    display: none;
+  }
+}
 </style>

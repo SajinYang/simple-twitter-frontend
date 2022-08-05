@@ -17,7 +17,7 @@
       </header>
 
       <Spinner v-if="isLoading"/>
-      <main v-else>
+      <main class="center-container scrollbar" v-else>
         <div class="profile-img">
           <!-- avatar -->
           <img
@@ -43,13 +43,13 @@
               編輯個人資料
             </button>
             <div class="btn-follow" v-else>
-              <button class="btn-direct-message me-3 p-2">
+              <button class="btn-direct-message p-2">
                 <img
                   src="../assets/icon/direct-message.svg"
                   alt="direct-message"
                 />
               </button>
-              <button class="btn-notification me-3">
+              <button class="btn-notification">
                 <img src="../assets/icon/add-notify.svg" alt="get-notify" />
               </button>
               <button
@@ -91,28 +91,12 @@
             </span>
           </div>
         </div>
-
-        <!-- NavTabs -->
-        <ul class="tabs-group">
-          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab']">
-            <router-link
-              class="nav-link"
-              aria-current="page"
-              :to="tab.path"
-              :key="tab.id"
-            >
-              {{ tab.title }}
-            </router-link>
-          </li>
-        </ul>
-
         <!-- nested routes -->
         <router-view />
       </main>
       <ModalEditProfile
         v-show="isEditing"
         :initial-profile="profile"
-        @save="handleModalSave"
         @close="handleModalClose"
       />
     </section>
@@ -122,8 +106,10 @@
 
 <style lang="scss" scoped>
 .title {
+  position: relative;;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .icon-back {
@@ -149,13 +135,14 @@
 
 .btn-follow {
   display: flex;
-  align-content: center;
+  align-items: center;
 }
 
 .btn-direct-message,
 .btn-notification {
   width: 40px;
   height: 40px;
+  margin-right: 16px;
   border: 1px solid var(--brand-color);
   border-radius: 50%;
 }
@@ -209,39 +196,25 @@
   margin-right: 1.25rem;
 }
 
-.tabs-group {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-tab.shine {
-  border-bottom: 1px solid var(--brand-color);
-}
-
-.nav-link {
-  display: block;
-  margin: 15px 30px;
-  color: var(--secondary);
-  cursor: pointer;
-
-  &.active {
-    color: var(--brand-color);
-  }
-}
-
 @media (max-width: 992px) {
+  .btn-direct-message,
+    .btn-notification {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
+      border: 1px solid var(--brand-color);
+      border-radius: 50%;
+      & > img{
+        width: 16px;
+        height: 14px;
+      }
+    }
+
   .avatar-img-thumbnail {
     left: 1.5rem;
     width: 80px;
     height: 80px;
     bottom: -40px;
-  }
-
-  .btn-direct-message,
-  .btn-notification {
-    width: 2rem;
-    height: 2px;
   }
 }
 </style>
@@ -276,7 +249,6 @@ export default {
         isFollowing: false
       },
       isEditing: false,
-      tabs: [],
       isLoading: true
     }
   },
@@ -315,25 +287,6 @@ export default {
         })
       }
     },
-    fetchTabs (userId) {
-      this.tabs = [
-        {
-          id: 1,
-          title: '推文',
-          path: `/users/${userId}/tweets`
-        },
-        {
-          id: 2,
-          title: '回覆',
-          path: `/users/${userId}/replies`
-        },
-        {
-          id: 3,
-          title: '喜歡的內容',
-          path: `/users/${userId}/likes`
-        }
-      ]
-    },
     async addFollowing (userId) {
       try {
         const { data } = await followshipAPI.addFollow({ id: userId })
@@ -364,23 +317,17 @@ export default {
         })
       }
     },
-    handleModalSave () {
-      console.log('handleModalSave')
-    },
     handleModalClose () {
-      console.log('handleModalClose')
       this.isEditing = false
     }
   },
   created () {
     const { id: userId } = this.$route.params
     this.fetchUserProfile(userId)
-    this.fetchTabs(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id } = to.params
     this.fetchUserProfile(id)
-    this.fetchTabs(id)
     next()
   },
   computed: {

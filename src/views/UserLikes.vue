@@ -1,42 +1,60 @@
 <template>
-  <Spinner v-if="isLoading"/>
-  <div v-else class="center-container scrollbar">
-    <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
-      <div class="tweet-popular-container">
-        <router-link class="tweet" :to="{ name: 'tweet', params: { id: liked.id } }">
-          <router-link class="avatar" :to="{ name: 'user', params: { id: liked.User.id } }">
-            <img :src="liked.User.avatar | emptyImage" alt="" class="avatarImg" />
-          </router-link>
-          <div class="tweet-info">
-            <div class="tweet-user">
-              <router-link class="tweet-user name" :to="{ name: 'user', params: { id: liked.User.id } }">
-                {{ liked.User.name }}
+  <div>
+    <Spinner v-if="isLoading" />
+    <template v-else>
+      <nav>
+        <ul class="tabs-group">
+          <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
+            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+              {{ tab.title }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
+      <div class="center-container scrollbar">
+        <section class="tweet-popular-section" v-for="liked in userLikes" :key="liked.id">
+          <div class="tweet-popular-container">
+            <router-link class="tweet" :to="{ name: 'tweet', params: { id: liked.id } }">
+              <router-link class="avatar" :to="{ name: 'user', params: { id: liked.User.id } }">
+                <img :src="liked.User.avatar | emptyImage" alt="" class="avatarImg" />
               </router-link>
-              <router-link class="tweet-user account" :to="{ name: 'user', params: { id: liked.User.id } }">
-                @{{ liked.User.account }} ・ {{ liked.createdAt | fromNow }}</router-link>
-            </div>
-            <p class="tweet-content">
-              {{ liked.description }}
-            </p>
-            <div class="tweet-icon-container">
-              <div class="tweet-reply">
-                <router-link class="cursor-default" to="">
-                  <ModalTweetReply :initialTweet="liked" class="tweet-icon-reply"
-                    @after-create-reply="afterCreateReply(liked.id)" />
-                </router-link>
-                <span class="tweet-icon-number">{{ liked.repliedCounts }}</span>
-              </div>
+              <div class="tweet-info">
+                <div class="tweet-user">
+                  <router-link class="tweet-user name" :to="{ name: 'user', params: { id: liked.User.id } }">
+                    {{ liked.User.name }}
+                  </router-link>
+                  <router-link class="tweet-user account" :to="{ name: 'user', params: { id: liked.User.id } }">
+                    @{{ liked.User.account }} ・ {{ liked.createdAt | fromNow }}</router-link>
+                </div>
+                <p class="tweet-content">
+                  {{ liked.description }}
+                </p>
+                <div class="tweet-icon-container">
+                  <div class="tweet-reply">
+                    <router-link class="cursor-default" to="">
+                      <ModalTweetReply :initialTweet="liked" class="tweet-icon-reply"
+                        @after-create-reply="afterCreateReply(liked.id)" />
+                    </router-link>
+                    <span class="tweet-icon-number">{{ liked.repliedCounts }}</span>
+                  </div>
 
-              <div class="tweet-like">
-                <img v-if="liked.isBeingLiked" class="tweet-icon-like" src="../assets/icon/tweet-like.svg"
-                  @click.stop.prevent="deleteLike(liked.id)" alt="" />
-                <span class="tweet-icon-number">{{ liked.likesCounts }}</span>
+                  <div class="tweet-like">
+                    <img v-if="liked.isBeingLiked" class="tweet-icon-like" src="../assets/icon/tweet-like.svg"
+                      @click.stop.prevent="deleteLike(liked.id)" alt="" />
+                    <span class="tweet-icon-number">{{ liked.likesCounts }}</span>
+                  </div>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
-        </router-link>
+        </section>
+        <h5 class="m-6" v-if="userLikes.length < 1">
+          You don’t have any likes yet.
+          <p class="text-muted">Tap the heart on any Tweet to show it some love. When you do, it’ll show up
+            here.</p>
+        </h5>
       </div>
-    </section>
+    </template>
   </div>
 </template>
 
@@ -57,10 +75,33 @@ export default {
   data () {
     return {
       userLikes: [],
-      isLoading: true
+      isLoading: true,
+      currentRoute: this.$router.currentRoute.name
     }
   },
   methods: {
+    fetchTabs (userId) {
+      this.tabs = [
+        {
+          id: 1,
+          title: '推文',
+          path: `/users/${userId}/tweets`,
+          name: 'user'
+        },
+        {
+          id: 2,
+          title: '回覆',
+          path: `/users/${userId}/replies`,
+          name: 'user-replies'
+        },
+        {
+          id: 3,
+          title: '喜歡的內容',
+          path: `/users/${userId}/likes`,
+          name: 'user-likes'
+        }
+      ]
+    },
     async fetchUserLiked (userId) {
       try {
         // get all tweets
@@ -127,16 +168,18 @@ export default {
   created () {
     const { id: userId } = this.$route.params
     this.fetchUserLiked(userId)
+    this.fetchTabs(userId)
   },
   beforeRouteUpdate (to, from, next) {
     const { id } = to.params
     this.fetchUserLiked(id)
+    this.fetchTabs(id)
     next()
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tweet-popular-section {
   display: flex;
   flex-direction: column;
@@ -215,5 +258,32 @@ export default {
 
 .cursor-default {
   cursor: default;
+}
+
+.tabs-group {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-tab {
+  &.active {
+    border-bottom: 2px solid var(--brand-color);
+  }
+}
+
+.nav-link {
+  display: block;
+  padding: 15px 30px;
+  color: var(--secondary);
+  cursor: pointer;
+
+  &.active {
+    color: var(--brand-color);
+  }
+
+  &:hover {
+    color: var(--brand-color);
+  }
 }
 </style>

@@ -54,7 +54,6 @@ export default {
         this.$router.push({ name: 'sign-in' })
       } catch (error) {
         this.isProcessing = false
-        console.log(error)
         const message = error.response.data.message
         Toast.fire({
           icon: 'warning',

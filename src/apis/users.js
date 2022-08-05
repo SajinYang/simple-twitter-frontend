@@ -26,8 +26,6 @@ export default {
     return apiHelper.get(`/users/${userId}/followers`)
   },
   updateAccount ({ userId, ...data }) {
-    console.log(userId)
-    console.log({ ...data })
     return apiHelper.put(`/users/${userId}/setting`, { ...data })
   },
   updateProfile ({ userId, data }) {

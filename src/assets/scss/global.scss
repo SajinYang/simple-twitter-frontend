@@ -2,11 +2,16 @@
 
 @import 'base/_reset',
 'base/_root',
+'base/_base',
 'base/_typography';
 
 // spacing
 .pt-6 {
   padding-top: 4rem;
+}
+
+.m-6{
+  margin: 5rem;
 }
 
 // display
@@ -22,6 +27,11 @@ textarea {
 
 .container-lg {
   max-width: 380px;
+}
+
+.text-muted {
+  font-size: 14px;
+  color: var(--secondary);
 }
 
 // 頭像
@@ -41,22 +51,25 @@ textarea {
 .toggle-follow {
   width: 64px;
   height: 40px;
+  margin-right: 6px;
   padding: 8px 16px;
   border: 1px solid var(--brand-color);
   border-radius: 50px;
   color: var(--brand-color);
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     color: var(--dark-0);
     background-color: var(--brand-color);
   }
 
   &.following {
     width: 96px;
+    margin-right: 6px;
     background-color: var(--brand-color);
     color: #FFFFFF;
-    &:hover{
+
+    &:hover {
       opacity: 0.8;
     }
   }
@@ -82,6 +95,10 @@ textarea {
   color: #FFFFFF;
   background: var(--brand-color);
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 // Modal - 推文、回覆關閉視窗按鈕
@@ -113,7 +130,7 @@ textarea {
   border-right: 1px solid var(--border);
   width: 100%;
   height: calc(100vh - 75px);
-  overflow-y: scroll;
+  overflow-y: overlay;
   overflow-x: hidden;
 }
 
@@ -142,7 +159,7 @@ textarea {
 
 // 卷軸style
 .scrollbar {
-  padding-right: 6px;
+  // padding-right: 6px;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -167,5 +184,17 @@ textarea {
   .container-twitter {
     display: grid;
     grid-template-columns: 6% auto 35%;
+  }
+
+  .container-lg {
+    max-width: 100%;
+  }
+}
+
+// 手機
+@media (max-width: 576px) {
+  .container-twitter {
+    display: grid;
+    grid-template-columns: 6% auto;
   }
 }
