@@ -155,7 +155,7 @@ export default {
   margin-top: 127px;
   position: relative;
   z-index: 50;
-  padding-right: 6px;
+  padding-right: 8px;
 }
 .follow-header {
   position: absolute;
