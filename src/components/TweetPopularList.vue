@@ -1,18 +1,25 @@
 <template>
   <section class="tweet-popular-section">
     <div class="tweet-popular-container card-hover">
-      <li
-        class="tweet"
-        :to="{ name: 'tweet', params: { id: tweet.id } }"
-      >
-        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.UserId } }">
+      <li class="tweet" :to="{ name: 'tweet', params: { id: tweet.id } }">
+        <router-link
+          class="avatar"
+          :to="{ name: 'user', params: { id: tweet.UserId } }"
+        >
           <img :src="tweet.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.UserId } }">{{ tweet.User.name }}</router-link>
-            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.UserId } }"
-              >@{{ tweet.User.account }} ・ {{ tweet.createdAt | fromNow }}</router-link
+            <router-link
+              class="tweet-user name"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >{{ tweet.User.name }}</router-link
+            >
+            <router-link
+              class="tweet-user account"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >@{{ tweet.User.account }} ・
+              {{ tweet.createdAt | fromNow }}</router-link
             >
           </div>
           <p class="tweet-content">
@@ -56,74 +63,74 @@
 </template>
 
 <script>
-import ModalTweetReply from './ModalTweetReply.vue'
-import tweetsAPI from '../apis/tweets'
-import { Toast } from '../utils/helpers'
-import { fromNowFilter, emptyImageFilter } from '../utils/mixin'
+import ModalTweetReply from "./ModalTweetReply.vue";
+import tweetsAPI from "../apis/tweets";
+import { Toast } from "../utils/helpers";
+import { fromNowFilter, emptyImageFilter } from "../utils/mixin";
 
 export default {
   components: {
-    ModalTweetReply
+    ModalTweetReply,
   },
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
     initialTweet: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
       tweet: this.initialTweet,
-      isProcessing: false
-    }
+      isProcessing: false,
+    };
   },
   methods: {
-    async addLike (tweetId) {
+    async addLike(tweetId) {
       try {
-        this.isProcessing = true
-        const { data } = await tweetsAPI.addLike({ tweetId })
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.addLike({ tweetId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        this.tweet.isBeingLiked = true
-        this.tweet.likesCounts += 1
-        this.isProcessing = false
+        this.tweet.isBeingLiked = true;
+        this.tweet.likesCounts += 1;
+        this.isProcessing = false;
       } catch (error) {
-        this.isProcessing = false
+        this.isProcessing = false;
         Toast.fire({
-          icon: 'error',
-          title: '無法按喜歡，請稍後再試'
-        })
+          icon: "error",
+          title: "無法按喜歡，請稍後再試",
+        });
       }
     },
-    async deleteLike (tweetId) {
+    async deleteLike(tweetId) {
       try {
-        this.isProcessing = true
-        const { data } = await tweetsAPI.deleteLike({ tweetId })
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.deleteLike({ tweetId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        this.tweet.isBeingLiked = false
-        this.tweet.likesCounts -= 1
-        this.isProcessing = false
+        this.tweet.isBeingLiked = false;
+        this.tweet.likesCounts -= 1;
+        this.isProcessing = false;
       } catch (error) {
-        this.isProcessing = false
+        this.isProcessing = false;
         Toast.fire({
-          icon: 'error',
-          title: '無法按喜歡，請稍後再試'
-        })
+          icon: "error",
+          title: "無法按喜歡，請稍後再試",
+        });
       }
     },
-    afterCreateReply () {
-      this.tweet.repliedCounts += 1
+    afterCreateReply() {
+      this.tweet.repliedCounts += 1;
     },
-    LinkToDetail (tweetId) {
-      console.log('click')
-      this.$router.push(`/tweets/${tweetId}`)
-    }
-  }
-}
+    LinkToDetail(tweetId) {
+      console.log("click");
+      this.$router.push(`/tweets/${tweetId}`);
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -210,7 +217,7 @@ export default {
   cursor: default;
 }
 
-.toLink{
+.toLink {
   position: absolute;
   top: 0;
   left: 0;
@@ -219,7 +226,18 @@ export default {
   z-index: 0;
 }
 
-.avatar, .tweet-reply, .tweet-like, .tweet-user, .tweet-icon-container {
+.avatar,
+.tweet-reply,
+.tweet-like,
+.tweet-user,
+.tweet-icon-container {
   z-index: 1;
+}
+
+.tweet-icon-number {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--secondary);
 }
 </style>
