@@ -18,7 +18,9 @@
               <div class="avatar-container">
                 <div class="avatar-image-container">
                   <label for="avatar-image" class="avatar-image-label"></label>
-                  <img class="avatar-img-thumbnail" :src="user.avatar | emptyImage" alt="avatar-image">
+                  <div class="avatar-thumbnail">
+                    <img class="avatarImg" :src="user.avatar | emptyImage" alt="avatar-image">
+                  </div>
                   <div class="bg-mask avatar-mask" v-if="!user.avatar"></div>
                 </div>
                 <input id="avatar-image" type="file" name="avatar" accept="image/*" class="form-control-file"
@@ -126,7 +128,14 @@ export default {
     },
     handleAvatarFileChange (e) {
       const { files } = e.target
+
       if (files.length === 0) {
+        this.user.avatar = ''
+      } else if (files[0].size > 8388608) {
+        Toast.fire({
+          icon: 'error',
+          title: '超過檔案大小上限8MB，請重新上傳'
+        })
         this.user.avatar = ''
       } else {
         const imageURL = window.URL.createObjectURL(files[0])
@@ -135,9 +144,14 @@ export default {
     },
     handleBannerFileChange (e) {
       const { files } = e.target
-      console.log('cover', files)
 
       if (files.length === 0) {
+        this.user.cover = ''
+      } else if (files[0].size > 8388608) {
+        Toast.fire({
+          icon: 'error',
+          title: '超過檔案大小上限8MB，請重新上傳'
+        })
         this.user.cover = ''
       } else {
         const imageURL = window.URL.createObjectURL(files[0])
@@ -331,10 +345,6 @@ export default {
 
 .avatar-image-container {
   position: relative;
-  width: 140px;
-  height: 140px;
-  border: 4px solid var(--dark-0);
-  border-radius: 50%;
 }
 
 .avatar-image-label {
@@ -351,9 +361,12 @@ export default {
   z-index: 1;
 }
 
-.avatar-img-thumbnail {
+.avatar-thumbnail {
+  width: 140px;
+  height: 140px;
+  border: 4px solid var(--dark-0);
   border-radius: 50%;
-  object-fit: cover;
+  background-color: #fff;
 }
 
 .avatar-mask {
@@ -463,7 +476,7 @@ textarea {
 
 // input end
 @media (max-width: 992px) {
-  .modal-container{
+  .modal-container {
     width: 100%;
     max-width: 600px;
   }

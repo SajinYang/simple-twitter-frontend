@@ -20,11 +20,13 @@
       <main class="center-container scrollbar" v-else>
         <div class="profile-img">
           <!-- avatar -->
+          <div class="avatar-thumbnail">
           <img
-            class="avatar-img-thumbnail"
+            class="avatarImg"
             :src="profile.avatar | emptyImage"
             alt="avatar-image"
           />
+          </div>
           <!-- banner -->
           <img
             class="d-block banner-img-thumbnail"
@@ -161,15 +163,15 @@
   position: relative;
 }
 
-.avatar-img-thumbnail {
+.avatar-thumbnail{
   position: absolute;
   left: 1rem;
   bottom: -70px;
   width: 140px;
   height: 140px;
-  border: 4px solid #fff;
+  border: 4px solid var(--dark-0);
   border-radius: 50%;
-  object-fit: cover;
+  background-color: var(--dark-0);
 }
 
 .banner-img-thumbnail {
