@@ -28,6 +28,7 @@ import TweetPopularList from '../components/TweetPopularList.vue'
 import usersAPI from '../apis/users'
 import { Toast } from '../utils/helpers'
 import Spinner from '../components/Spinner1.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -43,6 +44,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['updatePage']),
     fetchTabs (userId) {
       this.tabs = [
         {
@@ -108,6 +110,18 @@ export default {
     this.fetchUserTweets(id)
     this.fetchTabs(id)
     next()
+  },
+  computed: {
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        const { id: userId } = this.$route.params
+        this.fetchUserTweets(userId)
+        this.updatePage(false)
+      }
+    }
   }
 }
 </script>

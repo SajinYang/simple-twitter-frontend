@@ -226,7 +226,7 @@ import ModalEditProfile from '../components/ModalEditProfile.vue'
 import usersAPI from '../apis/users'
 import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { emptyImageFilter } from '../utils/mixin'
 import Spinner from '../components/Spinner1.vue'
 
@@ -259,6 +259,7 @@ export default {
     Spinner
   },
   methods: {
+    ...mapActions(['updatePage']),
     async fetchUserProfile (userId) {
       try {
         // get profile
@@ -331,7 +332,17 @@ export default {
     next()
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(['currentUser']),
+    ...mapState({ updatePageNow: 'updatePageNow' })
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        const { id: userId } = this.$route.params
+        this.fetchUserProfile(userId)
+        this.updatePage(false)
+      }
+    }
   }
 }
 </script>
