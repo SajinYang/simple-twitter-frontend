@@ -41,7 +41,7 @@ import usersAPI from '../apis/users'
 import followshipAPI from '../apis/followship'
 import { Toast } from './../utils/helpers'
 import { emptyImageFilter } from './../utils/mixin'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   mixins: [emptyImageFilter],
@@ -57,6 +57,7 @@ export default {
     this.fetchTopUsers()
   },
   methods: {
+    ...mapActions(['updatePage']),
     async fetchTopUsers () {
       try {
         const response = await usersAPI.getTopUsers()
@@ -89,6 +90,7 @@ export default {
           icon: 'success',
           title: '追蹤成功'
         })
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -117,6 +119,7 @@ export default {
           icon: 'success',
           title: '已取消追蹤'
         })
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
