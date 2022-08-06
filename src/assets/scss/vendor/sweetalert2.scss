@@ -1,0 +1,27 @@
+.swal2-popup.swal2-toast .swal2-header {
+  flex-direction: row-reverse !important;
+}
+
+.swal2-icon.swal2-success,
+.swal2-popup.swal2-toast .swal2-success {
+  color: var(--secondary-success) !important;
+  border-color:var(--secondary-success) !important;
+}
+
+.swal2-icon.swal2-error,
+.swal2-popup.swal2-toast .swal2-error {
+  color: var(--error) !important;
+  border-color: var(--error) !important;
+}
+
+.swal2-icon.swal2-warning,
+.swal2-popup.swal2-toast .swal2-warning {
+  color: var(--warning) !important;
+  border-color: var(--warning) !important;
+}
+
+.swal2-icon.swal2-info,
+.swal2-popup.swal2-toast .swal2-info {
+  color: var(--info) !important;
+  border-color: var(--info) !important;
+}
