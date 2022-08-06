@@ -149,10 +149,10 @@ export default {
   width: 24px;
   height: 24px;
   cursor: pointer;
-  margin-left: 10px;
+  margin: 0 19px 0 28px;
 }
 
 .title {
-  margin-left: 15px;
+  position: static;
 }
 </style>
