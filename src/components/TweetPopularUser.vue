@@ -46,7 +46,8 @@ import { mapState, mapActions } from 'vuex'
 export default {
   mixins: [emptyImageFilter],
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(['currentUser']),
+    ...mapState({ updatePageNow: 'updatePageNow' })
   },
   data () {
     return {
@@ -142,6 +143,14 @@ export default {
         return cutName
       }
       return userName
+    }
+  },
+  watch: {
+    updatePageNow () {
+      if (this.updatePageNow) {
+        this.fetchTopUsers()
+        this.updatePage(false)
+      }
     }
   }
 }

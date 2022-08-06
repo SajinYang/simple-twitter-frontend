@@ -303,6 +303,7 @@ export default {
           icon: 'success',
           title: '追蹤成功'
         })
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -322,6 +323,7 @@ export default {
           icon: 'success',
           title: '已取消追蹤'
         })
+        this.updatePage(true)
       } catch (error) {
         Toast.fire({
           icon: 'error',
