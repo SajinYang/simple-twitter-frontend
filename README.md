@@ -1,6 +1,6 @@
 # Simple-Twitter
 
-## demo
+## Demo
 [Simple Twitter](https://sajinyang.github.io/simple-twitter-frontend/)
 
 
