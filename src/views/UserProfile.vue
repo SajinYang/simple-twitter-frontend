@@ -299,6 +299,10 @@ export default {
         }
         this.profile.isFollowing = true
         this.profile.followersCounts += 1
+        Toast.fire({
+          icon: 'success',
+          title: '追蹤成功'
+        })
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -314,6 +318,10 @@ export default {
         }
         this.profile.isFollowing = false
         this.profile.followersCounts -= 1
+        Toast.fire({
+          icon: 'success',
+          title: '已取消追蹤'
+        })
       } catch (error) {
         Toast.fire({
           icon: 'error',
