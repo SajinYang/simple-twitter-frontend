@@ -1,32 +1,29 @@
 <template>
-  <div class="container-lg pt-6 pb-4 px-4 scrollbar">
-    <div class="row">
-      <div class="col-12">
-        <div class="logo">
-          <router-link to="/tweets">
-            <img src="./../assets/icon/navbar-logo.svg" alt="" />
-          </router-link>
+  <main class="container-wrap">
+    <div class="container-lg pt-6 pb-4 px-4 scrollbar">
+      <div class="row">
+        <div class="col-12">
+          <div class="logo">
+            <router-link to="/tweets">
+              <img src="./../assets/icon/navbar-logo.svg" alt="" />
+            </router-link>
+          </div>
+        </div>
+        <div class="col-12">
+          <h3>後台登入</h3>
+        </div>
+        <div class="col-12">
+          <FormLogin :is-admin-page="true" />
+        </div>
+        <div class="col-12">
+          <router-link to="/signin" class="btn-link f-right">前台登入</router-link>
         </div>
       </div>
-      <div class="col-12">
-        <h3>後台登入</h3>
-      </div>
-      <div class="col-12">
-        <FormLogin :is-admin-page="true" />
-      </div>
-      <div class="col-12">
-        <router-link to="/signin" class="btn-link f-right">前台登入</router-link>
-      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
-.container-lg{
-  height: 100vh;
-  overflow-y: scroll;
-}
-
 .f-right {
   float: right;
 }
