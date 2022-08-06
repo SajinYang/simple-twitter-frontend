@@ -1,36 +1,33 @@
 <template>
-  <div class="container-lg pt-6 pb-4 px-4 scrollbar">
-    <div class="row">
-      <div class="col-12">
-        <div class="logo">
-          <router-link to="/tweets">
-            <img src="./../assets/icon/navbar-logo.svg" alt="" />
-          </router-link>
+  <main class="container-wrap">
+    <div class="container-lg pt-6 pb-4 px-4 scrollbar">
+      <div class="row">
+        <div class="col-12">
+          <div class="logo">
+            <router-link to="/tweets">
+              <img src="./../assets/icon/navbar-logo.svg" alt="" />
+            </router-link>
+          </div>
         </div>
-      </div>
 
-      <div class="col-12">
-        <h3>登入 Alphitter</h3>
-      </div>
-      <div class="col-12">
-        <FormLogin />
-      </div>
-      <div class="col-12">
-        <div class="login-options">
-          <router-link :to="{ name: 'sign-up' }" class="btn-link">註冊</router-link>
-          <router-link to="/admin" class="btn-link option-admin">後台登入</router-link>
+        <div class="col-12">
+          <h3>登入 Alphitter</h3>
+        </div>
+        <div class="col-12">
+          <FormLogin />
+        </div>
+        <div class="col-12">
+          <div class="login-options">
+            <router-link :to="{ name: 'sign-up' }" class="btn-link">註冊</router-link>
+            <router-link to="/admin" class="btn-link option-admin">後台登入</router-link>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
-.container-lg {
-  height: 100vh;
-  overflow-y: scroll;
-}
-
 .logo {
   margin: 0 auto;
   width: 40px;
