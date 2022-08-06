@@ -14,71 +14,48 @@
         <div class="nav-item-container">
           <router-link class="nav-item index" to="/tweets">
             <div class="icon">
-              <IconIndexActive
-                v-if="NavbarStatus === 'tweets' || NavbarStatus === 'tweet'"
-              />
-              <IconIndex
-                v-if="NavbarStatus !== 'tweets' && NavbarStatus !== 'tweet'"
-              />
+              <IconIndexActive v-if="NavbarStatus === 'tweets' || NavbarStatus === 'tweet'" />
+              <IconIndex v-if="NavbarStatus !== 'tweets' && NavbarStatus !== 'tweet'" />
             </div>
-            <h5
-              class="nav-item-text"
-              :class="{
+            <h5 class="nav-item-text" :class="{
                 active: NavbarStatus === 'tweets' || NavbarStatus === 'tweet',
-              }"
-            >
+              }">
               首頁
             </h5>
           </router-link>
         </div>
 
         <div class="nav-item-container">
-          <router-link
-            class="nav-item user-profile"
-            :to="{ name: 'user', params: { id: currentUser.id } }"
-          >
+          <router-link class="nav-item user-profile" :to="{ name: 'user', params: { id: currentUser.id } }">
             <div class="icon">
-              <UserProfileActive
-                v-if="
+              <UserProfileActive v-if="
                   NavbarStatus !== 'tweets' &&
                   NavbarStatus !== 'user-setting' &&
                   NavbarStatus !== 'tweet'
-                "
-              />
-              <UserProfile
-                v-if="
-                  (NavbarStatus !== 'user' && NavbarStatus !== 'user-following' && NavbarStatus !== 'user-follower') ||
+                " />
+              <UserProfile v-if="
+                  (NavbarStatus !== 'user-likes' && NavbarStatus !== 'user-replies' && NavbarStatus !== 'user' && NavbarStatus !== 'user-following' && NavbarStatus !== 'user-follower') ||
                   NavbarStatus === 'tweet'
-                "
-              />
+                " />
             </div>
-            <h5
-              class="nav-item-text"
-              :class="{
+            <h5 class="nav-item-text" :class="{
                 active:
                   NavbarStatus !== 'tweets' &&
                   NavbarStatus !== 'user-setting' &&
                   NavbarStatus !== 'tweet',
-              }"
-            >
+              }">
               個人資料
             </h5>
           </router-link>
         </div>
 
         <div class="nav-item-container">
-          <router-link
-            class="nav-item setting"
-            :to="{ name: 'user-setting', params: { id: currentUser.id } }"
-          >
+          <router-link class="nav-item setting" :to="{ name: 'user-setting', params: { id: currentUser.id } }">
             <div class="icon">
               <SettingActive v-if="NavbarStatus === 'user-setting'" />
               <Setting v-if="NavbarStatus !== 'user-setting'" />
             </div>
-            <h5
-              class="nav-item-text"
-              :class="{ active: NavbarStatus === 'user-setting' }"
-            >
+            <h5 class="nav-item-text" :class="{ active: NavbarStatus === 'user-setting' }">
               設定
             </h5>
           </router-link>
