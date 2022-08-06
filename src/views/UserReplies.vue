@@ -6,7 +6,7 @@
       <nav>
         <ul class="tabs-group">
           <li v-for="tab in tabs" :key="tab.id" :class="['nav-tab', { 'active': tab.name === currentRoute }]">
-            <router-link class="nav-link" aria-current="page" :to="tab.path" :key="tab.id">
+            <router-link class="nav-link" aria-current="page" :to="{ name: tab.name }" :key="tab.id">
               {{ tab.title }}
             </router-link>
           </li>
@@ -45,19 +45,16 @@ export default {
         {
           id: 1,
           title: '推文',
-          path: `/users/${userId}/tweets`,
           name: 'user'
         },
         {
           id: 2,
           title: '回覆',
-          path: `/users/${userId}/replies`,
           name: 'user-replies'
         },
         {
           id: 3,
           title: '喜歡的內容',
-          path: `/users/${userId}/likes`,
           name: 'user-likes'
         }
       ]
