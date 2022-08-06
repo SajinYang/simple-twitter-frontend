@@ -2,17 +2,14 @@
   <div class="container-twitter">
     <NavBar />
     <section class="center-section">
-      <div class="title-container mb-4">
+      <div class="title-container">
         <header class="header">
           <h4 class="title">帳戶設定</h4>
         </header>
       </div>
-      <FormAccount
-      class="px-4"
-      :current-page="'setting'"
-      :initial-user="initialUser"
-      :is-processing="isProcessing"
-      @after-submit="handleAfterSubmit" />
+      <FormAccount class="pt-4 px-4"
+                   :current-page="'setting'"              :initial-user="initialUser"            :is-processing="isProcessing"
+                   @after-submit="handleAfterSubmit" />
     </section>
   </div>
 </template>

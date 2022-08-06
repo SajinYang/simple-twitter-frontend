@@ -264,6 +264,7 @@ export default {
 
 .modal-container {
   width: 600px;
+  height: 630px;
   left: 334px;
   margin: 0px auto;
   background-color: #fff;
@@ -294,7 +295,7 @@ export default {
 }
 
 .modal-content {
-  height: 100vh;
+  // height: 100vh;
   padding: 5rem 1rem 1rem 1rem;
 }
 

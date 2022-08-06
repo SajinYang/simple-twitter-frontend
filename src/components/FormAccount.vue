@@ -1,10 +1,11 @@
 <template>
-  <form action="#" class="form-group" @submit.stop.prevent="handleSubmit">
+  <form action="#" :class="['form-group',
+  { 'scrollable': currentPage === 'setting' },
+  { 'scroll': currentPage === 'setting' }]"
+   @submit.stop.prevent="handleSubmit">
     <div class="input-group">
-      <input type="text" name="account"
-             id="account" placeholder="請輸入帳號"
-             maxlength="100" v-model="user.account"
-             autocomplete="username" :class="{ error: user.account.length > 10 }" required>
+      <input type="text" name="account" id="account" placeholder="請輸入帳號" maxlength="100" v-model="user.account"
+        autocomplete="username" :class="{ error: user.account.length > 10 }" required>
       <label for="account">帳號</label>
 
       <div class="input-hints">
@@ -17,10 +18,8 @@
       </div>
     </div>
     <div class="input-group">
-      <input type="text" name="name"
-             id="name" placeholder="請輸入使用者名稱"
-             maxlength="100" autocomplete="name"
-             v-model="user.name" :class="{ error: user.name.length > 50 }" required>
+      <input type="text" name="name" id="name" placeholder="請輸入使用者名稱" maxlength="100" autocomplete="name"
+        v-model="user.name" :class="{ error: user.name.length > 50 }" required>
       <label for="name">名稱</label>
 
       <div class="input-hints">
@@ -33,27 +32,19 @@
       </div>
     </div>
     <div class="input-group">
-      <input type="email" name="email"
-             id="email" placeholder="請輸入Email"
-             autocomplete="email" required
-             v-model.lazy="user.email"
-             @change="checkEmailFormat">
+      <input type="email" name="email" id="email" placeholder="請輸入Email" autocomplete="email" required
+        v-model.lazy="user.email" @change="checkEmailFormat">
 
       <label for="email">Email</label>
     </div>
     <div class="input-group">
-      <input type="password" name="password"
-             id="password" placeholder="請設定密碼"
-             maxlength="100" autocomplete="new-password"
-             v-model.lazy="user.password"
-             :required="currentPage === 'signup'">
+      <input type="password" name="password" id="password" placeholder="請設定密碼" maxlength="100"
+        autocomplete="new-password" v-model.lazy="user.password" :required="currentPage === 'signup'">
       <label for="password">密碼</label>
     </div>
     <div class="input-group">
-      <input type="password" name="password"
-             id="passwordCheck" placeholder="請再次設定密碼" maxlength="100"
-             v-model.lazy="user.checkPassword"
-             :required="currentPage === 'signup'">
+      <input type="password" name="password" id="passwordCheck" placeholder="請再次設定密碼" maxlength="100"
+        v-model.lazy="user.checkPassword" :required="currentPage === 'signup'">
       <label for="checkPassword">密碼確認</label>
     </div>
 
@@ -74,6 +65,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  &.scrollable{
+    height: 100vh;
+    overflow-y: scroll;
+  }
 }
 
 // input start
