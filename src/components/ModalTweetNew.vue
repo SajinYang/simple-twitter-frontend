@@ -208,6 +208,7 @@ button:disabled {
     border-radius: 50%;
     background-color: #ff6600;
     margin: 25px 6px 40px 8px;
+    cursor: pointer;
   }
 }
 </style>

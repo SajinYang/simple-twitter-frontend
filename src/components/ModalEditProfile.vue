@@ -14,63 +14,64 @@
               </button>
             </div>
 
-            <div class="modal-body">
-              <div class="avatar-container">
-                <div class="avatar-image-container">
-                  <label for="avatar-image" class="avatar-image-label"></label>
-                  <div class="avatar-thumbnail">
-                    <img class="avatarImg" :src="user.avatar | emptyImage" alt="avatar-image">
-                  </div>
-                  <div class="bg-mask avatar-mask" v-if="!user.avatar"></div>
-                </div>
-                <input id="avatar-image" type="file" name="avatar" accept="image/*" class="form-control-file"
-                  @change="handleAvatarFileChange">
-              </div>
-              <div class="banner">
-                <div class="banner-container">
-                  <div class="banner-image-container">
-                    <div class="banner-btn-control">
-                      <label for="image" class="banner-image-label pe-5"></label>
-                      <button class="modal-close-button" @click.stop.prevent="handleBannerFileCancel">
-                        <img class="btn-close banner-cancel" src="./../assets/icon/modal-cancel.svg"
-                          alt="close-button" />
-                      </button>
+            <div class="modal-body scrollbar">
+              <div class="container-image">
+                <div class="avatar-container">
+                  <div class="avatar-image-container">
+                    <label for="avatar-image" class="avatar-image-label"></label>
+                    <div class="avatar-thumbnail">
+                      <img class="avatarImg" :src="user.avatar | emptyImage" alt="avatar-image">
                     </div>
-                    <img class="d-block banner-img-thumbnail" :src="user.cover | emptyCover" alt="banner-image">
-                    <div class="bg-mask banner-mask" v-if="!user.cover"></div>
+                    <div class="bg-mask avatar-mask" v-if="!user.avatar"></div>
                   </div>
-                  <input id="image" type="file" name="cover" accept="image/*" class="form-control-file"
-                    @change="handleBannerFileChange">
+                  <input id="avatar-image" type="file" name="avatar" accept="image/*" class="form-control-file"
+                    @change="handleAvatarFileChange">
+                </div>
+                <div class="banner">
+                  <div class="banner-container">
+                    <div class="banner-image-container">
+                      <div class="banner-btn-control">
+                        <label for="image" class="banner-image-label pe-5"></label>
+                        <button class="modal-close-button" @click.stop.prevent="handleBannerFileCancel">
+                          <img class="btn-close banner-cancel" src="./../assets/icon/modal-cancel.svg"
+                            alt="close-button" />
+                        </button>
+                      </div>
+                      <img class="d-block banner-img-thumbnail" :src="user.cover | emptyCover" alt="banner-image">
+                      <div class="bg-mask banner-mask" v-if="!user.cover"></div>
+                    </div>
+                    <input id="image" type="file" name="cover" accept="image/*" class="form-control-file"
+                      @change="handleBannerFileChange">
+                  </div>
                 </div>
               </div>
-            </div>
+              <div class="modal-content">
+                <div class="input-group">
+                  <input type="text" name="name" id="name" maxlength="100" v-model="user.name" required>
+                  <label for="name">名稱</label>
 
-            <div class="modal-footer">
-              <div class="input-group">
-                <input type="text" name="name" id="name" maxlength="100" v-model="user.name" required>
-                <label for="name">名稱</label>
-
-                <div class="input-hints">
-                  <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">
-                    字數超出上限！
-                  </span>
-                  <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">
-                    {{ user.name.length }}/50</span>
+                  <div class="input-hints">
+                    <span class="error" :style="{ visibility: user.name.length > 50 ? 'visible' : 'hidden' }">
+                      字數超出上限！
+                    </span>
+                    <span :class="{ error: user.name.length > 50 }" v-if="user.name.length">
+                      {{ user.name.length }}/50</span>
+                  </div>
                 </div>
-              </div>
 
-              <div class="input-group">
-                <textarea name="introduction" id="introduction" cols="30" rows="10" class="self-intro"
-                  v-model="user.introduction" placeholder="讓社群更認識你"></textarea>
-                <label for="introduction">自我介紹</label>
+                <div class="input-group">
+                  <textarea name="introduction" id="introduction" cols="30" rows="10" class="self-intro"
+                    v-model="user.introduction" placeholder="讓社群更認識你"></textarea>
+                  <label for="introduction">自我介紹</label>
 
-                <div class="input-hints">
-                  <span class="error" :style="{ visibility: user.introduction.length > 160 ? 'visible' : 'hidden' }">
-                    字數超出上限！
-                  </span>
-                  <span :class="{ error: user.introduction.length > 160 }" v-if="user.introduction.length">
-                    {{ user.introduction.length }}/160
-                  </span>
+                  <div class="input-hints">
+                    <span class="error" :style="{ visibility: user.introduction.length > 160 ? 'visible' : 'hidden' }">
+                      字數超出上限！
+                    </span>
+                    <span :class="{ error: user.introduction.length > 160 }" v-if="user.introduction.length">
+                      {{ user.introduction.length }}/160
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -249,7 +250,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   transition: opacity 0.3s ease;
 }
@@ -284,10 +285,16 @@ export default {
 }
 
 .modal-body {
+  height: 100vh;
+  overflow-y: overlay;
+}
+
+.container-image {
   position: relative;
 }
 
-.modal-footer {
+.modal-content {
+  height: 100vh;
   padding: 5rem 1rem 1rem 1rem;
 }
 
