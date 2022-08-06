@@ -3,7 +3,7 @@
     <NavBar />
     <section class="center-section">
       <!-- header -->
-      <header class="mt-3 mb-4 title">
+      <header class="title">
         <img
           class="icon-back"
           src="../assets/icon/tweet-back.svg"
@@ -112,6 +112,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  height: 75px;
 }
 
 .icon-back {
