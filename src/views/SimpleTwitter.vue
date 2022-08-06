@@ -11,7 +11,6 @@
         <TweetCreateNew />
         <Spinner v-if="isLoading"/>
         <TweetPopularList
-          class="card-hover"
           v-for="tweet in tweets"
           :key="tweet.id"
           :initialTweet="tweet"

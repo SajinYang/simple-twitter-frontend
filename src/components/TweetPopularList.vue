@@ -1,18 +1,25 @@
 <template>
   <section class="tweet-popular-section">
     <div class="tweet-popular-container">
-      <router-link
-        class="tweet"
-        :to="{ name: 'tweet', params: { id: tweet.id } }"
-      >
-        <router-link class="avatar" :to="{ name: 'user', params: { id: tweet.UserId } }">
+      <li class="tweet card-hover" @click.stop.prevent="linkToDetail(tweet.id)">
+        <router-link
+          class="avatar"
+          :to="{ name: 'user', params: { id: tweet.UserId } }"
+        >
           <img :src="tweet.User.avatar | emptyImage" alt="" class="avatarImg" />
         </router-link>
         <div class="tweet-info">
           <div class="tweet-user">
-            <router-link class="tweet-user name" :to="{ name: 'user', params: { id: tweet.UserId } }">{{ tweet.User.name }}</router-link>
-            <router-link class="tweet-user account" :to="{ name: 'user', params: { id: tweet.UserId } }"
-              >@{{ tweet.User.account }} ・ {{ tweet.createdAt | fromNow }}</router-link
+            <router-link
+              class="tweet-user name"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >{{ tweet.User.name }}</router-link
+            >
+            <router-link
+              class="tweet-user account"
+              :to="{ name: 'user', params: { id: tweet.UserId } }"
+              >@{{ tweet.User.account }} ・
+              {{ tweet.createdAt | fromNow }}</router-link
             >
           </div>
           <p class="tweet-content">
@@ -30,11 +37,12 @@
               <span class="tweet-icon-number">{{ tweet.repliedCounts }}</span>
             </div>
 
-            <div class="tweet-like">
+            <button class="tweet-like" :disabled="isProcessing">
               <img
                 v-if="tweet.isBeingLiked"
                 class="tweet-icon-like"
                 src="../assets/icon/tweet-like.svg"
+                :disabled="isProcessing"
                 @click.stop.prevent="deleteLike(tweet.id)"
                 alt=""
               />
@@ -42,14 +50,15 @@
                 v-else
                 class="tweet-icon-like"
                 src="../assets/icon/tweet-unlike.svg"
+                :disabled="isProcessing"
                 @click.stop.prevent="addLike(tweet.id)"
                 alt=""
               />
               <span class="tweet-icon-number">{{ tweet.likesCounts }}</span>
-            </div>
+            </button>
           </div>
         </div>
-      </router-link>
+      </li>
     </div>
   </section>
 </template>
@@ -73,19 +82,23 @@ export default {
   },
   data () {
     return {
-      tweet: this.initialTweet
+      tweet: this.initialTweet,
+      isProcessing: false
     }
   },
   methods: {
     async addLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.addLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = true
         this.tweet.likesCounts += 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
@@ -94,13 +107,16 @@ export default {
     },
     async deleteLike (tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await tweetsAPI.deleteLike({ tweetId })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         this.tweet.isBeingLiked = false
         this.tweet.likesCounts -= 1
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法按喜歡，請稍後再試'
@@ -109,6 +125,10 @@ export default {
     },
     afterCreateReply () {
       this.tweet.repliedCounts += 1
+    },
+    linkToDetail (tweetId) {
+      if (this.isProcessing) return
+      this.$router.push(`/tweets/${tweetId}`)
     }
   }
 }
@@ -193,5 +213,12 @@ export default {
 
 .cursor-default {
   cursor: default;
+}
+
+.tweet-icon-number {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--secondary);
 }
 </style>
