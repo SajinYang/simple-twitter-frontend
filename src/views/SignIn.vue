@@ -1,5 +1,5 @@
 <template>
-  <div class="container-lg pt-6 pb-4 px-4">
+  <div class="container-lg pt-6 pb-4 px-4 scrollbar">
     <div class="row">
       <div class="col-12">
         <div class="logo">
@@ -26,6 +26,11 @@
 </template>
 
 <style lang="scss" scoped>
+.container-lg {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
 .logo {
   margin: 0 auto;
   width: 40px;
